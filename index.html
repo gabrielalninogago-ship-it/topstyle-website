@@ -2803,6 +2803,207 @@
     }
     .sidebar__wa:hover { background: var(--whatsapp-dark); color: #fff; }
     .sidebar__wa svg { width: 16px; height: 16px; }
+
+    /* ─────────────────────────────────────────────
+       PANEL PEDIDO RÁPIDO
+    ───────────────────────────────────────────── */
+    .qr-trigger {
+      position: fixed;
+      right: 0;
+      bottom: 200px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 11px 14px 11px 16px;
+      background: linear-gradient(135deg, var(--rose-deep), var(--violet-lo));
+      color: #fff;
+      border: none;
+      border-radius: var(--radius) 0 0 var(--radius);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+      cursor: pointer;
+      z-index: 135;
+      box-shadow: -3px 0 12px rgba(0,0,0,0.35);
+      transition: background var(--t), transform var(--t);
+    }
+    .qr-trigger:hover {
+      background: linear-gradient(135deg, var(--violet-lo), var(--rose-deep));
+      transform: translateX(-2px);
+    }
+    .qr-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--t);
+      z-index: 145;
+    }
+    .qr-backdrop.is-open { opacity: 1; pointer-events: auto; }
+    .qr-panel {
+      position: fixed;
+      top: 0; right: 0;
+      width: 100%;
+      max-width: 380px;
+      height: 100dvh;
+      background: var(--bg-secondary);
+      border-left: 1px solid var(--border);
+      box-shadow: -16px 0 48px rgba(0,0,0,0.55);
+      transform: translateX(100%);
+      transition: transform var(--t);
+      z-index: 155;
+      display: flex;
+      flex-direction: column;
+    }
+    .qr-panel.is-open { transform: translateX(0); }
+    .qr-panel__head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-6);
+      border-bottom: 1px solid var(--border-subtle);
+      flex-shrink: 0;
+    }
+    .qr-panel__title {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 500;
+      margin: 0;
+    }
+    .qr-panel__close {
+      width: 36px; height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: border-color var(--t), color var(--t);
+    }
+    .qr-panel__close:hover { border-color: var(--silver); color: var(--silver-hi); }
+    .qr-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border-subtle);
+      flex-shrink: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .qr-tabs::-webkit-scrollbar { display: none; }
+    .qr-tab {
+      flex: 1;
+      padding: 10px var(--space-2);
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: color var(--t), border-color var(--t);
+    }
+    .qr-tab:hover { color: var(--text-secondary); }
+    .qr-tab.is-active { color: var(--rose); border-bottom-color: var(--rose); }
+    .qr-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: var(--space-3) 0;
+    }
+    .qr-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-3) var(--space-6);
+      transition: background var(--t-fast);
+    }
+    .qr-item:hover { background: var(--bg-tertiary); }
+    .qr-item__thumb {
+      width: 44px; height: 44px;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      background: var(--bg-elevated);
+      flex-shrink: 0;
+    }
+    .qr-item__thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .qr-item__info { flex: 1; min-width: 0; }
+    .qr-item__name {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.3;
+      margin-bottom: 2px;
+    }
+    .qr-item__price { font-size: 11px; color: var(--text-muted); }
+    .qr-item__add {
+      width: 32px; height: 32px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      font-size: 20px;
+      line-height: 1;
+      color: var(--text-secondary);
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background var(--t-fast), border-color var(--t-fast), color var(--t-fast);
+    }
+    .qr-item__add:hover { background: var(--rose-deep); border-color: var(--rose-deep); color: #fff; }
+    .qr-item__add--color {
+      font-size: 12px;
+      width: auto;
+      padding: 0 10px;
+      border-radius: var(--radius-full);
+      white-space: nowrap;
+    }
+    .qr-panel__foot {
+      padding: var(--space-4) var(--space-6);
+      border-top: 1px solid var(--border-subtle);
+      flex-shrink: 0;
+    }
+    .qr-panel__view-cart {
+      width: 100%;
+      padding: var(--space-3) var(--space-4);
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: border-color var(--t), color var(--t);
+    }
+    .qr-panel__view-cart:hover { border-color: var(--silver); color: var(--text-primary); }
+    .qr-panel__cart-badge {
+      background: var(--rose-deep);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      min-width: 22px;
+      text-align: center;
+    }
+    @media (max-width: 480px) {
+      .qr-panel { max-width: 100%; }
+      .qr-trigger { bottom: 160px; }
+    }
   </style>
 </head>
 <body>
@@ -3708,6 +3909,38 @@
         </svg>
         Escribinos por WhatsApp
       </a>
+    </div>
+  </aside>
+
+  <!-- ================================================= -->
+  <!--  PANEL PEDIDO RÁPIDO — Backdrop + Panel           -->
+  <!-- ================================================= -->
+  <button class="qr-trigger" id="qrTrigger" aria-label="Abrir panel pedido rápido" aria-controls="qrPanel">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+    Pedido Rápido
+  </button>
+  <div class="qr-backdrop" id="qrBackdrop" aria-hidden="true"></div>
+  <aside class="qr-panel" id="qrPanel" aria-label="Panel pedido rápido" aria-hidden="true">
+    <div class="qr-panel__head">
+      <h2 class="qr-panel__title">⚡ Pedido Rápido</h2>
+      <button class="qr-panel__close" id="qrClose" aria-label="Cerrar panel">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    <div class="qr-tabs" id="qrTabs" role="tablist">
+      <button class="qr-tab is-active" data-qr-tab="coloracion" role="tab" aria-selected="true">Coloración</button>
+      <button class="qr-tab" data-qr-tab="intelligent" role="tab" aria-selected="false">Intelligent</button>
+      <button class="qr-tab" data-qr-tab="styling" role="tab" aria-selected="false">Styling</button>
+      <button class="qr-tab" data-qr-tab="salon" role="tab" aria-selected="false">Pileta</button>
+    </div>
+    <div class="qr-list" id="qrList"></div>
+    <div class="qr-panel__foot">
+      <button class="qr-panel__view-cart" id="qrViewCart">
+        <span id="qrCartLabel">Tu pedido está vacío</span>
+        <span class="qr-panel__cart-badge" id="qrCartBadge" hidden>0</span>
+      </button>
     </div>
   </aside>
 
@@ -6079,6 +6312,99 @@
     //  - Mostrar CTA "Mi cuenta" en nav
     //  Ver README sección "Fase 2: Login mayorista"
     // ==========================================================
+
+    // ==========================================================
+    //  PANEL PEDIDO RÁPIDO
+    // ==========================================================
+    {
+      const qrTrigger   = $('#qrTrigger');
+      const qrBackdrop  = $('#qrBackdrop');
+      const qrPanel     = $('#qrPanel');
+      const qrList      = $('#qrList');
+      const qrCartLabel = $('#qrCartLabel');
+      const qrCartBadge = $('#qrCartBadge');
+
+      let qrActiveTab = 'coloracion';
+
+      const renderQRFooter = () => {
+        const n = CART.count();
+        qrCartLabel.textContent = n === 0 ? 'Tu pedido está vacío' : 'Ver pedido →';
+        qrCartBadge.textContent = n;
+        qrCartBadge.hidden = n === 0;
+      };
+
+      const renderQRList = () => {
+        const products = PRODUCTS.filter(p =>
+          p.active !== false && getProductLine(p.id) === qrActiveTab
+        );
+        qrList.innerHTML = products.map(p => {
+          const thumb = p.image
+            ? `<img src="${escapeHtml(p.image)}" alt="" loading="lazy">`
+            : '';
+          const price = p.price > 0 ? formatMoney(p.price) : 'Consultar';
+          const btn = isColorProduct(p.id)
+            ? `<button class="qr-item__add qr-item__add--color" data-qr-add="${escapeHtml(p.id)}">Elegir color</button>`
+            : `<button class="qr-item__add" data-qr-add="${escapeHtml(p.id)}" title="Agregar al pedido">+</button>`;
+          return `
+            <div class="qr-item">
+              <div class="qr-item__thumb">${thumb}</div>
+              <div class="qr-item__info">
+                <div class="qr-item__name">${escapeHtml(p.name)}</div>
+                <div class="qr-item__price">${price}</div>
+              </div>
+              ${btn}
+            </div>`;
+        }).join('');
+        renderQRFooter();
+      };
+
+      const openQR = () => {
+        qrPanel.classList.add('is-open');
+        qrBackdrop.classList.add('is-open');
+        qrPanel.setAttribute('aria-hidden', 'false');
+        qrBackdrop.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('is-locked');
+        renderQRList();
+      };
+
+      const closeQR = () => {
+        qrPanel.classList.remove('is-open');
+        qrBackdrop.classList.remove('is-open');
+        qrPanel.setAttribute('aria-hidden', 'true');
+        qrBackdrop.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('is-locked');
+      };
+
+      $('#qrTabs').addEventListener('click', e => {
+        const tab = e.target.closest('[data-qr-tab]');
+        if (!tab) return;
+        qrActiveTab = tab.dataset.qrTab;
+        $$('[data-qr-tab]').forEach(t => {
+          t.classList.toggle('is-active', t === tab);
+          t.setAttribute('aria-selected', String(t === tab));
+        });
+        renderQRList();
+      });
+
+      qrList.addEventListener('click', e => {
+        const btn = e.target.closest('[data-qr-add]');
+        if (!btn) return;
+        addToCart(btn.dataset.qrAdd);
+        renderQRFooter();
+      });
+
+      qrTrigger.addEventListener('click', openQR);
+      $('#qrClose').addEventListener('click', closeQR);
+      qrBackdrop.addEventListener('click', closeQR);
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && qrPanel.classList.contains('is-open')) closeQR();
+      });
+
+      $('#qrViewCart').addEventListener('click', () => {
+        closeQR();
+        setTimeout(openCart, 180);
+      });
+    }
   })();
   </script>
 
