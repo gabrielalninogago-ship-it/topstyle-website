@@ -1,6 +1,6 @@
 # TopStyle — Estado del proyecto
 
-> **Última actualización:** 13/05/2026 · **Checkpoint estable:** `J`
+> **Última actualización:** 14/05/2026 · **Checkpoint estable:** `K`
 > Documento autosuficiente para retomar el proyecto en cualquier contexto.
 
 ---
@@ -74,6 +74,8 @@ Topstyle/
     ├── G/   ← audit 2 fotos (parcial)
     ├── H/   ← audit 2 cerrado al 100%
     ├── I/   ← categorías reorganizadas según Question
+    ├── J/   ← admin de cupones + panel pedido rápido
+    ├── K/   ← strips mini por línea distribuidos + planning de roadmap
     └── index-pre-qr-panel.html  ← backup antes de integrar el panel pedido rápido (checkpoint J)
 ```
 
@@ -98,6 +100,19 @@ Topstyle/
 ### Bestsellers
 - **Carrusel "Más vendidos"** con flechas overlay, auto-scroll cada 3.5 s, pausa en hover/touch/focus/visibility, loop al final, respeta `prefers-reduced-motion`.
 - 7 productos curados (twelve-spray-210, is-keratin-lift-spray, is-lumiere-oleo, qstyle-curl-cream, qstyle-termic-protect, coloration-full-plex-60g, is-lumiere-ampollas).
+
+### Strips por línea (4 carruseles mini distribuidos)
+- **4 carruseles mini** (`.line-strip`) repartidos a lo largo de la home — uno por cada línea Question — para "salpicar" la página y que la usuaria los vea naturalmente al hacer scroll.
+- Ubicaciones: Coloración antes de `#categorias`, Intelligent antes de `#productos`, Styling (con fondo `--alt`) antes de `#como-comprar`, Salón antes de `#pedido`.
+- **Cards mini** de 130 → 145 → 160 px (mobile → tablet → desktop). Solo imagen + nombre (2 líneas máx) + precio + botón "+" circular.
+- **Auto-scroll continuo CSS** (`@keyframes` + `linear infinite`) — sin saltos, deslizamiento fluido a 55 px/s.
+- Contenido duplicado en JS para loop infinito sin "salto" visible al final.
+- Pausa en `:hover` y `:focus-within` por CSS puro (sin depender de JS / IntersectionObserver, que falla en preview headless).
+- Velocidad configurable via constante `PX_PER_SEC` en `initLineStrip`. Cada strip calcula su propia duración según ancho total.
+- Máscara suave (`mask-image`) en los bordes del viewport para que las cards no se corten brusco.
+- Header de cada strip con título + eyebrow + "Ver todo →" que dispara el filter chip correspondiente del catálogo.
+- Respeta `prefers-reduced-motion` (animación desactivada).
+- Hasta 18 productos por strip (cap `LINE_STRIP_MAX`).
 
 ### Categorías y catálogo
 - Sección **#categorias** con 4 tarjetas siguiendo la estructura oficial Question:
@@ -291,7 +306,19 @@ cp _checkpoints/I/TODO-mejoras.md .
 
 ---
 
-## 11. Decisiones recientes (sesiones del 04/05/2026)
+## 11. Decisiones recientes
+
+### Sesión del 13-14/05/2026 (checkpoint K)
+
+- ✅ **Roadmap priorizado y consensuado con Gabb** (10 puntos). El orden inmediato definido: (1) strips por línea, (2) selector de color v2, (3) UX tipo Meli iterativo, (4) lead capture, etc. Auditoría v3 queda pendiente de Ari pero no bloquea el resto.
+- ✅ **4 strips por línea distribuidos en la home** — cards mini 130-160 px, scroll continuo CSS a 55 px/s, loop infinito, pausa en hover. Reemplazan al primer intento (4 carruseles juntos con flechas) que quedaba pesado y repetitivo.
+- ✅ **Decisión arquitectural**: motor de auto-scroll del strip migrado de `requestAnimationFrame` a CSS `@keyframes` puro. Más simple, no depende del IntersectionObserver, funciona en todos los navegadores. El RAF había mostrado problemas en preview headless por throttling.
+- ✅ **Velocidad de scroll** subida de 22 px/s a 55 px/s tras feedback de que se veía "casi fijo" a 22.
+- 🔜 **Color books oficiales** ya están en `assets/pdfs/` (`question-lumiplex-colorbook-2026.pdf` y `question-coloration-colorbook-2025.pdf`). Próximo paso: extraer las imágenes oficiales de los swatches.
+- 🔜 **Recomendación de lead capture**: Web3Forms (gratis hasta 250/mes, llega al mail + dashboard, conectable a Google Sheets). Decisión pendiente de Gabb.
+- 🔜 **Carpeta duplicada detectada** en `C:\Users\Gabb\TopStyle\Web\` (versión stale). El proyecto activo está en `C:\Users\Gabb\.claude\Topstyle\`. El preview server sirve desde la activa. Decisión: dejarla por ahora, revisar si limpiar más adelante.
+
+### Sesiones del 04/05/2026 (checkpoints H + I)
 
 - ✅ Auditoría v2 aplicada al 100%: 22 fotos cambiadas + 8 desactivaciones nuevas + 1 rename + 1 reactivación.
 - ✅ silver-shampoo-960 sacado del carrusel bestsellers (estaba desactivado).
@@ -302,4 +329,4 @@ cp _checkpoints/I/TODO-mejoras.md .
 
 ---
 
-_Documento mantenido en sync con `_checkpoints/I/` (último estable). Si hacés cambios sustanciales, actualizá este archivo y bumpeá el checkpoint._
+_Documento mantenido en sync con `_checkpoints/K/` (último estable). Si hacés cambios sustanciales, actualizá este archivo y bumpeá el checkpoint._

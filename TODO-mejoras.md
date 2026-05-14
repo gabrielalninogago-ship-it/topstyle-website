@@ -1,10 +1,22 @@
 # TopStyle — Lista de mejoras pendientes
 
-Anotado el 21/04/2026. Última actualización: 04/05/2026.
+Anotado el 21/04/2026. Última actualización: 14/05/2026.
 
 ---
 
 ## ✅ Hechas
+
+### Sesión del 13-14/05/2026 (checkpoint K)
+
+- **Roadmap priorizado** (10 puntos) consensuado con Gabb. Orden: (1) strips por línea ✅, (2) selector de color v2, (3) UX tipo Meli iterativo, (4) lead capture (Web3Forms recomendado), etc.
+- **4 strips por línea distribuidos en la home**:
+  - Coloración antes de `#categorias`, Intelligent antes de `#productos`, Styling (fondo alt) antes de `#como-comprar`, Salón antes de `#pedido`.
+  - Cards mini 130 → 145 → 160 px (mobile / tablet / desktop). Solo imagen + nombre 2 líneas + precio + botón "+" circular.
+  - Auto-scroll continuo CSS (`@keyframes linear infinite`) a 55 px/s. Loop infinito por duplicación de contenido en JS.
+  - Pausa en `:hover` y `:focus-within` puramente por CSS. Respeta `prefers-reduced-motion`.
+  - Header con título + eyebrow + "Ver todo →" que filtra el catálogo abajo.
+  - Hasta 18 productos por strip (`LINE_STRIP_MAX`).
+- **Refactor del motor de auto-scroll**: migrado de `requestAnimationFrame` a CSS keyframes. Más simple y robusto.
 
 ### Sesión anterior
 - **Botón deslizante de tema claro/oscuro** en el nav (al lado del carrito). Modo claro por omisión, manteniendo la paleta rosa / violeta / champagne. Tu preferencia se guarda y se respeta al volver a entrar.
