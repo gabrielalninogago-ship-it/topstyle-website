@@ -1,6 +1,6 @@
 # TopStyle — Estado del proyecto
 
-> **Última actualización:** 04/05/2026 · **Checkpoint estable:** `I`
+> **Última actualización:** 13/05/2026 · **Checkpoint estable:** `J`
 > Documento autosuficiente para retomar el proyecto en cualquier contexto.
 
 ---
@@ -73,7 +73,8 @@ Topstyle/
     ├── F/   ← email cableado
     ├── G/   ← audit 2 fotos (parcial)
     ├── H/   ← audit 2 cerrado al 100%
-    └── I/   ← categorías reorganizadas según Question
+    ├── I/   ← categorías reorganizadas según Question
+    └── index-pre-qr-panel.html  ← backup antes de integrar el panel pedido rápido (checkpoint J)
 ```
 
 **Workspace montado en VM:** `/sessions/.../mnt/Topstyle/` ↔ `C:\Users\Gabb\.claude\Topstyle\`
@@ -147,6 +148,14 @@ Topstyle/
 - **Footer** con info y links.
 - **Toast** de confirmación al sumar al carrito.
 - **WhatsApp button** flotante.
+- **Panel Pedido Rápido** (`#qrPanel`) — sidebar derecha, trigger `#qrTrigger` fijo en el borde. 4 tabs (Coloración · Intelligent · Styling · Pileta/Salón), lista productos de la línea activa con imagen + nombre + precio + botón agregar/elegir color. Footer muestra total ítems y botón "Ver pedido →" que cierra el panel y abre el cart drawer. Z-index 155 (entre sidebar 150 y cart drawer 160). Código completamente dentro del IIFE existente en un bloque `{}`.
+
+### Admin de cupones (`admin.html`)
+- Panel dark para gestionar cupones sin tocar código.
+- **Persistencia via localStorage** (`topstyle_coupons_admin`): sin File System Access API, sin permisos de archivo.
+- Flujo: crear/editar/eliminar → guarda automático en localStorage.
+- `index.html` lee `topstyle_coupons_admin` al iniciar y mergea sobre el `COUPONS` hardcodeado con `Object.assign`.
+- Cupones soportados: % de descuento, mínimo de compra, vencimiento por días desde primera visita o por fecha fija, activar/desactivar.
 
 ---
 

@@ -5465,6 +5465,10 @@
         expiresRel: null,
       }
     };
+    try {
+      const _adminCoupons = JSON.parse(localStorage.getItem('topstyle_coupons_admin') || 'null');
+      if (_adminCoupons && typeof _adminCoupons === 'object') Object.assign(COUPONS, _adminCoupons);
+    } catch(e) {}
     const COUPON_STORAGE_KEY = 'topstyle_active_coupon';
     const FIRST_VISIT_KEY = 'topstyle_first_visit_at';
 
