@@ -6,6 +6,17 @@ Anotado el 21/04/2026. Última actualización: 14/05/2026.
 
 ## ✅ Hechas
 
+### Sesión del 20/05/2026 (checkpoint K2)
+
+- **COLORATION_PALETTE corregida al 100%**: 109 tonos oficiales en 29 familias, validado contra `Question_ColorBook (2025) DIGITAL` con Gabb.
+  - Diff con la versión anterior:
+    - **+19 tonos** agregados (Cenizas Irisados 8.11/9.11, Tonos Fríos 9.10/7.17/10.21/10.51, Marrones Cálidos 7.35, Tabacos 6.52/7.52/8.52, Marrones Elementales 5ME/6ME/7ME/8ME, Dorados Miel 8.32/10.32, Dorados Intensos 9.33, Cobres 8.34/9.34, Cobrizos Vibrantes 7.46V/8.43V, Rojos 7.62, Malvas 8.2/9.2, Aclarantes 10).
+    - **−5 tonos eliminados** que no existían en el PDF oficial (7.13, 7.4, ME genérico, 0/0 Mix neutro, duplicados varios).
+    - **Recategorizaciones**: 9.13/10.13 (Irisados → Dorados Beige), 5.62 (Caobas → Violáceos), 5.65/7.65 (Caobas → Rojos), 6.52/7.52 (Caobas → Tabacos), 6.23/7.23 (Marrones genéricos → Marrones Fríos), 5.35/6.35 (Marrones genéricos → Marrones Cálidos), 7.17 (Tabacos → Tonos Fríos como "Lead Ice").
+    - **Renombres**: ajustados a nombres del PDF oficial (e.g. `912` = "Súper aclarante ceniza malva"; `9.31` = "dorado ceniza" no "beige"; `5MK/6MK` = "moka mousse"; etc.).
+    - **Familias unificadas**: "Max Súper Aclarantes" fusionada en "Súper Aclarantes" (5 tonos); "Correctores" y "Mix" fusionados en "Mix Correctores" (6 tonos: Azul, Plata, Verde Mate, Violeta, Rojo, Dorado, sin prefijo).
+- **Hex de swatches**: siguen siendo aproximaciones algorítmicas. Pendiente extraerlos del PDF (45/109 son rects planos detectables con pdfplumber; el resto son fotos embebidas que necesitan otro approach).
+
 ### Sesión del 13-14/05/2026 (checkpoint K)
 
 - **Roadmap priorizado** (10 puntos) consensuado con Gabb. Orden: (1) strips por línea ✅, (2) selector de color v2, (3) UX tipo Meli iterativo, (4) lead capture (Web3Forms recomendado), etc.

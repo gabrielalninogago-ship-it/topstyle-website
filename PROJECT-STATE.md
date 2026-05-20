@@ -1,6 +1,6 @@
 # TopStyle — Estado del proyecto
 
-> **Última actualización:** 14/05/2026 · **Checkpoint estable:** `K`
+> **Última actualización:** 20/05/2026 · **Checkpoint estable:** `K2`
 > Documento autosuficiente para retomar el proyecto en cualquier contexto.
 
 ---
@@ -129,7 +129,10 @@ Topstyle/
 - Toggle "Varios tonos / 1 tono".
 - Stepper de cantidad por tono seleccionado, total dinámico.
 - Cada tono se agrega como **ítem separado** al carrito (con swatch + código + nombre visibles).
-- **Paletas curadas:** `LUMIPLEX_PALETTE` (47 tonos) y `COLORATION_PALETTE` (~90 tonos) extraídas de los color books PDF oficiales. Hex de los swatches son aproximaciones — pendiente reemplazar por imágenes oficiales.
+- **Paletas oficiales:**
+  - `COLORATION_PALETTE` — **109 tonos en 29 familias** (✅ revisado contra Question Color Book 2025 con Gabb el 20/05/2026). Estructura 100% alineada con el PDF oficial.
+  - `LUMIPLEX_PALETTE` — 47 tonos (pendiente de revisión contra PDF oficial).
+- **Hex de swatches**: aproximaciones algorítmicas. Pendiente: extraer colores reales de los rectángulos planos del PDF (45/109 detectados como rects) + identificar swatches que son fotos embebidas vía OCR/matching de coordenadas.
 
 ### Carrito
 - Estructura de items: `{id, qty, variant?: {code, name, hex, line}}`.
