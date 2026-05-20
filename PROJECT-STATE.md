@@ -1,6 +1,6 @@
 # TopStyle — Estado del proyecto
 
-> **Última actualización:** 20/05/2026 · **Checkpoint estable:** `K2`
+> **Última actualización:** 20/05/2026 · **Checkpoint estable:** `L`
 > Documento autosuficiente para retomar el proyecto en cualquier contexto.
 
 ---
@@ -131,7 +131,7 @@ Topstyle/
 - Cada tono se agrega como **ítem separado** al carrito (con swatch + código + nombre visibles).
 - **Paletas oficiales:**
   - `COLORATION_PALETTE` — **109 tonos en 29 familias** (✅ revisado contra Question Color Book 2025 con Gabb el 20/05/2026). Estructura 100% alineada con el PDF oficial.
-  - `LUMIPLEX_PALETTE` — 47 tonos (pendiente de revisión contra PDF oficial).
+  - `LUMIPLEX_PALETTE` — **35 tonos en 7 familias** (✅ revisado contra Question Lumiplex Color Book 2026 con Gabb el 20/05/2026). Familias: Naturales (7), Perlados (6), Dorados (11, unifica beige según PDF), Cenizas (4), Cobrizos (2), Marrones (4), Rojizos (1). Sin Mix Correctores (no aplican a Lumiplex).
 - **Hex de swatches**: aproximaciones algorítmicas. Pendiente: extraer colores reales de los rectángulos planos del PDF (45/109 detectados como rects) + identificar swatches que son fotos embebidas vía OCR/matching de coordenadas.
 
 ### Carrito
@@ -310,6 +310,12 @@ cp _checkpoints/I/TODO-mejoras.md .
 ---
 
 ## 11. Decisiones recientes
+
+### Sesión del 20/05/2026 (checkpoint L)
+
+- ✅ **Lumiplex palette validada contra PDF oficial**: 47→35 tonos. Recategorizaciones aplicadas: `5.65` movido a familia nueva "Rojizos"; `9.31`/`10.13`/`10.31` unificados dentro de "Dorados" (siguiendo PDF, antes estaban en "Beige" aparte); `7.46`/`8.43` con nombres invertidos corregidos. 11 Mix Correctores eliminados — confirmado por Gabb que Lumiplex no tiene Mix.
+- ✅ **`formatMoney` fix**: antes devolvía `"[COMPLETAR: precio]"` cuando el monto era 0 (placeholder de desarrollo visible en el footer del modal de selector de color cuando no había tonos seleccionados). Ahora devuelve `"$ 0"`.
+- ✅ **Footer cleanup**: Instagram cableado a `instagram.com/distribuidora.topstyle`. Iconos de Facebook y TikTok removidos (Gabb confirmó que no se usan acá — quedan para el proyecto de marketing). Placeholder `[COMPLETAR: CUIT opcional]` removido del bottom.
 
 ### Sesión del 13-14/05/2026 (checkpoint K)
 

@@ -3847,19 +3847,9 @@
         <div class="footer__col">
           <h4>Redes</h4>
           <div class="footer__social">
-            <a href="[COMPLETAR:URL Instagram]" aria-label="Instagram" target="_blank" rel="noopener">
+            <a href="https://instagram.com/distribuidora.topstyle" aria-label="Instagram @distribuidora.topstyle" target="_blank" rel="noopener">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                 <rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37zM17.5 6.5h.01"/>
-              </svg>
-            </a>
-            <a href="[COMPLETAR:URL Facebook]" aria-label="Facebook" target="_blank" rel="noopener">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
-              </svg>
-            </a>
-            <a href="[COMPLETAR:URL TikTok]" aria-label="TikTok" target="_blank" rel="noopener">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5.8 20.1a6.34 6.34 0 0 0 10.86-4.43V8.39a7.74 7.74 0 0 0 4.51 1.44V6.43a4.81 4.81 0 0 1-1.58-.14z"/>
               </svg>
             </a>
           </div>
@@ -3868,7 +3858,7 @@
 
       <div class="footer__bottom">
         <span>© <span id="year"></span> TopStyle · Professional Hair Stylist Products. Todos los derechos reservados.</span>
-        <span>Buenos Aires, Argentina · [COMPLETAR: CUIT opcional]</span>
+        <span>Buenos Aires, Argentina</span>
       </div>
     </div>
   </footer>
@@ -4188,7 +4178,7 @@
     //  (curadas a partir de los color books oficiales)
     // ==========================================================
     const LUMIPLEX_PALETTE = [
-      // Naturales
+      // Naturales (7)
       {c:'1',     n:'Negro',                           f:'Naturales', h:'#1a1410'},
       {c:'4',     n:'Castaño',                         f:'Naturales', h:'#5a3826'},
       {c:'5',     n:'Castaño claro',                   f:'Naturales', h:'#7a5236'},
@@ -4196,52 +4186,40 @@
       {c:'7',     n:'Rubio',                           f:'Naturales', h:'#b48a5e'},
       {c:'8',     n:'Rubio claro',                     f:'Naturales', h:'#c9a47a'},
       {c:'9',     n:'Rubio muy claro',                 f:'Naturales', h:'#dcc09a'},
-      // Cenizas
+      // Perlados (6)
+      {c:'7.21',  n:'Rubio malva ceniza',              f:'Perlados',  h:'#8e7470'},
+      {c:'8.21',  n:'Rubio claro malva ceniza',        f:'Perlados',  h:'#a48a82'},
+      {c:'9.21',  n:'Rubio muy claro malva ceniza',    f:'Perlados',  h:'#bba39a'},
+      {c:'10.21', n:'Rubio extra claro malva ceniza',  f:'Perlados',  h:'#caafa6'},
+      {c:'8.10',  n:'Rubio claro perla metalizado',    f:'Perlados',  h:'#bda69e'},
+      {c:'10.10', n:'Rubio extra claro perla',         f:'Perlados',  h:'#d4c2b8'},
+      // Dorados (11 — incluye .31 y 10.13 según PDF oficial)
+      {c:'5.3',   n:'Castaño claro dorado',            f:'Dorados',   h:'#7c5a30'},
+      {c:'6.3',   n:'Rubio oscuro dorado',             f:'Dorados',   h:'#9c7640'},
+      {c:'7.3',   n:'Rubio dorado',                    f:'Dorados',   h:'#bb8e4c'},
+      {c:'8.3',   n:'Rubio claro dorado',              f:'Dorados',   h:'#d2a868'},
+      {c:'9.3',   n:'Rubio muy claro dorado',          f:'Dorados',   h:'#e0bf85'},
+      {c:'7.32',  n:'Rubio dorado miel',               f:'Dorados',   h:'#c39252'},
+      {c:'8.32',  n:'Rubio claro dorado miel',         f:'Dorados',   h:'#d6ae6f'},
+      {c:'9.32',  n:'Rubio muy claro dorado miel',     f:'Dorados',   h:'#e3c38b'},
+      {c:'10.13', n:'Rubio extra claro beige',         f:'Dorados',   h:'#dec8a4'},
+      {c:'9.31',  n:'Rubio muy claro dorado beige',    f:'Dorados',   h:'#d8bf95'},
+      {c:'10.31', n:'Rubio extra claro dorado beige',  f:'Dorados',   h:'#dec0a0'},
+      // Cenizas (4)
       {c:'5.1',   n:'Castaño claro ceniza',            f:'Cenizas',   h:'#6b5a52'},
       {c:'6.1',   n:'Rubio oscuro ceniza',             f:'Cenizas',   h:'#8a766a'},
       {c:'7.1',   n:'Rubio ceniza',                    f:'Cenizas',   h:'#a89384'},
       {c:'8.1',   n:'Rubio claro ceniza',              f:'Cenizas',   h:'#bca99a'},
-      // Perlados
-      {c:'7.21',  n:'Rubio malva ceniza',              f:'Perlados',  h:'#8e7470'},
-      {c:'8.10',  n:'Rubio claro perla metalizado',    f:'Perlados',  h:'#bda69e'},
-      {c:'8.21',  n:'Rubio claro malva ceniza',        f:'Perlados',  h:'#a48a82'},
-      {c:'9.21',  n:'Rubio muy claro malva ceniza',    f:'Perlados',  h:'#bba39a'},
-      {c:'10.10', n:'Rubio extra claro perla',         f:'Perlados',  h:'#d4c2b8'},
-      {c:'10.21', n:'Rubio extra claro malva ceniza',  f:'Perlados',  h:'#caafa6'},
-      // Dorados
-      {c:'5.3',   n:'Castaño claro dorado',            f:'Dorados',   h:'#7c5a30'},
-      {c:'6.3',   n:'Rubio oscuro dorado',             f:'Dorados',   h:'#9c7640'},
-      {c:'7.3',   n:'Rubio dorado',                    f:'Dorados',   h:'#bb8e4c'},
-      {c:'7.32',  n:'Rubio dorado miel',               f:'Dorados',   h:'#c39252'},
-      {c:'8.3',   n:'Rubio claro dorado',              f:'Dorados',   h:'#d2a868'},
-      {c:'8.32',  n:'Rubio claro dorado miel',         f:'Dorados',   h:'#d6ae6f'},
-      {c:'9.3',   n:'Rubio muy claro dorado',          f:'Dorados',   h:'#e0bf85'},
-      {c:'9.32',  n:'Rubio muy claro dorado miel',     f:'Dorados',   h:'#e3c38b'},
-      // Beige
-      {c:'9.31',  n:'Rubio muy claro dorado beige',    f:'Beige',     h:'#d8bf95'},
-      {c:'10.13', n:'Rubio extra claro beige',         f:'Beige',     h:'#dec8a4'},
-      {c:'10.31', n:'Rubio extra claro dorado beige',  f:'Beige',     h:'#dec0a0'},
-      // Marrones / Chocolates
-      {c:'5.65',  n:'Castaño claro rojizo caoba',      f:'Marrones',  h:'#6b3a2c'},
+      // Cobrizos (2)
+      {c:'7.46',  n:'Rubio cobrizo rojizo',            f:'Cobrizos',  h:'#b46438'},
+      {c:'8.43',  n:'Rubio claro cobrizo dorado',      f:'Cobrizos',  h:'#bd6c42'},
+      // Marrones / Chocolates (4)
       {c:'6.53',  n:'Rubio oscuro chocolate',          f:'Marrones',  h:'#7e4e3a'},
       {c:'7.8',   n:'Rubio marrón neutro',             f:'Marrones',  h:'#8e6244'},
       {c:'8.53',  n:'Rubio claro chocolate',           f:'Marrones',  h:'#a07254'},
       {c:'10.53', n:'Rubio extra claro chocolate',     f:'Marrones',  h:'#c8a489'},
-      // Cobrizos
-      {c:'7.46',  n:'Rubio claro cobrizo dorado',      f:'Cobrizos',  h:'#b46438'},
-      {c:'8.43',  n:'Rubio cobrizo rojizo',            f:'Cobrizos',  h:'#bd6c42'},
-      // Mix correctores
-      {c:'ROJO',     n:'Mix Rojo',                     f:'Mix',       h:'#c92020'},
-      {c:'VIOLETA',  n:'Mix Violeta',                  f:'Mix',       h:'#7d3aa6'},
-      {c:'NARANJA',  n:'Mix Naranja',                  f:'Mix',       h:'#e07a25'},
-      {c:'COBRE',    n:'Mix Cobre',                    f:'Mix',       h:'#b75c2e'},
-      {c:'MALVA',    n:'Mix Malva',                    f:'Mix',       h:'#8e5a90'},
-      {c:'AZUL',     n:'Mix Azul',                     f:'Mix',       h:'#2c4ba1'},
-      {c:'CENIZA',   n:'Mix Ceniza',                   f:'Mix',       h:'#888785'},
-      {c:'VERDE',    n:'Mix Verde',                    f:'Mix',       h:'#3a7a3e'},
-      {c:'AMARILLO', n:'Mix Amarillo',                 f:'Mix',       h:'#e6c834'},
-      {c:'DORADO',   n:'Mix Dorado',                   f:'Mix',       h:'#c79b3a'},
-      {c:'MATE',     n:'Mix Mate',                     f:'Mix',       h:'#7a695a'},
+      // Rojizos (1)
+      {c:'5.65',  n:'Castaño claro rojizo caoba',      f:'Rojizos',   h:'#6b3a2c'},
     ];
 
     // COLORATION_PALETTE — 109 tonos oficiales según Question Color Book 2025.
@@ -5241,11 +5219,12 @@
       { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]
     ));
     const formatMoney = (n) => {
-      if (!n || isNaN(n)) return '[COMPLETAR: precio]';
+      const num = Number(n);
+      if (!Number.isFinite(num)) return '$ 0';
       return new Intl.NumberFormat('es-AR', {
         style: 'currency', currency: CURRENCY,
         minimumFractionDigits: 0, maximumFractionDigits: 0
-      }).format(n);
+      }).format(num);
     };
 
     const toastEl = $('#toast');
