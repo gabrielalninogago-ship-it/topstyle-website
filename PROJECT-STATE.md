@@ -1,6 +1,6 @@
 # TopStyle — Estado del proyecto
 
-> **Última actualización:** 20/05/2026 · **Checkpoint estable:** `M`
+> **Última actualización:** 21/05/2026 · **Checkpoint estable:** `N`
 > Documento autosuficiente para retomar el proyecto en cualquier contexto.
 
 ---
@@ -76,6 +76,9 @@ Topstyle/
     ├── I/   ← categorías reorganizadas según Question
     ├── J/   ← admin de cupones + panel pedido rápido
     ├── K/   ← strips mini por línea distribuidos + planning de roadmap
+    ├── L/   ← Lumiplex palette validada (35 tonos, sin Mix)
+    ├── M/   ← UX tipo Meli parte 1 (badges, buscador, sticky cart, pill bienvenida)
+    ├── N/   ← swatches hex reales extraídos del PDF + boost asimétrico
     └── index-pre-qr-panel.html  ← backup antes de integrar el panel pedido rápido (checkpoint J)
 ```
 
@@ -132,7 +135,7 @@ Topstyle/
 - **Paletas oficiales:**
   - `COLORATION_PALETTE` — **109 tonos en 29 familias** (✅ revisado contra Question Color Book 2025 con Gabb el 20/05/2026). Estructura 100% alineada con el PDF oficial.
   - `LUMIPLEX_PALETTE` — **35 tonos en 7 familias** (✅ revisado contra Question Lumiplex Color Book 2026 con Gabb el 20/05/2026). Familias: Naturales (7), Perlados (6), Dorados (11, unifica beige según PDF), Cenizas (4), Cobrizos (2), Marrones (4), Rojizos (1). Sin Mix Correctores (no aplican a Lumiplex).
-- **Hex de swatches**: aproximaciones algorítmicas. Pendiente: extraer colores reales de los rectángulos planos del PDF (45/109 detectados como rects) + identificar swatches que son fotos embebidas vía OCR/matching de coordenadas.
+- **Hex de swatches**: ✅ extraídos directamente de las fotos del color book oficial (checkpoint N, 21/05/2026). Pipeline en `_audit/extract_coloration_v5.py` (detección dinámica del mechón por fila) y `_audit/extract_v3.py` (Lumiplex). Boost asimétrico aplicado encima para mantener vibración sin perder fidelidad al matiz real. Mix Correctores extraídos de los rectángulos vectoriales de la página 6 del PDF de Coloration.
 
 ### Carrito
 - Estructura de items: `{id, qty, variant?: {code, name, hex, line}}`.
@@ -310,6 +313,14 @@ cp _checkpoints/I/TODO-mejoras.md .
 ---
 
 ## 11. Decisiones recientes
+
+### Sesión del 21/05/2026 (checkpoint N — swatches reales del PDF)
+
+- ✅ **Pipeline de extracción de swatches del PDF terminado y aplicado** para Coloration (109) y Lumiplex (35). Cada hex viene de muestrear el píxel central del mechón en la foto del color book oficial. Mix Correctores de Coloration extraídos de los rectángulos vectoriales de la página 6 (los hex anteriores eran aproximaciones que no coincidían con el PDF).
+- ✅ **Detección dinámica del mechón** (v5 para Coloration, v3 para Lumiplex) — escaneo vertical buscando bandas de color no-blanco, agrupado por fila para que un mismo bbox aplique a todos los códigos de una fila. Resuelve problemas previos donde el muestreador agarraba texto ("ROJIZO VIBRANT") o columnas con solo etiqueta sin mechón visible.
+- ✅ **Boost asimétrico aplicado encima del hex del PDF** para mantener vibración sin perder fidelidad: oscuros (L<22%) casi intactos, medios (L 22-40%) +0.06, claros >40% lift proporcional. Saturación +5% global.
+- ✅ **Enforcement de jerarquía monotónica** dentro de cada familia (paso mínimo L+0.03 entre alturas crecientes). Corrige los casos donde la foto del PDF tiene degradado raíz→puntas que el muestreador interpretaba mal (ej. "5" Naturales). 15 ajustes mínimos en Coloration, 6 en Lumiplex.
+- 🔜 **Próximo paso**: polish estético del sitio + test mobile real + lead capture + hosting. Estimado V1 al ~92%.
 
 ### Sesión del 20/05/2026 (checkpoint M — UX tipo Meli, parte 1)
 
