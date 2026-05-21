@@ -1,6 +1,6 @@
 # TopStyle — Estado del proyecto
 
-> **Última actualización:** 20/05/2026 · **Checkpoint estable:** `L`
+> **Última actualización:** 20/05/2026 · **Checkpoint estable:** `M`
 > Documento autosuficiente para retomar el proyecto en cualquier contexto.
 
 ---
@@ -310,6 +310,21 @@ cp _checkpoints/I/TODO-mejoras.md .
 ---
 
 ## 11. Decisiones recientes
+
+### Sesión del 20/05/2026 (checkpoint M — UX tipo Meli, parte 1)
+
+- ✅ **Badges con color por tipo** en cards del catálogo, bestseller carousel y strips por línea. Helper `badgeKind()` clasifica por keyword del badge: "Top ventas"→rosa, "Sin amoníaco"→verde sage, "Nuevo"→verde brillante, "Profesional/Salón"→plum, default→silver.
+- ✅ **Buscador global colapsable**: lupa redonda en el nav abre una fila full-width con input grande debajo del header. Filtra catálogo en vivo (debounce 180ms) por nombre+marca+descripción+id, scrollea al grid en el primer tipeo, `Esc` o "Cerrar" colapsa la fila. Muestra contador "Mostrando X resultados para 'query'".
+- ✅ **Sticky cart mobile** (`.cart-float`): botón flotante violeta en esquina inferior izquierda, visible solo en mobile (<768px) y con items en el carrito. Bump animation al sumar producto (sincronizado con el bump del cart-trigger del header via helper `bumpCartIcons()`).
+- ✅ **Checkbox "Soy clienta frecuente"** en el form de pedido: aplica `TOPSTYLE15` automático. Sincronización bidireccional con el cart drawer (aplicar/quitar desde un lado refleja en el otro).
+- ✅ **Welcome modal con pill flotante de fallback**: la lógica cambió de "una sola vez" a un sistema de 3 estados (`pending` / `applied` / `dismissed`):
+  - Modal aparece en cada NUEVA visita si está `pending` (usando `sessionStorage` para no molestar en la misma visita).
+  - Si la usuaria cierra el modal sin aplicar, queda un **pill flotante** centrado abajo: "🎁 Tenés 10% off esperándote" — click reabre el modal, X lo descarta para siempre.
+  - Cuando aplican BIENVENIDA10 (desde el cart drawer) → state pasa a `applied`, ni modal ni pill vuelven a aparecer.
+  - Migración del flag viejo `topstyle_welcome_seen=1` → `topstyle_welcome_state=dismissed`.
+- ✅ **Botón "Volver arriba"** sticky: aparece a 600px+ de scroll, esquina inferior derecha encima del WhatsApp. Smooth scroll al top.
+- ✅ **Footer cleanup heredado** (de checkpoint L): IG cableado a @distribuidora.topstyle, Facebook y TikTok removidos, CUIT placeholder fuera.
+- ✅ **Fix logo del nav**: el primer intento del buscador inline le robaba espacio al logo y lo colapsaba a width:0. Solución: lupa = botón redondo + fila colapsable debajo del nav.
 
 ### Sesión del 20/05/2026 (checkpoint L)
 

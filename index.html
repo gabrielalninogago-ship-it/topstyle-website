@@ -387,6 +387,7 @@
       font-weight: 600;
       letter-spacing: 0.04em;
       color: var(--text-primary);
+      flex-shrink: 0;
     }
     .nav__brand img {
       height: 64px;
@@ -429,6 +430,113 @@
       display: none;
     }
     @media (min-width: 960px) { .nav__cta { display: inline-flex; } }
+
+    .nav__search-btn {
+      display: none;
+      width: 38px;
+      height: 38px;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: 1px solid var(--border-strong);
+      border-radius: 50%;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all var(--t);
+      flex-shrink: 0;
+    }
+    @media (min-width: 768px) { .nav__search-btn { display: inline-flex; } }
+    .nav__search-btn:hover { background: var(--silver-hi); color: var(--text-on-light); border-color: var(--silver-hi); }
+    .nav__search-btn.is-active { background: var(--silver-hi); color: var(--text-on-light); border-color: var(--silver-hi); }
+
+    .nav__search-row {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height var(--t-slow), border-color var(--t);
+      border-top: 1px solid transparent;
+      background: var(--bg-primary);
+    }
+    .nav.is-search-open .nav__search-row {
+      max-height: 96px;
+      border-top-color: var(--border-subtle);
+    }
+    .nav__search-row-inner {
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 12px var(--space-6);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    @media (min-width: 768px) { .nav__search-row-inner { padding: 14px var(--space-8); } }
+    .nav__search-field {
+      position: relative;
+      flex: 1;
+      display: flex;
+      align-items: center;
+    }
+    .nav__search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: var(--text-muted);
+    }
+    .nav__search-input {
+      width: 100%;
+      padding: 12px 40px 12px 40px;
+      font-size: 15px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-full);
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color var(--t), box-shadow var(--t);
+    }
+    .nav__search-input:focus {
+      border-color: var(--silver-hi);
+      box-shadow: 0 0 0 3px rgba(107, 58, 138, 0.15);
+    }
+    .nav__search-input::placeholder { color: var(--text-muted); }
+    .nav__search-input::-webkit-search-cancel-button { display: none; }
+    .nav__search-clear {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 22px;
+      height: 22px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: var(--border-strong);
+      color: var(--text-primary);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1;
+      padding: 0;
+    }
+    .nav__search-field.has-text .nav__search-clear { display: flex; }
+    .nav__search-clear:hover { background: var(--silver-hi); color: var(--text-on-light); }
+    .nav__search-close {
+      flex-shrink: 0;
+      padding: 8px 16px;
+      background: transparent;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-full);
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all var(--t);
+    }
+    .nav__search-close:hover { color: var(--text-primary); border-color: var(--silver-mid); }
 
     /* ================================================== */
     /*  THEME TOGGLE — switch claro/oscuro                 */
@@ -1029,13 +1137,29 @@
       position: absolute;
       top: var(--space-3);
       left: var(--space-3);
-      padding: 4px 10px;
+      padding: 5px 11px;
       font-size: 10px;
-      letter-spacing: 0.18em;
+      font-weight: 700;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: var(--text-on-light);
+      color: #fff;
       background: var(--silver-hi);
       border-radius: var(--radius-full);
+      box-shadow: 0 2px 10px rgba(43, 18, 53, 0.22);
+      z-index: 2;
+    }
+    .product__badge--bestseller {
+      background: linear-gradient(135deg, #e36ba8, #8b3a7d);
+    }
+    .product__badge--new {
+      background: linear-gradient(135deg, #6fc59a, #3a8a64);
+    }
+    .product__badge--pro {
+      background: linear-gradient(135deg, #6b3a8a, #2b1235);
+    }
+    .product__badge--natural {
+      background: linear-gradient(135deg, #c4dba0, #7ba85e);
+      color: #1f3a0d;
     }
     .product__body {
       padding: var(--space-6);
@@ -1301,6 +1425,70 @@
       gap: var(--space-6);
     }
     @media (min-width: 640px) { .form__row--split { grid-template-columns: 1fr 1fr; } }
+    .form__check {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      border: 1px solid var(--border-strong);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: border-color var(--t), background var(--t);
+    }
+    .form__check:hover { border-color: var(--silver-mid); }
+    .form__check input { position: absolute; opacity: 0; pointer-events: none; }
+    .form__check-box {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      border: 1.5px solid var(--border-strong);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+      transition: all var(--t);
+    }
+    .form__check input:checked + .form__check-box {
+      background: var(--silver-hi);
+      border-color: var(--silver-hi);
+    }
+    .form__check input:checked + .form__check-box::after {
+      content: '';
+      width: 6px;
+      height: 11px;
+      border-right: 2px solid var(--text-on-light);
+      border-bottom: 2px solid var(--text-on-light);
+      transform: rotate(45deg) translate(-1px, -1px);
+    }
+    .form__check-label {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      font-size: 14px;
+      color: var(--text-primary);
+      line-height: 1.4;
+    }
+    .form__check-label strong { font-weight: 600; }
+    .form__check-label small {
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 400;
+    }
+    .form__check-label small code {
+      background: var(--bg-tertiary);
+      color: var(--silver-hi);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-family: var(--font-sans);
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .form__check.is-applied {
+      border-color: var(--silver-hi);
+      background: rgba(107, 58, 138, 0.06);
+    }
     .form__label {
       display: block;
       font-size: 12px;
@@ -1505,6 +1693,182 @@
     @media (min-width: 768px) {
       .wa-float { right: 28px; bottom: 28px; width: 64px; height: 64px; }
       .wa-float svg { width: 32px; height: 32px; }
+    }
+
+    .cart-float {
+      position: fixed;
+      left: 20px;
+      bottom: 20px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--silver-hi);
+      color: var(--text-on-light);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 28px rgba(43, 18, 53, 0.32);
+      z-index: 90;
+      cursor: pointer;
+      border: none;
+      transition: transform var(--t), box-shadow var(--t);
+    }
+    .cart-float.is-visible { display: flex; }
+    .cart-float:hover { transform: translateY(-2px) scale(1.05); }
+    .cart-float svg { width: 24px; height: 24px; }
+    .cart-float__count {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      min-width: 22px;
+      height: 22px;
+      padding: 0 6px;
+      border-radius: 11px;
+      background: var(--rose-hi);
+      color: var(--text-on-light);
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--bg-primary);
+    }
+    @media (min-width: 768px) {
+      .cart-float { display: none !important; }
+    }
+    .cart-float.bump { animation: cartBump 0.5s ease; }
+
+    .back-to-top {
+      position: fixed;
+      right: 20px;
+      bottom: 96px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--bg-elevated);
+      color: var(--silver-hi);
+      border: 1px solid var(--border-strong);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(43, 18, 53, 0.22);
+      z-index: 88;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(8px);
+      transition: opacity var(--t), transform var(--t), background var(--t), color var(--t), border-color var(--t);
+    }
+    .back-to-top.is-visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+    .back-to-top:hover {
+      background: var(--silver-hi);
+      color: var(--text-on-light);
+      border-color: var(--silver-hi);
+      transform: translateY(-2px);
+    }
+    @media (min-width: 768px) {
+      .back-to-top { right: 28px; bottom: 102px; width: 48px; height: 48px; }
+    }
+
+    .welcome-pill {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%) translateY(120px);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 6px 10px 16px;
+      background: linear-gradient(135deg, #d6488f, #6b3a8a);
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 10px 28px rgba(214, 72, 143, 0.35);
+      z-index: 89;
+      opacity: 0;
+      pointer-events: none;
+      transition: transform var(--t-slow), opacity var(--t-slow);
+    }
+    .welcome-pill.is-visible {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .welcome-pill__body {
+      background: transparent;
+      border: none;
+      color: inherit;
+      font: inherit;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .welcome-pill__icon {
+      font-size: 15px;
+      line-height: 1;
+    }
+    .welcome-pill__close {
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.2);
+      border: none;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 14px;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0;
+      margin-left: 4px;
+      transition: background var(--t);
+    }
+    .welcome-pill__close:hover { background: rgba(255,255,255,0.4); }
+    @media (max-width: 480px) {
+      .welcome-pill { font-size: 12px; padding: 9px 6px 9px 14px; }
+    }
+
+    .search-results-count {
+      max-width: var(--container);
+      margin: 8px auto 0;
+      padding: 0 var(--space-6);
+      font-size: 12px;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      display: none;
+    }
+    .nav.is-search-open .search-results-count.has-query { display: block; }
+    @media (min-width: 768px) { .search-results-count { padding: 0 var(--space-8); } }
+
+    .bestseller-card__badge--bestseller,
+    .line-strip-card__badge--bestseller {
+      background: linear-gradient(135deg, #e36ba8, #8b3a7d) !important;
+      color: #fff !important;
+    }
+    .bestseller-card__badge--new,
+    .line-strip-card__badge--new {
+      background: linear-gradient(135deg, #6fc59a, #3a8a64) !important;
+      color: #fff !important;
+    }
+    .bestseller-card__badge--pro,
+    .line-strip-card__badge--pro {
+      background: linear-gradient(135deg, #6b3a8a, #2b1235) !important;
+      color: #fff !important;
+    }
+    .bestseller-card__badge--natural,
+    .line-strip-card__badge--natural {
+      background: linear-gradient(135deg, #c4dba0, #7ba85e) !important;
+      color: #1f3a0d !important;
     }
 
     /* ================================================== */
@@ -3178,6 +3542,13 @@
         <a class="nav__link" href="#contacto">Contacto</a>
       </nav>
 
+      <button class="nav__search-btn" id="navSearchBtn" type="button" aria-label="Buscar producto" aria-expanded="false" aria-controls="navSearchRow">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </button>
+
       <a class="btn btn--primary nav__cta" href="#pedido">Hacer pedido</a>
 
       <button class="theme-toggle" id="themeToggle" aria-label="Cambiar entre modo claro y oscuro" title="Cambiar modo claro/oscuro">
@@ -3218,6 +3589,21 @@
       <a href="#como-comprar">Cómo comprar</a>
       <a href="#contacto">Contacto</a>
       <a href="#pedido" class="btn btn--primary btn--block" style="margin-top: 16px;">Hacer pedido</a>
+    </div>
+
+    <div class="nav__search-row" id="navSearchRow" role="search">
+      <div class="nav__search-row-inner">
+        <div class="nav__search-field" id="navSearchField">
+          <svg class="nav__search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="search" class="nav__search-input" id="navSearchInput" placeholder="Buscá por nombre, marca o tono — ej: Lumiplex, twelve, rubio dorado…" autocomplete="off" aria-label="Buscar producto en el catálogo">
+          <button class="nav__search-clear" id="navSearchClear" type="button" aria-label="Limpiar búsqueda">×</button>
+        </div>
+        <button class="nav__search-close" id="navSearchCloseBtn" type="button">Cerrar</button>
+      </div>
+      <div class="search-results-count" id="searchResultsCount" aria-live="polite"></div>
     </div>
   </header>
 
@@ -3725,6 +4111,17 @@
           </div>
 
           <div class="form__row">
+            <label class="form__check" id="frecuenteCheck">
+              <input type="checkbox" id="f-frecuente" name="frecuente">
+              <span class="form__check-box" aria-hidden="true"></span>
+              <span class="form__check-label">
+                <strong>Soy clienta frecuente</strong>
+                <small>Aplicamos automáticamente <code>TOPSTYLE15</code> · 15% off en compras desde $ 25.000.</small>
+              </span>
+            </label>
+          </div>
+
+          <div class="form__row">
             <label class="form__label" for="f-zona">Zona de entrega</label>
             <select class="form__select" id="f-zona" name="zona">
               <option value="">Elegí una opción</option>
@@ -3866,6 +4263,30 @@
   <!-- ================================================= -->
   <!--  BOTÓN FLOTANTE DE WHATSAPP                        -->
   <!-- ================================================= -->
+  <button class="cart-float" id="cartFloat" type="button" aria-label="Abrir carrito" aria-controls="cartDrawer">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+      <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+      <line x1="3" y1="6" x2="21" y2="6"/>
+      <path d="M16 10a4 4 0 0 1-8 0"/>
+    </svg>
+    <span class="cart-float__count" id="cartFloatCount">0</span>
+  </button>
+
+  <button class="back-to-top" id="backToTop" type="button" aria-label="Volver arriba">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <line x1="12" y1="19" x2="12" y2="5"/>
+      <polyline points="5 12 12 5 19 12"/>
+    </svg>
+  </button>
+
+  <div class="welcome-pill" id="welcomePill" role="dialog" aria-label="Cupón de bienvenida pendiente">
+    <button type="button" class="welcome-pill__body" id="welcomePillBody" aria-label="Ver mi cupón de bienvenida">
+      <span class="welcome-pill__icon" aria-hidden="true">🎁</span>
+      <span>Tenés <strong>10% off</strong> esperándote</span>
+    </button>
+    <button type="button" class="welcome-pill__close" id="welcomePillClose" aria-label="Descartar cupón">×</button>
+  </div>
+
   <a class="wa-float" id="waFloat"
      href="https://wa.me/5491127395984?text=Hola%20TopStyle%2C%20quiero%20hacer%20una%20consulta"
      target="_blank" rel="noopener"
@@ -5226,6 +5647,14 @@
         minimumFractionDigits: 0, maximumFractionDigits: 0
       }).format(num);
     };
+    const badgeKind = (label) => {
+      const t = String(label || '').toLowerCase();
+      if (t.includes('top') || t.includes('vent') || t.includes('best')) return 'bestseller';
+      if (t.includes('nuev') || t.includes('new')) return 'new';
+      if (t.includes('profes') || t.includes('salon') || t.includes('salón')) return 'pro';
+      if (t.includes('amon') || t.includes('natur') || t.includes('vegan')) return 'natural';
+      return 'default';
+    };
 
     const toastEl = $('#toast');
     const showToast = (msg) => {
@@ -5314,6 +5743,7 @@
     const productsEmpty = $('#productsEmpty');
     let currentFilter = 'all';
     let currentLine = null; // filtro por línea (keyword en name/description). null = sin filtro.
+    let searchQuery = '';   // texto del buscador global del nav (lowercased).
 
     const matchesLine = (p, keyword) => {
       const hay = `${p.name} ${p.description || ''}`.toLowerCase();
@@ -5344,6 +5774,12 @@
         ? visible
         : visible.filter(p => getProductLine(p.id) === currentFilter);
       if (currentLine) filtered = filtered.filter(p => matchesLine(p, currentLine));
+      if (searchQuery) {
+        filtered = filtered.filter(p => {
+          const hay = `${p.name} ${p.brand} ${p.description || ''} ${p.id}`.toLowerCase();
+          return hay.includes(searchQuery);
+        });
+      }
 
       productsGrid.innerHTML = filtered.map((p, i) => {
         const delayClass = ['', 'reveal--delay-1', 'reveal--delay-2'][i % 3];
@@ -5354,7 +5790,7 @@
           ? `<img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}" loading="lazy">`
           : `<div class="product__placeholder">Foto del producto</div>`;
         const badgeHtml = p.badge
-          ? `<span class="product__badge">${escapeHtml(p.badge)}</span>`
+          ? `<span class="product__badge product__badge--${badgeKind(p.badge)}">${escapeHtml(p.badge)}</span>`
           : '';
 
         return `
@@ -5381,6 +5817,70 @@
     };
 
     renderProducts();
+
+    // Buscador global del nav — botón lupa abre fila expandible debajo del nav y filtra el catálogo en vivo.
+    (() => {
+      const nav = $('#nav');
+      const btn = $('#navSearchBtn');
+      const field = $('#navSearchField');
+      const input = $('#navSearchInput');
+      const clearBtn = $('#navSearchClear');
+      const closeBtn = $('#navSearchCloseBtn');
+      const countEl = $('#searchResultsCount');
+      if (!input || !nav) return;
+      let debounce;
+      const updateCount = () => {
+        if (!countEl) return;
+        if (!searchQuery) {
+          countEl.textContent = '';
+          countEl.classList.remove('has-query');
+          return;
+        }
+        const visible = document.querySelectorAll('#productsGrid .product').length;
+        countEl.textContent = visible === 0
+          ? `Sin resultados para "${searchQuery}"`
+          : `Mostrando ${visible} ${visible === 1 ? 'producto' : 'productos'} para "${searchQuery}"`;
+        countEl.classList.add('has-query');
+      };
+      const apply = () => {
+        const v = input.value.trim();
+        field.classList.toggle('has-text', v.length > 0);
+        clearTimeout(debounce);
+        debounce = setTimeout(() => {
+          const had = !!searchQuery;
+          searchQuery = v.toLowerCase();
+          renderProducts();
+          updateCount();
+          if (searchQuery && !had) {
+            document.getElementById('productos')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 180);
+      };
+      const open = () => {
+        nav.classList.add('is-search-open');
+        btn?.setAttribute('aria-expanded', 'true');
+        btn?.classList.add('is-active');
+        setTimeout(() => input.focus(), 220);
+      };
+      const close = () => {
+        nav.classList.remove('is-search-open');
+        btn?.setAttribute('aria-expanded', 'false');
+        btn?.classList.remove('is-active');
+        if (searchQuery) { input.value = ''; apply(); }
+      };
+      btn?.addEventListener('click', () => {
+        nav.classList.contains('is-search-open') ? close() : open();
+      });
+      closeBtn?.addEventListener('click', close);
+      input.addEventListener('input', apply);
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          if (input.value) { input.value = ''; apply(); }
+          else close();
+        }
+      });
+      clearBtn?.addEventListener('click', () => { input.value = ''; apply(); input.focus(); });
+    })();
 
     // ==========================================================
     //  3B. CARRUSEL BESTSELLERS
@@ -5416,7 +5916,7 @@
           <article class="bestseller-card reveal" data-product-id="${p.id}">
             <div class="bestseller-card__media">
               <span class="bestseller-card__rank">${String(i + 1).padStart(2, '0')}</span>
-              ${p.badge ? `<span class="bestseller-card__badge">${escapeHtml(p.badge)}</span>` : ''}
+              ${p.badge ? `<span class="bestseller-card__badge bestseller-card__badge--${badgeKind(p.badge)}">${escapeHtml(p.badge)}</span>` : ''}
               <img src="${p.image}" alt="${escapeHtml(p.name)}" loading="lazy" />
             </div>
             <div class="bestseller-card__body">
@@ -5613,7 +6113,7 @@
         return `
           <article class="line-strip-card" data-product-id="${p.id}">
             <div class="line-strip-card__media">
-              ${p.badge ? `<span class="line-strip-card__badge">${escapeHtml(p.badge)}</span>` : ''}
+              ${p.badge ? `<span class="line-strip-card__badge line-strip-card__badge--${badgeKind(p.badge)}">${escapeHtml(p.badge)}</span>` : ''}
               <img src="${escapeHtml(p.image || '')}" alt="${escapeHtml(p.name)}" loading="lazy" />
             </div>
             <div class="line-strip-card__body">
@@ -5864,11 +6364,28 @@
     const cartDiscountLabel = $('#cartDiscountLabel');
     const cartDiscountValue = $('#cartDiscountValue');
 
+    const cartFloat = $('#cartFloat');
+    const cartFloatCount = $('#cartFloatCount');
+
+    const bumpCartIcons = () => {
+      cartTrigger.classList.add('bump');
+      cartFloat?.classList.add('bump');
+      setTimeout(() => {
+        cartTrigger.classList.remove('bump');
+        cartFloat?.classList.remove('bump');
+      }, 500);
+    };
+
     const renderCart = () => {
       const count = CART.count();
       // Contador en navbar
       cartCount.textContent = count;
       cartCount.classList.toggle('is-visible', count > 0);
+      // Sticky cart mobile (visible solo cuando hay items)
+      if (cartFloat) {
+        cartFloatCount.textContent = count;
+        cartFloat.classList.toggle('is-visible', count > 0);
+      }
 
       cartDrawerCount.textContent = `${count} ${count === 1 ? 'ítem' : 'ítems'}`;
 
@@ -5949,6 +6466,7 @@
     };
 
     cartTrigger.addEventListener('click', openCart);
+    cartFloat?.addEventListener('click', openCart);
     cartClose.addEventListener('click', closeCart);
     cartBackdrop.addEventListener('click', closeCart);
     document.addEventListener('keydown', (e) => {
@@ -5972,8 +6490,7 @@
       }
       CART.add(id, 1);
       renderCart();
-      cartTrigger.classList.add('bump');
-      setTimeout(() => cartTrigger.classList.remove('bump'), 500);
+      bumpCartIcons();
       showToast(`✓ ${p.name} sumado al pedido`);
     };
     window.addToCart = addToCart;
@@ -6015,6 +6532,9 @@
     // ==========================================================
     //  5B. CUPONES — UI del carrito
     // ==========================================================
+    const frecuenteCheck = $('#frecuenteCheck');
+    const frecuenteInput = $('#f-frecuente');
+
     const syncCouponUI = () => {
       if (!cartCoupon) return;
       cartCoupon.classList.toggle('is-applied', !!ACTIVE_COUPON);
@@ -6026,8 +6546,22 @@
         couponMsg.textContent = '';
         couponMsg.className = 'cart-coupon__msg';
       }
+      // Sincronizar checkbox "Soy clienta frecuente" con TOPSTYLE15
+      if (frecuenteInput && frecuenteCheck) {
+        const isTopStyle15 = !!(ACTIVE_COUPON && ACTIVE_COUPON.code === 'TOPSTYLE15');
+        frecuenteInput.checked = isTopStyle15;
+        frecuenteCheck.classList.toggle('is-applied', isTopStyle15);
+      }
     };
     syncCouponUI();
+
+    frecuenteInput?.addEventListener('change', () => {
+      if (frecuenteInput.checked) {
+        applyCouponCode('TOPSTYLE15');
+      } else if (ACTIVE_COUPON && ACTIVE_COUPON.code === 'TOPSTYLE15') {
+        removeCoupon();
+      }
+    });
 
     const showCouponMsg = (text, kind = 'ok') => {
       couponMsg.textContent = text;
@@ -6071,6 +6605,8 @@
       showCouponMsg(`¡Listo! ${c.value}% de descuento aplicado`, 'ok');
       syncCouponUI();
       renderCart();
+      // Si aplicó BIENVENIDA10, marcamos el welcome como cerrado para siempre.
+      if (c.code === 'BIENVENIDA10') setWelcomeState('applied');
       return true;
     };
 
@@ -6315,8 +6851,7 @@
         added += s.qty;
       });
       renderCart();
-      cartTrigger.classList.add('bump');
-      setTimeout(() => cartTrigger.classList.remove('bump'), 500);
+      bumpCartIcons();
       const tonosTxt = colorSelected.length === 1 ? `tono ${colorSelected[0].code}` : `${colorSelected.length} tonos`;
       showToast(`✓ ${productName} — ${tonosTxt} (${added} ${added===1?'unidad':'unidades'})`);
       closeColorPicker();
@@ -6332,33 +6867,78 @@
     });
 
     // ==========================================================
-    //  5C. WELCOME MODAL — cupón de bienvenida
+    //  5C. WELCOME MODAL — cupón de bienvenida (con pill flotante)
     // ==========================================================
-    const WELCOME_SEEN_KEY = 'topstyle_welcome_seen';
+    // Estados: '' (pendiente) | 'applied' (aplicó BIENVENIDA10) | 'dismissed' (descartó el pill)
+    const WELCOME_STATE_KEY = 'topstyle_welcome_state';
+    const WELCOME_MODAL_SESSION_KEY = 'topstyle_welcome_modal_session';
     const welcomeModal = $('#welcomeModal');
     const welcomeClose = $('#welcomeClose');
     const welcomeContinue = $('#welcomeContinue');
     const welcomeCopy = $('#welcomeCopy');
     const welcomeCodeValue = $('#welcomeCodeValue');
+    const welcomePill = $('#welcomePill');
+    const welcomePillBody = $('#welcomePillBody');
+    const welcomePillClose = $('#welcomePillClose');
+
+    const getWelcomeState = () => {
+      try {
+        const s = localStorage.getItem(WELCOME_STATE_KEY);
+        if (s) return s;
+        // Migración del flag viejo: welcome_seen=1 -> dismissed.
+        if (localStorage.getItem('topstyle_welcome_seen') === '1') {
+          localStorage.setItem(WELCOME_STATE_KEY, 'dismissed');
+          return 'dismissed';
+        }
+        return '';
+      } catch(e) { return ''; }
+    };
+    const setWelcomeState = (s) => {
+      try { localStorage.setItem(WELCOME_STATE_KEY, s); } catch(e) {}
+      syncWelcomePill();
+    };
+    const wasModalShownThisSession = () => {
+      try { return sessionStorage.getItem(WELCOME_MODAL_SESSION_KEY) === '1'; } catch(e) { return false; }
+    };
+    const markModalShownThisSession = () => {
+      try { sessionStorage.setItem(WELCOME_MODAL_SESSION_KEY, '1'); } catch(e) {}
+    };
+
+    const syncWelcomePill = () => {
+      if (!welcomePill) return;
+      const state = getWelcomeState();
+      const modalOpen = welcomeModal?.classList.contains('is-open');
+      welcomePill.classList.toggle('is-visible', state === '' && !modalOpen);
+    };
 
     const openWelcome = () => {
       if (!welcomeModal) return;
       welcomeModal.classList.add('is-open');
       welcomeModal.setAttribute('aria-hidden', 'false');
+      markModalShownThisSession();
+      syncWelcomePill();
     };
     const closeWelcome = () => {
       if (!welcomeModal) return;
       welcomeModal.classList.remove('is-open');
       welcomeModal.setAttribute('aria-hidden', 'true');
-      try { localStorage.setItem(WELCOME_SEEN_KEY, '1'); } catch(e) {}
+      // No marcamos applied/dismissed acá — el modal vuelve en próxima visita hasta apply.
+      syncWelcomePill();
     };
 
-    // Mostrar el modal sólo la primera vez, con un pequeño delay
-    let welcomeSeen = false;
-    try { welcomeSeen = localStorage.getItem(WELCOME_SEEN_KEY) === '1'; } catch(e) {}
-    if (!welcomeSeen && welcomeModal) {
+    // Mostrar el modal en primera apertura de la sesión si todavía está pending.
+    if (welcomeModal && getWelcomeState() === '' && !wasModalShownThisSession()) {
       setTimeout(openWelcome, 1600);
+    } else {
+      // Modal no se va a abrir → mostramos pill enseguida si corresponde.
+      syncWelcomePill();
     }
+
+    welcomePillBody?.addEventListener('click', openWelcome);
+    welcomePillClose?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      setWelcomeState('dismissed');
+    });
 
     welcomeClose?.addEventListener('click', closeWelcome);
     welcomeContinue?.addEventListener('click', () => {
@@ -6642,6 +7222,23 @@
     //  9. Año del footer
     // ==========================================================
     $('#year').textContent = new Date().getFullYear();
+
+    // ==========================================================
+    //  9B. Botón "Volver arriba" — aparece cuando se scrollea
+    // ==========================================================
+    (() => {
+      const btn = $('#backToTop');
+      if (!btn) return;
+      const SHOW_AT = 600;
+      const onScroll = () => {
+        btn.classList.toggle('is-visible', window.scrollY > SHOW_AT);
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+      btn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    })();
 
     // ==========================================================
     //  10. Aplicar reveals iniciales
