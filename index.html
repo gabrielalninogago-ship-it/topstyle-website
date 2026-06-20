@@ -856,8 +856,10 @@
       margin: 0 auto var(--space-4);
       position: relative;
       z-index: 1;
-      filter: drop-shadow(0 4px 18px rgba(0,0,0,0.6));
     }
+    .distributor-card__logo--dark { display: none; }
+    [data-theme="dark"] .distributor-card__logo--light { display: none; }
+    [data-theme="dark"] .distributor-card__logo--dark { display: block; }
     @media (max-width: 640px) {
       .distributor-card__logo { max-width: 320px; }
     }
@@ -3662,7 +3664,8 @@
     <div class="container">
       <p class="brands__label">Distribuidor oficial</p>
       <div class="distributor-card reveal">
-        <img src="assets/logos/question-professional-logo.png" alt="Question Professional" class="distributor-card__logo" />
+        <img src="assets/logos/question-logo-black.png" alt="Question Professional" class="distributor-card__logo distributor-card__logo--light" />
+        <img src="assets/logos/question-logo-white.png" alt="Question Professional" class="distributor-card__logo distributor-card__logo--dark" />
         <p class="distributor-card__tagline">Somos Color · Cosmética Capilar Profesional</p>
         <p style="color: var(--text-secondary); max-width: 560px; margin: 0 auto; position: relative; z-index: 1;">
           Laboratorio argentino con <strong>25 años de trayectoria</strong> desarrollando cosmética capilar exclusiva para peluquería profesional. Coloración con <strong>Full Plex Advanced Technology</strong> y <strong>Ácido Hialurónico</strong> que cuida la fibra capilar en cada etapa del color.
