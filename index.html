@@ -7043,18 +7043,21 @@
     // ==========================================================
     const buildCartLines = () => {
       if (!CART.items.length) return [];
-      const lines = ['*Productos solicitados:*'];
+      const productLines = [];
       CART.items.forEach(item => {
         const p = PRODUCTS.find(x => x.id === item.id);
-        if (!p) return;
-        const lineTotal = p.price > 0
-          ? ` — ${formatMoney(p.price * item.qty)}`
-          : '';
         const variantTxt = item.variant
           ? ` (tono ${item.variant.code} — ${item.variant.name})`
           : '';
-        lines.push(`• ${item.qty} x ${p.brand} — ${p.name}${variantTxt}${lineTotal}`);
+        if (p) {
+          const lineTotal = p.price > 0 ? ` — ${formatMoney(p.price * item.qty)}` : '';
+          productLines.push(`• ${item.qty} x ${p.brand} — ${p.name}${variantTxt}${lineTotal}`);
+        } else {
+          productLines.push(`• ${item.qty} x ${item.id}${variantTxt}`);
+        }
       });
+      if (!productLines.length) return [];
+      const lines = ['*Productos solicitados:*', ...productLines];
       if (CART.hasPrices()) {
         const subtotal = CART.subtotal();
         lines.push('', `*Subtotal estimado:* ${formatMoney(subtotal)}`);
