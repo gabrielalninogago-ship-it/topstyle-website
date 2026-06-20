@@ -3679,23 +3679,23 @@
             <span class="line-chip__title">Lumiplex sin amoníaco</span>
             <span class="line-chip__hint">Ver carta de colores (PDF)</span>
           </a>
-          <button class="line-chip" type="button" data-line="Intelligent">
+          <button class="line-chip" type="button" data-line="intelligent" data-filter="intelligent">
             <span class="line-chip__title">Intelligent Series</span>
             <span class="line-chip__hint">Ver la línea →</span>
           </button>
-          <button class="line-chip" type="button" data-line="Q Style">
+          <button class="line-chip" type="button" data-line="styling" data-filter="styling">
             <span class="line-chip__title">Q Style</span>
             <span class="line-chip__hint">Ver la línea →</span>
           </button>
-          <button class="line-chip" type="button" data-line="Acid Line">
+          <button class="line-chip" type="button" data-line="acid-line" data-filter="salon">
             <span class="line-chip__title">Acid Line</span>
             <span class="line-chip__hint">Ver la línea →</span>
           </button>
-          <button class="line-chip" type="button" data-line="Theraphy Liss">
+          <button class="line-chip" type="button" data-line="theraphy" data-filter="salon">
             <span class="line-chip__title">Theraphy Liss</span>
             <span class="line-chip__hint">Ver la línea →</span>
           </button>
-          <button class="line-chip" type="button" data-line="Silver">
+          <button class="line-chip" type="button" data-line="silver" data-filter="salon">
             <span class="line-chip__title">Silver · matizador</span>
             <span class="line-chip__hint">Ver la línea →</span>
           </button>
@@ -6186,15 +6186,14 @@
     });
 
     // Botones de líneas (Intelligent / Q Style / Acid / Theraphy / Silver)
-    // → filtran catálogo por keyword y hacen scroll.
+    // → filtran catálogo por línea (data-filter) y hacen scroll.
     $$('.line-chip[data-line]').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
-        const line = btn.dataset.line;
-        currentFilter = 'all';
-        currentLine = line;
+        currentFilter = btn.dataset.filter || 'all';
+        currentLine = null;
         filterChips.forEach(c => {
-          const active = c.dataset.filter === 'all';
+          const active = c.dataset.filter === currentFilter;
           c.classList.toggle('is-active', active);
           c.setAttribute('aria-selected', String(active));
         });
