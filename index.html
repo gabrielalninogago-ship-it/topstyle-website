@@ -1126,7 +1126,8 @@
     .product__image img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
+      padding: 8px;
       transition: transform var(--t-slow);
     }
     .product:hover .product__image img { transform: scale(1.04); }
