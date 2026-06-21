@@ -1101,6 +1101,21 @@
     }
     @media (min-width: 640px) { .products__grid { grid-template-columns: repeat(2, 1fr); } }
     @media (min-width: 960px) { .products__grid { grid-template-columns: repeat(3, 1fr); gap: var(--space-8); } }
+    /* F3b — IS agrupada por sub-línea */
+    .is-subline-group { grid-column: 1 / -1; margin-bottom: var(--space-8); }
+    .is-subline-header {
+      display: flex; align-items: baseline; gap: 10px;
+      border-left: 3px solid var(--subline-color, var(--violet-lo));
+      padding-left: 12px; margin-bottom: var(--space-6);
+    }
+    .is-subline-header__label {
+      font-family: var(--font-display); font-size: 1.05rem; font-weight: 700;
+      color: var(--text-primary);
+    }
+    .is-subline-header__desc { font-size: 0.8rem; color: var(--text-muted); }
+    .is-subline-cards { display: grid; grid-template-columns: 1fr; gap: var(--space-6); }
+    @media (min-width: 640px) { .is-subline-cards { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 960px) { .is-subline-cards { grid-template-columns: repeat(3, 1fr); gap: var(--space-8); } }
 
     .product {
       display: flex;
@@ -6137,6 +6152,16 @@
       return null;
     };
 
+    const IS_SUBLINES = [
+      { key:'keratin-lift',  label:'Keratin Lift',  desc:'Alisado y control del frizz',            color:'#9b72d0' },
+      { key:'nutriv-cell',   label:'Nutriv Cell',   desc:'Nutrición con células madre vegetales',   color:'#f5922b' },
+      { key:'volumizer',     label:'Volumizer',     desc:'Cuerpo y volumen visible',                color:'#69c248' },
+      { key:'lumiere',       label:'Lumière',       desc:'Brillo y suavidad extrema',               color:'#c9a94a' },
+      { key:'color-defense', label:'Color Defense', desc:'Protección del color permanente',         color:'#e33d95' },
+      { key:'hair-resist',   label:'Hair Resist',   desc:'Anti-caída y fortalecimiento',            color:'#5bb8e8' },
+      { key:'equilibre',     label:'Équilibre',     desc:'Para cabello sensibilizado',              color:'#bfd42e' },
+    ];
+
     const renderProducts = () => {
       const visible = PRODUCTS.filter(p => p.active !== false);
       let filtered = currentFilter === 'all'
@@ -6150,7 +6175,7 @@
         });
       }
 
-      productsGrid.innerHTML = filtered.map((p, i) => {
+      const cardHtml = (p, i) => {
         const delayClass = ['', 'reveal--delay-1', 'reveal--delay-2'][i % 3];
         const priceHtml = p.price > 0
           ? `${formatMoney(p.price)}<small>${CURRENCY}</small>`
@@ -6161,7 +6186,6 @@
         const badgeHtml = p.badge
           ? `<span class="product__badge product__badge--${badgeKind(p.badge)}">${escapeHtml(p.badge)}</span>`
           : '';
-
         return `
           <article class="product reveal ${delayClass}" data-category="${escapeHtml(p.category)}" data-id="${escapeHtml(p.id)}" role="listitem">
             <div class="product__image">
@@ -6177,9 +6201,24 @@
                 <button class="product__add" data-add="${escapeHtml(p.id)}" aria-label="Sumar ${escapeHtml(p.name)} al carrito">+ Al carrito</button>
               </div>
             </div>
-          </article>
-        `;
-      }).join('');
+          </article>`;
+      };
+
+      if (currentFilter === 'intelligent' && !currentLine && !searchQuery) {
+        productsGrid.innerHTML = IS_SUBLINES.map(sub => {
+          const subProds = filtered.filter(p => p.id.startsWith('is-' + sub.key + '-'));
+          if (!subProds.length) return '';
+          return `<div class="is-subline-group">
+            <div class="is-subline-header" style="--subline-color:${sub.color}">
+              <span class="is-subline-header__label">${sub.label}</span>
+              <span class="is-subline-header__desc">${sub.desc}</span>
+            </div>
+            <div class="is-subline-cards">${subProds.map(cardHtml).join('')}</div>
+          </div>`;
+        }).join('');
+      } else {
+        productsGrid.innerHTML = filtered.map(cardHtml).join('');
+      }
 
       productsEmpty.hidden = filtered.length > 0;
       applyReveal(productsGrid);
