@@ -2728,6 +2728,87 @@
     }
 
     /* ================================================= */
+    /*  IR PROMO — Intensive Repair kits                  */
+    /* ================================================= */
+    .ir-promo { background: var(--bg-secondary); }
+    .ir-promo__kits {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-8);
+      margin-top: var(--space-12);
+    }
+    .ir-kit {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-8) var(--space-6);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .ir-kit__tag {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #fff;
+      background: #4a4a55;
+      border-radius: 20px;
+      padding: 3px 12px;
+      margin-bottom: var(--space-3);
+    }
+    .ir-kit__desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: var(--space-6);
+      line-height: 1.5;
+    }
+    .ir-kit__imgs {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-4);
+      margin-bottom: var(--space-6);
+    }
+    .ir-kit__img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      border-radius: var(--radius);
+      background: var(--bg-tertiary);
+    }
+    .ir-kit__total {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: var(--space-4);
+    }
+    .ir-kit__total small {
+      font-size: 0.7rem;
+      font-weight: 400;
+      color: var(--text-muted);
+      margin-left: 4px;
+    }
+    .ir-kit__btn {
+      width: 100%;
+      padding: 12px 20px;
+      background: #4a4a55;
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background var(--t-fast), transform var(--t-fast);
+    }
+    .ir-kit__btn:hover { background: #333340; transform: translateY(-1px); }
+    .ir-kit__btn:active { transform: translateY(0); }
+    @media (max-width: 600px) {
+      .ir-promo__kits { grid-template-columns: 1fr; }
+      .ir-kit__img { width: 64px; height: 64px; }
+    }
+
+    /* ================================================= */
     /*  COLOR PICKER MODAL — Lumiplex / Coloration         */
     /* ================================================= */
     .color-modal-bg {
@@ -4086,6 +4167,22 @@
           loading="lazy"
         />
         <!-- Pins insertados por JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================= -->
+  <!--  IS — INTENSIVE REPAIR KITS                        -->
+  <!-- ================================================= -->
+  <section class="section ir-promo" id="ir-promo" aria-label="Intensive Repair — Kits">
+    <div class="container">
+      <div>
+        <p class="eyebrow reveal">Intelligent Series · Intensive Repair</p>
+        <h2 class="section-title reveal reveal--delay-1">Reparación intensa.</h2>
+        <p class="section-subtitle reveal reveal--delay-2">Para cabellos dañados o quebradizos. Tecnología Molecular Collagen Complex con extracto de uva.</p>
+      </div>
+      <div class="ir-promo__kits reveal reveal--delay-1" id="irKitsGrid">
+        <!-- Kits insertados por JS -->
       </div>
     </div>
   </section>
@@ -7862,6 +7959,54 @@
             openPin.querySelector('.is-pin__dot').setAttribute('aria-expanded','false');
             openPin = null;
           }
+        });
+      }
+    }
+
+    // ==========================================================
+    //  IR KITS — Intensive Repair
+    // ==========================================================
+    {
+      const IR_KITS = [
+        {
+          tag: 'Kit Chico',
+          desc: 'Shampoo 330 ml · Bálsamo 240 ml · Máscara 330 ml',
+          ids: ['is-intensive-shampoo', 'is-intensive-balsamo', 'is-intensive-mascara'],
+        },
+        {
+          tag: 'Kit Grande',
+          desc: 'Shampoo 1500 ml · Bálsamo 1500 ml · Máscara 850 ml',
+          ids: ['is-intensive-shampoo-1500', 'is-intensive-balsamo-1500', 'is-intensive-mascara-850'],
+        },
+      ];
+
+      const grid = document.getElementById('irKitsGrid');
+      if (grid) {
+        IR_KITS.forEach(kit => {
+          const prods = kit.ids.map(id => PRODUCTS.find(p => p.id === id)).filter(Boolean);
+          const total = prods.reduce((s, p) => s + (p.price || 0), 0);
+          const totalHtml = total > 0
+            ? `${formatMoney(total)}<small>los 3 productos</small>`
+            : `<small>Consultar precio</small>`;
+
+          const imgsHtml = prods.map(p =>
+            `<img class="ir-kit__img" src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}" loading="lazy">`
+          ).join('');
+
+          const card = document.createElement('div');
+          card.className = 'ir-kit reveal';
+          card.innerHTML = `
+            <span class="ir-kit__tag">${kit.tag}</span>
+            <p class="ir-kit__desc">${kit.desc}</p>
+            <div class="ir-kit__imgs">${imgsHtml}</div>
+            <div class="ir-kit__total">${totalHtml}</div>
+            <button class="ir-kit__btn" type="button">Agregar ${kit.tag} al pedido</button>`;
+
+          card.querySelector('.ir-kit__btn').addEventListener('click', () => {
+            kit.ids.forEach(id => addToCart(id));
+          });
+
+          grid.appendChild(card);
         });
       }
     }
