@@ -1066,7 +1066,19 @@
     .category:hover .category__icon { opacity: 1; transform: scale(1.1); }
 
     /* ================================================== */
-    /*  PRODUCTOS DESTACADOS                               */
+    /*  F2 — PRODUCTOS DESTACADOS (sección propia, 4 curados) */
+    /* ================================================== */
+    .featured__head { margin-bottom: var(--space-8); }
+    .featured__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-6);
+      margin-top: var(--space-8);
+    }
+    @media (max-width: 960px) { .featured__grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 480px)  { .featured__grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-4); } }
+
+    /*  CATÁLOGO — PRODUCTOS DESTACADOS                   */
     /* ================================================== */
     .products__filters {
       display: flex;
@@ -3868,6 +3880,25 @@
         <span class="hero__sparkle hero__sparkle--2"></span>
         <span class="hero__sparkle hero__sparkle--3"></span>
         <img src="assets/logos/topstyle-logo-transparent.png" alt="" class="hero__logo" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================= -->
+  <!--  F1. BANNER CARRUSEL (pendiente — imágenes de Gabb) -->
+  <!-- ================================================= -->
+
+  <!-- ================================================= -->
+  <!--  F2. PRODUCTOS DESTACADOS — hasta 4, configurables  -->
+  <!-- ================================================= -->
+  <section class="section section--tight featured" id="destacados" aria-label="Productos destacados">
+    <div class="container">
+      <div class="featured__head reveal">
+        <p class="eyebrow">Selección del mes</p>
+        <h2 class="section-title" style="margin-bottom:0">Los más elegidos.</h2>
+      </div>
+      <div class="featured__grid" id="featuredGrid" role="list">
+        <!-- Renderizado desde JS — editar FEATURED_IDS para cambiar los productos -->
       </div>
     </div>
   </section>
@@ -7960,6 +7991,55 @@
             openPin = null;
           }
         });
+      }
+    }
+
+    // ==========================================================
+    //  F2 — PRODUCTOS DESTACADOS (editar IDs para cambiar selección)
+    // ==========================================================
+    {
+      const FEATURED_IDS = [
+        'coloration-full-plex-60g',
+        'is-keratin-lift-spray',
+        'is-lumiere-oleo',
+        'qstyle-curl-cream',
+      ];
+
+      const featuredGrid = document.getElementById('featuredGrid');
+      if (featuredGrid) {
+        FEATURED_IDS.forEach((id, i) => {
+          const p = PRODUCTS.find(x => x.id === id && x.active !== false);
+          if (!p) return;
+          const priceHtml = p.price > 0
+            ? `${formatMoney(p.price)}<small>${CURRENCY}</small>`
+            : `<span style="font-size:14px;color:var(--text-muted);">Consultar</span>`;
+          const imgHtml = p.image
+            ? `<img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}" loading="lazy">`
+            : `<div class="product__placeholder">Foto del producto</div>`;
+          const badgeHtml = p.badge
+            ? `<span class="product__badge product__badge--${badgeKind(p.badge)}">${escapeHtml(p.badge)}</span>`
+            : '';
+          const isColor = p.id === 'lumiplex-color-60g' || p.id === 'coloration-full-plex-60g';
+          const addBtn = isColor
+            ? `<button class="product__add" data-open-color="${escapeHtml(p.id)}">Elegir color</button>`
+            : `<button class="product__add" data-add="${escapeHtml(p.id)}" aria-label="Agregar ${escapeHtml(p.name)}">+</button>`;
+          const delays = ['', ' reveal--delay-1', ' reveal--delay-2', ' reveal--delay-2'];
+          const card = document.createElement('article');
+          card.className = `product reveal${delays[i] || ''}`;
+          card.setAttribute('role', 'listitem');
+          card.innerHTML = `
+            <div class="product__image">${badgeHtml}${imgHtml}</div>
+            <div class="product__body">
+              <p class="product__brand">${escapeHtml(p.brand)}</p>
+              <h3 class="product__name">${escapeHtml(p.name)}</h3>
+              <div class="product__footer">
+                <span class="product__price">${priceHtml}</span>
+                ${addBtn}
+              </div>
+            </div>`;
+          featuredGrid.appendChild(card);
+        });
+        applyReveal(featuredGrid);
       }
     }
 
