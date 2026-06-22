@@ -1066,6 +1066,56 @@
     .category:hover .category__icon { opacity: 1; transform: scale(1.1); }
 
     /* ================================================== */
+    /*  F1 — BANNER CARRUSEL                                  */
+    /* ================================================== */
+    .banner-carousel {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-lg);
+      user-select: none;
+      background: var(--bg-secondary);
+    }
+    .banner-carousel__track {
+      display: flex;
+      transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      will-change: transform;
+    }
+    .banner-carousel__slide { flex: 0 0 100%; min-width: 0; }
+    .banner-carousel__slide img { width: 100%; height: auto; display: block; }
+    .banner-carousel__btn {
+      position: absolute;
+      top: 50%; transform: translateY(-50%);
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.88);
+      border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 2;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+      transition: background var(--t-fast), transform var(--t-fast);
+      backdrop-filter: blur(4px);
+    }
+    .banner-carousel__btn:hover { background: #fff; transform: translateY(-50%) scale(1.08); }
+    .banner-carousel__btn--prev { left: 12px; }
+    .banner-carousel__btn--next { right: 12px; }
+    .banner-carousel__dots {
+      position: absolute;
+      bottom: 10px; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 6px; z-index: 2;
+    }
+    .banner-carousel__dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.55);
+      border: none; cursor: pointer; padding: 0;
+      transition: background var(--t-fast), transform var(--t-fast);
+    }
+    .banner-carousel__dot.is-active { background: #fff; transform: scale(1.4); }
+    @media (prefers-reduced-motion: reduce) { .banner-carousel__track { transition: none; } }
+    @media (max-width: 640px) {
+      .banner-carousel__btn { width: 30px; height: 30px; }
+    }
+
     /*  F2 — PRODUCTOS DESTACADOS (sección propia, 4 curados) */
     /* ================================================== */
     .featured__head { margin-bottom: var(--space-8); }
@@ -3885,8 +3935,22 @@
   </section>
 
   <!-- ================================================= -->
-  <!--  F1. BANNER CARRUSEL (pendiente — imágenes de Gabb) -->
+  <!--  F1. BANNER CARRUSEL                               -->
   <!-- ================================================= -->
+  <section class="section section--tight" id="banner" aria-label="Novedades TopStyle">
+    <div class="container">
+      <div class="banner-carousel" id="bannerCarousel" aria-live="polite">
+        <div class="banner-carousel__track" id="bannerTrack"></div>
+        <button class="banner-carousel__btn banner-carousel__btn--prev" id="bannerPrev" aria-label="Slide anterior">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <button class="banner-carousel__btn banner-carousel__btn--next" id="bannerNext" aria-label="Slide siguiente">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        <div class="banner-carousel__dots" id="bannerDots" role="tablist" aria-label="Navegar slides"></div>
+      </div>
+    </div>
+  </section>
 
   <!-- ================================================= -->
   <!--  F2. PRODUCTOS DESTACADOS — hasta 4, configurables  -->
@@ -7992,6 +8056,78 @@
           }
         });
       }
+    }
+
+    // ==========================================================
+    //  F1 — BANNER CARRUSEL (editar BANNERS para cambiar slides)
+    // ==========================================================
+    {
+      const BANNERS = [
+        { src: 'assets/banners/01_topstyle_twelve.png',           alt: 'Twelve Spray — Question Professional' },
+        { src: 'assets/banners/02_topstyle_lumiplex_color.png',   alt: 'Lumiplex Color — Question Professional' },
+        { src: 'assets/banners/03_topstyle_intensive_repair.png', alt: 'Intensive Repair — Question Professional' },
+        { src: 'assets/banners/04_topstyle_termic_protect.png',   alt: 'Termic Protect — Question Professional' },
+        { src: 'assets/banners/05_topstyle_coloration.png',       alt: 'Coloration Full Plex — Question Professional' },
+        { src: 'assets/banners/06_topstyle_q_style.png',          alt: 'Q Style — Question Professional' },
+      ];
+
+      const track    = document.getElementById('bannerTrack');
+      const dotsWrap = document.getElementById('bannerDots');
+      const btnPrev  = document.getElementById('bannerPrev');
+      const btnNext  = document.getElementById('bannerNext');
+      if (!track) return;
+
+      let current = 0;
+      let timer   = null;
+      const DELAY = 4500;
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      BANNERS.forEach((b, i) => {
+        const slide = document.createElement('div');
+        slide.className = 'banner-carousel__slide';
+        slide.innerHTML = `<img src="${escapeHtml(b.src)}" alt="${escapeHtml(b.alt)}" loading="${i === 0 ? 'eager' : 'lazy'}">`;
+        track.appendChild(slide);
+
+        const dot = document.createElement('button');
+        dot.className = 'banner-carousel__dot' + (i === 0 ? ' is-active' : '');
+        dot.setAttribute('role', 'tab');
+        dot.setAttribute('aria-label', `Slide ${i + 1}`);
+        dot.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+        dot.addEventListener('click', () => { goTo(i); stopAuto(); startAuto(); });
+        dotsWrap.appendChild(dot);
+      });
+
+      const allDots = () => dotsWrap.querySelectorAll('.banner-carousel__dot');
+
+      const goTo = (idx) => {
+        allDots()[current].classList.remove('is-active');
+        allDots()[current].setAttribute('aria-selected', 'false');
+        current = (idx + BANNERS.length) % BANNERS.length;
+        track.style.transform = `translateX(-${current * 100}%)`;
+        allDots()[current].classList.add('is-active');
+        allDots()[current].setAttribute('aria-selected', 'true');
+      };
+
+      const startAuto = () => {
+        if (reduced) return;
+        clearInterval(timer);
+        timer = setInterval(() => goTo(current + 1), DELAY);
+      };
+      const stopAuto = () => clearInterval(timer);
+
+      btnPrev.addEventListener('click', () => { goTo(current - 1); stopAuto(); startAuto(); });
+      btnNext.addEventListener('click', () => { goTo(current + 1); stopAuto(); startAuto(); });
+
+      const carousel = document.getElementById('bannerCarousel');
+      carousel.addEventListener('mouseenter', stopAuto);
+      carousel.addEventListener('mouseleave', startAuto);
+      carousel.addEventListener('touchstart', stopAuto, { passive: true });
+      carousel.addEventListener('touchend',   startAuto, { passive: true });
+      document.addEventListener('visibilitychange', () => {
+        document.hidden ? stopAuto() : startAuto();
+      });
+
+      startAuto();
     }
 
     // ==========================================================
