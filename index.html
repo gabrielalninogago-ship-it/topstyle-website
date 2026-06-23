@@ -8243,10 +8243,16 @@
         if (wasSwipe) dragDelta < 0 ? goTo(current + 1) : goTo(current - 1);
         startAuto();
       });
-      // Evitar navegación del link si fue arrastre real (no tap con pequeño movimiento)
+      // Tap en banner → navegar al link del slide actual (setPointerCapture redirige el click al carousel)
       carousel.addEventListener('click', (e) => {
-        if (wasSwipe) { e.preventDefault(); wasSwipe = false; }
-      }, true);
+        if (wasSwipe) { wasSwipe = false; return; }
+        const link = e.target.closest('a[href]');
+        if (!link) return;
+        e.preventDefault();
+        const hash = link.getAttribute('href');
+        const target = hash.startsWith('#') ? document.getElementById(hash.slice(1)) : null;
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
 
       // Scroll de mouse → avanzar/retroceder slide
       let wheelLock = false;
