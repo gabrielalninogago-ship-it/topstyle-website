@@ -752,6 +752,7 @@
       gap: var(--space-6);
       padding-top: var(--space-6);
       border-top: 1px solid var(--border-subtle);
+      align-items: flex-start;
     }
     .hero__trust-item {
       display: flex;
@@ -1214,6 +1215,10 @@
       transition: transform var(--t-slow);
     }
     .product:hover .product__image img { transform: scale(1.04); }
+    /* Ajustes de encuadre por producto */
+    .product[data-id="mascara-capilar-250"] .product__image img,
+    .product[data-id="mascara-capilar-post-color-250"] .product__image img { padding: 2px; }
+    .product[data-id="lumiplex-activador-19vol-900"] .product__image img { padding: 20px; }
     .product__placeholder {
       position: absolute;
       inset: 0;
@@ -4012,11 +4017,7 @@
             <span class="line-chip__hint">Ver la línea →</span>
           </button>
           <button class="line-chip" type="button" data-line="silver" data-filter="salon">
-            <span class="line-chip__title">Silver · matizador</span>
-            <span class="line-chip__hint">Ver la línea →</span>
-          </button>
-          <button class="line-chip" type="button" data-line="twelve" data-filter="salon">
-            <span class="line-chip__title">Twelve Spray</span>
+            <span class="line-chip__title">Línea Salón</span>
             <span class="line-chip__hint">Ver la línea →</span>
           </button>
         </div>
@@ -8222,9 +8223,9 @@
       carousel.addEventListener('mouseleave', startAuto);
 
       // Drag / swipe (pointer events → funciona en mouse y touch)
-      let dragStartX = 0, dragDelta = 0, isDragging = false;
+      let dragStartX = 0, dragDelta = 0, isDragging = false, wasSwipe = false;
       carousel.addEventListener('pointerdown', (e) => {
-        dragStartX = e.clientX; dragDelta = 0; isDragging = true;
+        dragStartX = e.clientX; dragDelta = 0; isDragging = true; wasSwipe = false;
         carousel.setPointerCapture(e.pointerId);
         stopAuto();
       });
@@ -8235,12 +8236,13 @@
       carousel.addEventListener('pointerup', () => {
         if (!isDragging) return;
         isDragging = false;
-        if (Math.abs(dragDelta) > 50) dragDelta < 0 ? goTo(current + 1) : goTo(current - 1);
+        wasSwipe = Math.abs(dragDelta) > 50;
+        if (wasSwipe) dragDelta < 0 ? goTo(current + 1) : goTo(current - 1);
         startAuto();
       });
-      // Evitar navegación del link si fue arrastre
+      // Evitar navegación del link si fue arrastre real (no tap con pequeño movimiento)
       carousel.addEventListener('click', (e) => {
-        if (Math.abs(dragDelta) > 10) e.preventDefault();
+        if (wasSwipe) { e.preventDefault(); wasSwipe = false; }
       }, true);
 
       // Scroll de mouse → avanzar/retroceder slide
