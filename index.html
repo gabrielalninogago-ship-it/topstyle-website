@@ -1220,10 +1220,10 @@
     .product:hover .product__image img { transform: scale(1.04); }
     /* Ajustes de encuadre por producto */
     .product[data-id="mascara-capilar-250"] .product__image img,
-    .product[data-id="mascara-capilar-post-color-250"] .product__image img { padding: 0; transform: scale(1.22); }
+    .product[data-id="mascara-capilar-post-color-250"] .product__image img { padding: 0; transform: scale(1.50); }
     .product[data-id="mascara-capilar-250"]:hover .product__image img,
-    .product[data-id="mascara-capilar-post-color-250"]:hover .product__image img { transform: scale(1.27); }
-    .product[data-id="lumiplex-activador-19vol-900"] .product__image img { padding: 13px; }
+    .product[data-id="mascara-capilar-post-color-250"]:hover .product__image img { transform: scale(1.55); }
+    .product[data-id="lumiplex-activador-19vol-900"] .product__image img { padding: 18px; }
     .product__placeholder {
       position: absolute;
       inset: 0;
@@ -8245,9 +8245,10 @@
         if (wasSwipe) dragDelta < 0 ? goTo(current + 1) : goTo(current - 1);
         startAuto();
       });
-      // Tap en banner → navegar al link del slide actual
-      carousel.addEventListener('click', () => {
+      // Tap en banner → navegar al link del slide actual (ignorar clicks en flechas/dots)
+      carousel.addEventListener('click', (e) => {
         if (wasSwipe) { wasSwipe = false; return; }
+        if (e.target.closest('.banner-carousel__btn, .banner-carousel__dot')) return;
         const link = BANNERS[current]?.link;
         if (!link) return;
         const target = link.startsWith('#') ? document.getElementById(link.slice(1)) : null;
