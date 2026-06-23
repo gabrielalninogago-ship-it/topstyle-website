@@ -1091,11 +1091,12 @@
       top: 50%; transform: translateY(-50%);
       width: 38px; height: 38px;
       border-radius: 50%;
-      background: rgba(255,255,255,0.88);
+      background: rgba(255,255,255,0.92);
       border: none; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      z-index: 2;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+      z-index: 10;
+      color: #1a1a1a;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.22);
       transition: background var(--t-fast), transform var(--t-fast);
       backdrop-filter: blur(4px);
     }
@@ -1105,16 +1106,17 @@
     .banner-carousel__dots {
       position: absolute;
       bottom: 10px; left: 50%; transform: translateX(-50%);
-      display: flex; gap: 6px; z-index: 2;
+      display: flex; gap: 6px; z-index: 10;
     }
     .banner-carousel__dot {
-      width: 7px; height: 7px;
+      width: 8px; height: 8px;
       border-radius: 50%;
       background: rgba(255,255,255,0.55);
-      border: none; cursor: pointer; padding: 0;
+      border: 1.5px solid rgba(255,255,255,0.4);
+      cursor: pointer; padding: 0;
       transition: background var(--t-fast), transform var(--t-fast);
     }
-    .banner-carousel__dot.is-active { background: #fff; transform: scale(1.4); }
+    .banner-carousel__dot.is-active { background: #fff; transform: scale(1.4); border-color: #fff; }
     @media (prefers-reduced-motion: reduce) { .banner-carousel__track { transition: none; } }
     @media (max-width: 640px) {
       .banner-carousel__btn { width: 30px; height: 30px; }
@@ -8097,12 +8099,12 @@
     // ==========================================================
     {
       const BANNERS = [
-        { src: 'assets/banners/01_topstyle_twelve.png',           alt: 'Twelve Spray — Question Professional' },
-        { src: 'assets/banners/02_topstyle_lumiplex_color.png',   alt: 'Lumiplex Color — Question Professional' },
-        { src: 'assets/banners/03_topstyle_intensive_repair.png', alt: 'Intensive Repair — Question Professional' },
-        { src: 'assets/banners/04_topstyle_termic_protect.png',   alt: 'Termic Protect — Question Professional' },
-        { src: 'assets/banners/05_topstyle_coloration.png',       alt: 'Coloration Full Plex — Question Professional' },
-        { src: 'assets/banners/06_topstyle_q_style.png',          alt: 'Q Style — Question Professional' },
+        { src: 'assets/banners/01_topstyle_twelve.png',           alt: 'Twelve Spray — Question Professional',        link: '#productos' },
+        { src: 'assets/banners/02_topstyle_lumiplex_color.png',   alt: 'Lumiplex Color — Question Professional',       link: '#productos' },
+        { src: 'assets/banners/03_topstyle_intensive_repair.png', alt: 'Intensive Repair — Question Professional',     link: '#ir-promo'  },
+        { src: 'assets/banners/04_topstyle_termic_protect.png',   alt: 'Termic Protect — Question Professional',       link: '#productos' },
+        { src: 'assets/banners/05_topstyle_coloration.png',       alt: 'Coloration Full Plex — Question Professional', link: '#categorias'},
+        { src: 'assets/banners/06_topstyle_q_style.png',          alt: 'Q Style — Question Professional',              link: '#productos' },
       ];
 
       const track    = document.getElementById('bannerTrack');
@@ -8113,13 +8115,16 @@
 
       let current = 0;
       let timer   = null;
-      const DELAY = 3000;
+      const DELAY = 1800;
       const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
       BANNERS.forEach((b, i) => {
         const slide = document.createElement('div');
         slide.className = 'banner-carousel__slide';
-        slide.innerHTML = `<img src="${escapeHtml(b.src)}" alt="${escapeHtml(b.alt)}" loading="${i === 0 ? 'eager' : 'lazy'}">`;
+        const imgHtml = `<img src="${escapeHtml(b.src)}" alt="${escapeHtml(b.alt)}" loading="${i === 0 ? 'eager' : 'lazy'}">`;
+        slide.innerHTML = b.link
+          ? `<a href="${escapeHtml(b.link)}" aria-label="${escapeHtml(b.alt)}" tabindex="-1">${imgHtml}</a>`
+          : imgHtml;
         track.appendChild(slide);
 
         const dot = document.createElement('button');
@@ -8155,8 +8160,41 @@
       const carousel = document.getElementById('bannerCarousel');
       carousel.addEventListener('mouseenter', stopAuto);
       carousel.addEventListener('mouseleave', startAuto);
-      carousel.addEventListener('touchstart', stopAuto, { passive: true });
-      carousel.addEventListener('touchend',   startAuto, { passive: true });
+
+      // Drag / swipe (pointer events → funciona en mouse y touch)
+      let dragStartX = 0, dragDelta = 0, isDragging = false;
+      carousel.addEventListener('pointerdown', (e) => {
+        dragStartX = e.clientX; dragDelta = 0; isDragging = true;
+        carousel.setPointerCapture(e.pointerId);
+        stopAuto();
+      });
+      carousel.addEventListener('pointermove', (e) => {
+        if (!isDragging) return;
+        dragDelta = e.clientX - dragStartX;
+      });
+      carousel.addEventListener('pointerup', () => {
+        if (!isDragging) return;
+        isDragging = false;
+        if (Math.abs(dragDelta) > 50) dragDelta < 0 ? goTo(current + 1) : goTo(current - 1);
+        startAuto();
+      });
+      // Evitar navegación del link si fue arrastre
+      carousel.addEventListener('click', (e) => {
+        if (Math.abs(dragDelta) > 10) e.preventDefault();
+      }, true);
+
+      // Scroll de mouse → avanzar/retroceder slide
+      let wheelLock = false;
+      carousel.addEventListener('wheel', (e) => {
+        const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+        if (Math.abs(delta) < 30 || wheelLock) return;
+        e.preventDefault();
+        delta > 0 ? goTo(current + 1) : goTo(current - 1);
+        stopAuto(); startAuto();
+        wheelLock = true;
+        setTimeout(() => { wheelLock = false; }, 500);
+      }, { passive: false });
+
       document.addEventListener('visibilitychange', () => {
         document.hidden ? stopAuto() : startAuto();
       });
