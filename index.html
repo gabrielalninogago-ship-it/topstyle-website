@@ -8210,6 +8210,13 @@
           featuredGrid.appendChild(card);
         });
         applyReveal(featuredGrid);
+
+        featuredGrid.addEventListener('click', (e) => {
+          const addBtn = e.target.closest('[data-add]');
+          if (addBtn) { addToCart(addBtn.dataset.add); return; }
+          const colorBtn = e.target.closest('[data-open-color]');
+          if (colorBtn) openColorPicker(colorBtn.dataset.openColor);
+        });
       }
     }
 
