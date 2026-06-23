@@ -6907,6 +6907,15 @@
         value: 20,
         minSubtotal: 50000,
         expiresRel: null,
+      },
+      'LANZA35OFF': {
+        code: 'LANZA35OFF',
+        label: 'Lanzamiento IS',
+        type: 'percent',
+        value: 35,
+        minSubtotal: 0,
+        expiresRel: null,
+        lineas: ['intelligent'],
       }
     };
     try {
@@ -6944,15 +6953,24 @@
       }
     } catch(e) {}
 
-    const computeDiscount = (subtotal) => {
+    const LINE_LABELS = { coloracion: 'Coloración', intelligent: 'Intelligent Series', styling: 'Q Style', salon: 'Salón' };
+
+    const lineSubtotal = (coupon) => {
+      const lineas = coupon?.lineas;
+      if (!lineas || !lineas.length) return CART.subtotal();
+      return CART.items.reduce((acc, i) => {
+        const p = PRODUCTS.find(x => x.id === i.id);
+        if (!p || p.price <= 0) return acc;
+        return lineas.includes(getProductLine(p.id)) ? acc + p.price * i.qty : acc;
+      }, 0);
+    };
+
+    const computeDiscount = () => {
       if (!ACTIVE_COUPON || !CART.hasPrices()) return 0;
-      if (subtotal < (ACTIVE_COUPON.minSubtotal || 0)) return 0;
-      if (ACTIVE_COUPON.type === 'percent') {
-        return Math.round(subtotal * ACTIVE_COUPON.value / 100);
-      }
-      if (ACTIVE_COUPON.type === 'amount') {
-        return Math.min(subtotal, ACTIVE_COUPON.value);
-      }
+      const base = lineSubtotal(ACTIVE_COUPON);
+      if (base < (ACTIVE_COUPON.minSubtotal || 0)) return 0;
+      if (ACTIVE_COUPON.type === 'percent') return Math.round(base * ACTIVE_COUPON.value / 100);
+      if (ACTIVE_COUPON.type === 'amount') return Math.min(base, ACTIVE_COUPON.value);
       return 0;
     };
 
@@ -7039,12 +7057,15 @@
       cartSummarySubtotal.textContent = CART.hasPrices() ? formatMoney(subtotal) : 'A consultar';
 
       // Descuento del cupón (si aplica)
-      const discount = computeDiscount(subtotal);
+      const discount = computeDiscount();
       const total = Math.max(0, subtotal - discount);
       if (cartDiscountRow) {
         if (discount > 0 && CART.hasPrices()) {
           cartDiscountRow.hidden = false;
-          cartDiscountLabel.textContent = ACTIVE_COUPON ? `(${ACTIVE_COUPON.code})` : '';
+          const lineasSuffix = ACTIVE_COUPON?.lineas?.length
+            ? ` · solo ${ACTIVE_COUPON.lineas.map(l => LINE_LABELS[l] || l).join(', ')}`
+            : '';
+          cartDiscountLabel.textContent = ACTIVE_COUPON ? `(${ACTIVE_COUPON.code}${lineasSuffix})` : '';
           cartDiscountValue.textContent = '− ' + formatMoney(discount);
         } else {
           cartDiscountRow.hidden = true;
@@ -7195,8 +7216,9 @@
         showCouponMsg('El cupón expiró', 'err');
         return false;
       }
-      if (c.minSubtotal && CART.subtotal() < c.minSubtotal) {
-        showCouponMsg(`Aplica a compras desde ${formatMoney(c.minSubtotal)}`, 'err');
+      if (c.minSubtotal && lineSubtotal(c) < c.minSubtotal) {
+        const scope = c.lineas?.length ? ` en ${c.lineas.map(l => LINE_LABELS[l] || l).join(', ')}` : '';
+        showCouponMsg(`Aplica a compras desde ${formatMoney(c.minSubtotal)}${scope}`, 'err');
         // Igual lo aceptamos para que se active cuando alcance el mínimo
         ACTIVE_COUPON = c;
         try { localStorage.setItem(COUPON_STORAGE_KEY, c.code); } catch(e) {}
@@ -7656,9 +7678,17 @@
       if (CART.hasPrices()) {
         const subtotal = CART.subtotal();
         lines.push('', `*Subtotal estimado:* ${formatMoney(subtotal)}`);
-        const discount = computeDiscount(subtotal);
+        const discount = computeDiscount();
         if (discount > 0 && ACTIVE_COUPON) {
-          lines.push(`*Cupón aplicado:* ${ACTIVE_COUPON.code} (${ACTIVE_COUPON.label}) — ${ACTIVE_COUPON.value}%`);
+          const hasLineas = ACTIVE_COUPON.lineas?.length;
+          if (hasLineas) {
+            const base = lineSubtotal(ACTIVE_COUPON);
+            const lineLabel = ACTIVE_COUPON.lineas.map(l => LINE_LABELS[l] || l).join(', ');
+            lines.push(`*Cupón aplicado:* ${ACTIVE_COUPON.code} (${ACTIVE_COUPON.label}) — ${ACTIVE_COUPON.value}% en ${lineLabel}`);
+            lines.push(`*Base de descuento:* ${formatMoney(base)}`);
+          } else {
+            lines.push(`*Cupón aplicado:* ${ACTIVE_COUPON.code} (${ACTIVE_COUPON.label}) — ${ACTIVE_COUPON.value}%`);
+          }
           lines.push(`*Descuento:* − ${formatMoney(discount)}`);
           lines.push(`*Total estimado:* ${formatMoney(subtotal - discount)}`);
         }

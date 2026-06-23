@@ -621,6 +621,31 @@
     gap: 10px;
   }
 
+  /* ── LINES CHECKBOXES ── */
+  .lines-checks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 6px;
+  }
+  .line-check {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: .82rem;
+    color: var(--text-dim);
+    cursor: pointer;
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    transition: border-color .15s, color .15s;
+    user-select: none;
+  }
+  .line-check:hover { border-color: var(--gold-dim); color: var(--gold); }
+  .line-check input[type="checkbox"] { accent-color: var(--gold); cursor: pointer; }
+  .line-check.is-all { border-color: var(--gold-dim); color: var(--gold); }
+
   /* ── SCROLLBAR ── */
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: var(--bg); }
@@ -742,6 +767,20 @@
             <label class="form-label" for="fDateTo">Válido hasta <span class="req">*</span></label>
             <input class="form-input" type="date" id="fDateTo" onclick="try{this.showPicker()}catch(e){}" />
           </div>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <div class="form-field">
+        <label class="form-label">Líneas aplicables</label>
+        <span class="form-hint">Dejá "Todas" si el descuento aplica a todo el carrito. El mínimo de compra se chequeará solo contra los productos de las líneas seleccionadas.</span>
+        <div class="lines-checks">
+          <label class="line-check is-all"><input type="checkbox" id="fLineAll" checked> Todas</label>
+          <label class="line-check"><input type="checkbox" id="fLineColoracion" value="coloracion" disabled> Coloración</label>
+          <label class="line-check"><input type="checkbox" id="fLineIntelligent" value="intelligent" disabled> Intelligent Series</label>
+          <label class="line-check"><input type="checkbox" id="fLineStyling" value="styling" disabled> Q Style</label>
+          <label class="line-check"><input type="checkbox" id="fLineSalon" value="salon" disabled> Salón</label>
         </div>
       </div>
 
@@ -888,6 +927,30 @@ const fActive     = $('fActive');
 const expiryDaysEl = $('expiryDays');
 const expiryDateEl = $('expiryDate');
 
+// Líneas
+const fLineAll        = $('fLineAll');
+const fLineColoracion = $('fLineColoracion');
+const fLineIntelligent= $('fLineIntelligent');
+const fLineStyling    = $('fLineStyling');
+const fLineSalon      = $('fLineSalon');
+const LINE_CHECKS     = [fLineColoracion, fLineIntelligent, fLineStyling, fLineSalon];
+const LINE_LABELS_ADMIN = { coloracion: 'Coloración', intelligent: 'Intelligent Series', styling: 'Q Style', salon: 'Salón' };
+
+function getFormLineas() {
+  if (fLineAll.checked) return [];
+  return LINE_CHECKS.filter(cb => cb.checked).map(cb => cb.value);
+}
+
+function setFormLineas(lineas) {
+  if (!lineas || lineas.length === 0) {
+    fLineAll.checked = true;
+    LINE_CHECKS.forEach(cb => { cb.checked = false; cb.disabled = true; });
+  } else {
+    fLineAll.checked = false;
+    LINE_CHECKS.forEach(cb => { cb.checked = lineas.includes(cb.value); cb.disabled = false; });
+  }
+}
+
 // ────────────────────────────────────────────────
 //  TOAST
 // ────────────────────────────────────────────────
@@ -964,6 +1027,10 @@ function renderGrid() {
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
             ${expiryLabel(c)}
           </span>
+          <span>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h8M4 18h12"/></svg>
+            ${c.lineas && c.lineas.length ? c.lineas.map(l => LINE_LABELS_ADMIN[l] || l).join(', ') : 'Todas las líneas'}
+          </span>
         </div>
       </div>
       <div class="coupon-card__actions">
@@ -995,6 +1062,7 @@ function openNew() {
   fDateFrom.value = '';
   fDateTo.value = '';
   fActive.checked = true;
+  setFormLineas([]);
   updateExpiryFields();
   fCode.disabled = false;
   openModal();
@@ -1017,7 +1085,8 @@ function openEdit(idx) {
     fDateFrom.value = c.validFrom ? c.validFrom.split('T')[0] : '';
   }
   fActive.checked = c.active !== false;
-  fCode.disabled = true; // don't allow code change when editing
+  setFormLineas(c.lineas || []);
+  fCode.disabled = true;
   updateExpiryFields();
   openModal();
 }
@@ -1069,7 +1138,8 @@ function saveCoupon() {
     validFrom = fDateFrom.value || null;
   }
 
-  const coupon = { code, label, type: 'percent', value, minSubtotal, expiryType, expiresRel, expiresAt, validFrom, active };
+  const lineas = getFormLineas();
+  const coupon = { code, label, type: 'percent', value, minSubtotal, expiryType, expiresRel, expiresAt, validFrom, active, lineas };
 
   if (editingIndex === -1) {
     coupons.push(coupon);
@@ -1120,6 +1190,18 @@ confirmOverlay.addEventListener('click', e => { if (e.target === confirmOverlay)
 
 // Uppercase code input
 fCode.addEventListener('input', () => { fCode.value = fCode.value.toUpperCase(); });
+
+// Líneas: "Todas" habilita/deshabilita el resto
+fLineAll.addEventListener('change', () => {
+  LINE_CHECKS.forEach(cb => { cb.checked = false; cb.disabled = fLineAll.checked; });
+});
+LINE_CHECKS.forEach(cb => {
+  cb.addEventListener('change', () => {
+    if (cb.checked) { fLineAll.checked = false; }
+    // Si nada queda seleccionado, volver a Todas
+    if (!LINE_CHECKS.some(x => x.checked)) { fLineAll.checked = true; LINE_CHECKS.forEach(x => x.disabled = true); }
+  });
+});
 
 // Keyboard
 document.addEventListener('keydown', e => {
