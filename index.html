@@ -774,6 +774,18 @@
       color: var(--text-muted);
     }
 
+    /* Hero above-the-fold desktop — todo en la primera pantalla, stats al pie del logo */
+    @media (min-width: 960px) {
+      .hero { padding-bottom: var(--space-8); }
+      .hero__inner { align-items: stretch; }
+      .hero__content { display: flex; flex-direction: column; }
+      .hero__eyebrow { margin-bottom: 18px; }
+      .hero__title { font-size: clamp(40px, 6.2vw, 80px); margin-bottom: 16px; }
+      .hero__lead { font-size: 18px; line-height: 1.55; margin-bottom: 0; }
+      .hero__ctas { margin-top: auto; padding-top: 28px; margin-bottom: 0; }
+      .hero__trust { padding-top: 18px; }
+    }
+
     /* Visual del hero: logo con halo plateado suave */
     .hero__visual {
       position: relative;
