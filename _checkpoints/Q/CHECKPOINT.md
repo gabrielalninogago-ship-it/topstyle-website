@@ -1,8 +1,22 @@
 # Checkpoint Q — V1 rev2 (listo para 2ª revisión)
 
-**Fecha:** 2026-06-23
-**Commit:** c1a8c81
-**Estado:** Post-revisión Ari — en producción
+**Fecha inicial:** 2026-06-23 · **Commit base:** c1a8c81
+**Última actualización:** 2026-06-24 · **Commit:** aa1e272
+**Estado:** Post-revisión Ari + hero above-the-fold — en producción
+
+---
+
+## ✦ Sub-hito Q2 — Hero above-the-fold desktop (2026-06-24)
+
+Commit `aa1e272` — Hero compacto para desktop: todo el contenido visible en la primera pantalla sin scroll.
+
+- Grid hero: `align-items: stretch` — columna izquierda se estira al alto del logo
+- Columna izquierda: `flex-direction: column`
+- Título: hasta **80px** (`clamp(40px, 6.2vw, 80px)`)
+- Lead: **18px**, `line-height: 1.55`
+- Botones: `margin-top: auto` — flotan debajo del texto, separados naturalmente
+- Stats: se anclan al pie del logo
+- Solo afecta desktop (`min-width: 960px`), mobile sin cambios
 
 ---
 
