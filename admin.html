@@ -651,6 +651,57 @@
   ::-webkit-scrollbar-track { background: var(--bg); }
   ::-webkit-scrollbar-thumb { background: var(--border-hi); border-radius: 3px; }
 
+  /* ── FEATURED LIST ── */
+  .featured-add-row {
+    display: flex; gap: 10px; align-items: center; margin-bottom: 18px;
+  }
+  .featured-add-row .form-select { flex: 1; }
+
+  .featured-list { display: grid; gap: 8px; }
+
+  .featured-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    display: flex; align-items: center; gap: 14px;
+    transition: border-color .2s;
+  }
+  .featured-item:hover { border-color: var(--border-hi); }
+
+  .featured-item__rank {
+    width: 26px; height: 26px;
+    background: var(--gold-glow);
+    border: 1px solid var(--gold-dim);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .78rem; font-weight: 600;
+    color: var(--gold-hi); flex-shrink: 0;
+  }
+
+  .featured-item__name { flex: 1; font-size: .88rem; color: var(--text); }
+  .featured-item__id   { font-size: .72rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
+
+  .featured-item__actions { display: flex; gap: 4px; flex-shrink: 0; }
+
+  .btn-icon {
+    width: 28px; height: 28px;
+    background: transparent; border: 1px solid var(--border);
+    border-radius: var(--radius-sm); color: var(--text-muted);
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    font-size: .8rem; transition: all .15s;
+  }
+  .btn-icon:hover { border-color: var(--gold-dim); color: var(--gold); background: var(--gold-glow); }
+  .btn-icon:disabled { opacity: .28; pointer-events: none; }
+  .btn-icon.danger:hover { border-color: var(--red); color: var(--red); background: var(--red-bg); }
+
+  .featured-empty {
+    text-align: center; padding: 28px 16px;
+    color: var(--text-muted); font-size: .85rem;
+    border: 1px dashed var(--border); border-radius: var(--radius-sm);
+  }
+
   /* ── RESPONSIVE ── */
   @media (max-width: 580px) {
     .header { padding: 0 16px; }
@@ -659,6 +710,7 @@
     .coupon-card { grid-template-columns: auto 1fr; }
     .coupon-card__actions { grid-column: 1 / -1; justify-content: flex-end; border-top: 1px solid var(--border); padding-top: 12px; margin-top: 8px; }
     .toolbar { gap: 8px; }
+    .featured-add-row { flex-direction: column; align-items: stretch; }
   }
 </style>
 </head>
@@ -698,6 +750,145 @@
       <div style="font-size:2.5rem">🎟</div>
       <p>Todavía no hay cupones. Creá el primero con el botón de arriba.</p>
     </div>
+  </div>
+
+
+  <hr class="divider" style="margin: 48px 0 40px;">
+
+  <!-- DESTACADOS HEADER -->
+  <div class="section-head">
+    <h2>Productos Destacados</h2>
+    <span class="badge-count" id="featuredCount">0 / 5</span>
+  </div>
+  <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:20px;line-height:1.6;">
+    Estos productos aparecen primero al ordenar por <strong style="color:var(--text-dim)">"Más elegidos"</strong> en el catálogo.<br>
+    Máximo 5. El orden importa: el #1 aparece primero en la sección "Los más elegidos" del home.
+  </p>
+
+  <!-- ADD ROW -->
+  <div class="featured-add-row">
+    <select class="form-select" id="featuredSelect">
+      <option value="">— Seleccionar producto —</option>
+      <optgroup label="Coloración">
+        <option value="coloration-full-plex-60g">Coloration Full Plex — Pomo 60 g</option>
+        <option value="lumiplex-color-60g">Lumiplex Color Demi-Permanente 60 g</option>
+        <option value="oxidante-10-vol-900">Crema Oxigenada 10 Vol. 900 cc</option>
+        <option value="oxidante-20-vol-900">Crema Oxigenada 20 Vol. 900 cc</option>
+        <option value="oxidante-30-vol-900">Crema Oxigenada 30 Vol. 900 cc</option>
+        <option value="revelador-40-vol-900">Revelador Superaclarante 40 Vol. 900 cc</option>
+        <option value="lumiplex-activador-3vol-900">Emulsión Activadora Lumiplex 3 Vol. 900 ml</option>
+        <option value="lumiplex-activador-6vol-900">Emulsión Activadora Lumiplex 6 Vol. 900 ml</option>
+        <option value="lumiplex-activador-13vol-900">Emulsión Activadora Lumiplex 13 Vol. 900 ml</option>
+        <option value="lumiplex-activador-19vol-900">Emulsión Activadora Lumiplex 19 Vol. 900 ml</option>
+        <option value="polvo-decolorante-500">Polvo Decolorante 500 g</option>
+        <option value="mint-power-plex-500">Mint Power Plex — Polvo Decolorante 500 g</option>
+        <option value="white-power-plex-500">White Power Plex — Polvo Decolorante 500 g</option>
+        <option value="permanente-1-naturales-300">Permanente 1 — Cabellos Naturales 300 ml</option>
+        <option value="permanente-2-tenidos-300">Permanente 2 — Cabellos Teñidos 300 ml</option>
+        <option value="permanente-3-decolorados-300">Permanente 3 — Cabellos Decolorados 300 ml</option>
+        <option value="neutralizante-900">Neutralizante Permanente 900 cc</option>
+        <option value="locion-quitamanchas-300">Loción Quitamanchas 300 ml</option>
+        <option value="ampollas-restauradoras">Ampollas Restauradoras — Estuche 4 x 10 ml</option>
+      </optgroup>
+      <optgroup label="Línea Salón">
+        <option value="twelve-spray-210">Twelve — Tratamiento Sin Enjuague 210 ml</option>
+        <option value="mascara-capilar-1000">Máscara Capilar Línea Salón — Pote 1000 cc</option>
+        <option value="mascara-capilar-250">Máscara Capilar Línea Salón — Pote 250 cc</option>
+        <option value="acid-line-shampoo-480">Acid Line Shampoo 480 ml</option>
+        <option value="acid-line-acondicionador-480">Acid Line Acondicionador 480 ml</option>
+        <option value="acid-line-mascara-500">Acid Line Máscara 500 ml</option>
+        <option value="theraphy-liss-kit">Theraphy Liss — Kit Alisado Progresivo (3 pasos)</option>
+        <option value="theraphy-liss-shampoo-480">Theraphy Liss Shampoo Pre-Alisado 480 ml</option>
+        <option value="theraphy-liss-alisador-480">Theraphy Liss Alisador Progresivo 480 ml</option>
+        <option value="theraphy-liss-mascara-480">Theraphy Liss Máscara Re-hidratante 480 ml</option>
+        <option value="shampoo-neutro-900">Shampoo Neutro 900 ml</option>
+        <option value="shampoo-neutro-4900">Shampoo Neutro 4900 ml — Galón</option>
+        <option value="shampoo-post-color-900">Shampoo Post Color 900 ml</option>
+        <option value="shampoo-frecuente-4900">Shampoo Frecuente 4900 ml — Galón</option>
+        <option value="silver-shampoo-960">Silver Shampoo 960 ml</option>
+        <option value="silver-shampoo-200">Silver Shampoo 200 ml</option>
+        <option value="silver-acondicionador-960">Silver Acondicionador 160 ml</option>
+        <option value="silver-mascara-500">Silver Máscara 500 ml</option>
+        <option value="crema-enjuague-900">Crema Enjuague 900 ml</option>
+        <option value="mascara-capilar-post-color-1000">Máscara Post Color 1000 ml</option>
+        <option value="mascara-capilar-post-color-250">Máscara Post Color 250 ml</option>
+      </optgroup>
+      <optgroup label="Q Style">
+        <option value="qstyle-finish-spray-normal">Q Style Finish Spray Normal 488 ml</option>
+        <option value="qstyle-finish-spray-fuerte">Q Style Finish Spray Fuerte 488 ml</option>
+        <option value="qstyle-hair-fix-mousse">Q Style Hair Fix Mousse 250 ml</option>
+        <option value="qstyle-finish-glow">Q Style Finish Glow 225 ml</option>
+        <option value="qstyle-curl-cream">Q Style Curl Cream 235 ml</option>
+        <option value="qstyle-volume-fix">Q Style Volume Fix 190 ml</option>
+        <option value="qstyle-fixer-paste">Q Style Fixer Paste 160 ml</option>
+        <option value="qstyle-coolfix-gel">Q Style Coolfix Gel 230 ml</option>
+        <option value="qstyle-termic-protect">Q Style Termic Protect 240 ml</option>
+        <option value="qstyle-oil-molecular-flex">Q Style Oil Molecular Flex 70 ml</option>
+        <option value="qstyle-terra-100">Q Style Terra — Fragancia Capilar 100 ml</option>
+      </optgroup>
+      <optgroup label="Intelligent Series">
+        <option value="is-nutriv-cell-shampoo">Nutriv Cell Shampoo 330 ml</option>
+        <option value="is-nutriv-cell-acond">Nutriv Cell Acondicionador 230 ml</option>
+        <option value="is-nutriv-cell-mascara">Nutriv Cell Máscara 330 ml</option>
+        <option value="is-nutriv-cell-shampoo-1500">Nutriv Cell Shampoo 1500 ml</option>
+        <option value="is-nutriv-cell-acond-1500">Nutriv Cell Acondicionador 1500 ml</option>
+        <option value="is-nutriv-cell-mascara-850">Nutriv Cell Máscara 850 ml</option>
+        <option value="is-color-defense-shampoo">Color Defense Shampoo 330 ml</option>
+        <option value="is-color-defense-acond">Color Defense Acondicionador 230 ml</option>
+        <option value="is-color-defense-mascara">Color Defense Máscara Protectora 330 ml</option>
+        <option value="is-color-defense-shampoo-1500">Color Defense Shampoo 1500 ml</option>
+        <option value="is-color-defense-acond-1500">Color Defense Acondicionador 1500 ml</option>
+        <option value="is-color-defense-mascara-850">Color Defense Máscara Protectora 850 ml</option>
+        <option value="is-keratin-lift-shampoo">Keratin Lift Shampoo 330 ml</option>
+        <option value="is-keratin-lift-spray">Keratin Lift Spray 200 ml</option>
+        <option value="is-keratin-lift-mascara">Keratin Lift Máscara 330 ml</option>
+        <option value="is-keratin-lift-ampollas">Keratin Lift Tratamiento Capilar — 12 Ampollas 10 ml</option>
+        <option value="is-keratin-lift-oleo">Keratin Lift Óleo Tratante 75 ml</option>
+        <option value="is-keratin-lift-shampoo-1500">Keratin Lift Shampoo 1500 ml</option>
+        <option value="is-keratin-lift-mascara-850">Keratin Lift Máscara 850 ml</option>
+        <option value="is-volumizer-shampoo">Volumizer Shampoo 330 ml</option>
+        <option value="is-volumizer-acond">Volumizer Acondicionador 230 ml</option>
+        <option value="is-volumizer-mascara">Volumizer Máscara Revitalizante 330 ml</option>
+        <option value="is-volumizer-shampoo-1500">Volumizer Shampoo 1500 ml</option>
+        <option value="is-volumizer-acond-1500">Volumizer Acondicionador 1500 ml</option>
+        <option value="is-volumizer-mascara-850">Volumizer Máscara Revitalizante 850 ml</option>
+        <option value="is-lumiere-shampoo">Lumière Shampoo 330 ml</option>
+        <option value="is-lumiere-spray">Lumière Spray Tratante 200 ml</option>
+        <option value="is-lumiere-mascara">Lumière Máscara Tratante 330 ml</option>
+        <option value="is-lumiere-ampollas">Lumière Tratamiento Hydra-Nutritive — 12 Ampollas 10 ml</option>
+        <option value="is-lumiere-oleo">Lumière Óleo Tratante Capilar 75 ml</option>
+        <option value="is-lumiere-shampoo-1500">Lumière Shampoo 1500 ml</option>
+        <option value="is-lumiere-mascara-850">Lumière Máscara Tratante 850 ml</option>
+        <option value="is-intensive-shampoo">Intensive Repair Shampoo 330 ml</option>
+        <option value="is-intensive-balsamo">Intensive Repair Bálsamo 240 ml</option>
+        <option value="is-intensive-mascara">Intensive Repair Máscara 330 ml</option>
+        <option value="is-intensive-shampoo-1500">Intensive Repair Shampoo 1500 ml</option>
+        <option value="is-intensive-balsamo-1500">Intensive Repair Bálsamo 1500 ml</option>
+        <option value="is-intensive-mascara-850">Intensive Repair Máscara 850 ml</option>
+        <option value="is-hair-resist-shampoo">Hair Resist Shampoo 330 ml</option>
+        <option value="is-hair-resist-shampoo-1500">Hair Resist Shampoo 1500 ml</option>
+        <option value="is-equilibre-shampoo">Équilibre Shampoo 330 ml</option>
+        <option value="is-equilibre-acond">Équilibre Acondicionador 230 ml</option>
+        <option value="is-equilibre-mascara">Équilibre Máscara Capilar 330 ml</option>
+        <option value="is-equilibre-shampoo-1500">Équilibre Shampoo 1500 ml</option>
+        <option value="is-equilibre-acond-1500">Équilibre Acondicionador 1500 ml</option>
+        <option value="is-equilibre-mascara-850">Équilibre Máscara Capilar 850 ml</option>
+      </optgroup>
+    </select>
+    <button class="btn btn-outline" id="btnAddFeatured">+ Agregar</button>
+  </div>
+
+  <!-- FEATURED ITEMS -->
+  <div class="featured-list" id="featuredList">
+    <div class="featured-empty">Todavía no hay productos destacados. Seleccioná uno y hacé click en <strong>+ Agregar</strong>.</div>
+  </div>
+
+  <!-- EXPORT -->
+  <div style="margin-top:20px;display:flex;justify-content:flex-end;">
+    <button class="btn btn-outline" id="btnExportFeatured">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Exportar destacados.json
+    </button>
   </div>
 
 </main>
@@ -1215,6 +1406,203 @@ document.addEventListener('keydown', e => {
 //  INIT
 // ────────────────────────────────────────────────
 renderGrid();
+
+// ════════════════════════════════════════════════
+//  BLOQUE 5 — PRODUCTOS DESTACADOS
+// ════════════════════════════════════════════════
+const LS_FEATURED_KEY = 'topstyle_featured_admin';
+
+// Compact catalog: id → name (matches index.html PRODUCTS)
+const PRODUCT_CATALOG = {
+  'coloration-full-plex-60g': 'Coloration Full Plex — Pomo 60 g',
+  'lumiplex-color-60g': 'Lumiplex Color Demi-Permanente 60 g',
+  'oxidante-10-vol-900': 'Crema Oxigenada 10 Vol. 900 cc',
+  'oxidante-20-vol-900': 'Crema Oxigenada 20 Vol. 900 cc',
+  'oxidante-30-vol-900': 'Crema Oxigenada 30 Vol. 900 cc',
+  'revelador-40-vol-900': 'Revelador Superaclarante 40 Vol. 900 cc',
+  'lumiplex-activador-3vol-900': 'Emulsión Activadora Lumiplex 3 Vol. 900 ml',
+  'lumiplex-activador-6vol-900': 'Emulsión Activadora Lumiplex 6 Vol. 900 ml',
+  'lumiplex-activador-13vol-900': 'Emulsión Activadora Lumiplex 13 Vol. 900 ml',
+  'lumiplex-activador-19vol-900': 'Emulsión Activadora Lumiplex 19 Vol. 900 ml',
+  'polvo-decolorante-500': 'Polvo Decolorante 500 g',
+  'mint-power-plex-500': 'Mint Power Plex — Polvo Decolorante 500 g',
+  'white-power-plex-500': 'White Power Plex — Polvo Decolorante 500 g',
+  'permanente-1-naturales-300': 'Permanente 1 — Cabellos Naturales 300 ml',
+  'permanente-2-tenidos-300': 'Permanente 2 — Cabellos Teñidos 300 ml',
+  'permanente-3-decolorados-300': 'Permanente 3 — Cabellos Decolorados 300 ml',
+  'neutralizante-900': 'Neutralizante Permanente 900 cc',
+  'locion-quitamanchas-300': 'Loción Quitamanchas 300 ml',
+  'ampollas-restauradoras': 'Ampollas Restauradoras — Estuche 4 x 10 ml',
+  'twelve-spray-210': 'Twelve — Tratamiento Sin Enjuague 210 ml',
+  'mascara-capilar-1000': 'Máscara Capilar Línea Salón — Pote 1000 cc',
+  'mascara-capilar-250': 'Máscara Capilar Línea Salón — Pote 250 cc',
+  'acid-line-shampoo-480': 'Acid Line Shampoo 480 ml',
+  'acid-line-acondicionador-480': 'Acid Line Acondicionador 480 ml',
+  'acid-line-mascara-500': 'Acid Line Máscara 500 ml',
+  'theraphy-liss-kit': 'Theraphy Liss — Kit Alisado Progresivo (3 pasos)',
+  'theraphy-liss-shampoo-480': 'Theraphy Liss Shampoo Pre-Alisado 480 ml',
+  'theraphy-liss-alisador-480': 'Theraphy Liss Alisador Progresivo 480 ml',
+  'theraphy-liss-mascara-480': 'Theraphy Liss Máscara Re-hidratante 480 ml',
+  'shampoo-neutro-900': 'Shampoo Neutro 900 ml',
+  'shampoo-neutro-4900': 'Shampoo Neutro 4900 ml — Galón',
+  'shampoo-post-color-900': 'Shampoo Post Color 900 ml',
+  'shampoo-frecuente-4900': 'Shampoo Frecuente 4900 ml — Galón',
+  'silver-shampoo-960': 'Silver Shampoo 960 ml',
+  'silver-shampoo-200': 'Silver Shampoo 200 ml',
+  'silver-acondicionador-960': 'Silver Acondicionador 160 ml',
+  'silver-mascara-500': 'Silver Máscara 500 ml',
+  'crema-enjuague-900': 'Crema Enjuague 900 ml',
+  'mascara-capilar-post-color-1000': 'Máscara Post Color 1000 ml',
+  'mascara-capilar-post-color-250': 'Máscara Post Color 250 ml',
+  'qstyle-finish-spray-normal': 'Q Style Finish Spray Normal 488 ml',
+  'qstyle-finish-spray-fuerte': 'Q Style Finish Spray Fuerte 488 ml',
+  'qstyle-hair-fix-mousse': 'Q Style Hair Fix Mousse 250 ml',
+  'qstyle-finish-glow': 'Q Style Finish Glow 225 ml',
+  'qstyle-curl-cream': 'Q Style Curl Cream 235 ml',
+  'qstyle-volume-fix': 'Q Style Volume Fix 190 ml',
+  'qstyle-fixer-paste': 'Q Style Fixer Paste 160 ml',
+  'qstyle-coolfix-gel': 'Q Style Coolfix Gel 230 ml',
+  'qstyle-termic-protect': 'Q Style Termic Protect 240 ml',
+  'qstyle-oil-molecular-flex': 'Q Style Oil Molecular Flex 70 ml',
+  'qstyle-terra-100': 'Q Style Terra — Fragancia Capilar 100 ml',
+  'is-nutriv-cell-shampoo': 'Nutriv Cell Shampoo 330 ml',
+  'is-nutriv-cell-acond': 'Nutriv Cell Acondicionador 230 ml',
+  'is-nutriv-cell-mascara': 'Nutriv Cell Máscara 330 ml',
+  'is-nutriv-cell-shampoo-1500': 'Nutriv Cell Shampoo 1500 ml',
+  'is-nutriv-cell-acond-1500': 'Nutriv Cell Acondicionador 1500 ml',
+  'is-nutriv-cell-mascara-850': 'Nutriv Cell Máscara 850 ml',
+  'is-color-defense-shampoo': 'Color Defense Shampoo 330 ml',
+  'is-color-defense-acond': 'Color Defense Acondicionador 230 ml',
+  'is-color-defense-mascara': 'Color Defense Máscara Protectora 330 ml',
+  'is-color-defense-shampoo-1500': 'Color Defense Shampoo 1500 ml',
+  'is-color-defense-acond-1500': 'Color Defense Acondicionador 1500 ml',
+  'is-color-defense-mascara-850': 'Color Defense Máscara Protectora 850 ml',
+  'is-keratin-lift-shampoo': 'Keratin Lift Shampoo 330 ml',
+  'is-keratin-lift-spray': 'Keratin Lift Spray 200 ml',
+  'is-keratin-lift-mascara': 'Keratin Lift Máscara 330 ml',
+  'is-keratin-lift-ampollas': 'Keratin Lift Tratamiento Capilar — 12 Ampollas 10 ml',
+  'is-keratin-lift-oleo': 'Keratin Lift Óleo Tratante 75 ml',
+  'is-keratin-lift-shampoo-1500': 'Keratin Lift Shampoo 1500 ml',
+  'is-keratin-lift-mascara-850': 'Keratin Lift Máscara 850 ml',
+  'is-volumizer-shampoo': 'Volumizer Shampoo 330 ml',
+  'is-volumizer-acond': 'Volumizer Acondicionador 230 ml',
+  'is-volumizer-mascara': 'Volumizer Máscara Revitalizante 330 ml',
+  'is-volumizer-shampoo-1500': 'Volumizer Shampoo 1500 ml',
+  'is-volumizer-acond-1500': 'Volumizer Acondicionador 1500 ml',
+  'is-volumizer-mascara-850': 'Volumizer Máscara Revitalizante 850 ml',
+  'is-lumiere-shampoo': 'Lumière Shampoo 330 ml',
+  'is-lumiere-spray': 'Lumière Spray Tratante 200 ml',
+  'is-lumiere-mascara': 'Lumière Máscara Tratante 330 ml',
+  'is-lumiere-ampollas': 'Lumière Tratamiento Hydra-Nutritive — 12 Ampollas 10 ml',
+  'is-lumiere-oleo': 'Lumière Óleo Tratante Capilar 75 ml',
+  'is-lumiere-shampoo-1500': 'Lumière Shampoo 1500 ml',
+  'is-lumiere-mascara-850': 'Lumière Máscara Tratante 850 ml',
+  'is-intensive-shampoo': 'Intensive Repair Shampoo 330 ml',
+  'is-intensive-balsamo': 'Intensive Repair Bálsamo 240 ml',
+  'is-intensive-mascara': 'Intensive Repair Máscara 330 ml',
+  'is-intensive-shampoo-1500': 'Intensive Repair Shampoo 1500 ml',
+  'is-intensive-balsamo-1500': 'Intensive Repair Bálsamo 1500 ml',
+  'is-intensive-mascara-850': 'Intensive Repair Máscara 850 ml',
+  'is-hair-resist-shampoo': 'Hair Resist Shampoo 330 ml',
+  'is-hair-resist-shampoo-1500': 'Hair Resist Shampoo 1500 ml',
+  'is-equilibre-shampoo': 'Équilibre Shampoo 330 ml',
+  'is-equilibre-acond': 'Équilibre Acondicionador 230 ml',
+  'is-equilibre-mascara': 'Équilibre Máscara Capilar 330 ml',
+  'is-equilibre-shampoo-1500': 'Équilibre Shampoo 1500 ml',
+  'is-equilibre-acond-1500': 'Équilibre Acondicionador 1500 ml',
+  'is-equilibre-mascara-850': 'Équilibre Máscara Capilar 850 ml',
+};
+
+const MAX_FEATURED = 5;
+let featured = []; // array of product IDs, ordered
+
+function loadFeatured() {
+  try {
+    const raw = localStorage.getItem(LS_FEATURED_KEY);
+    if (raw) { const arr = JSON.parse(raw); if (Array.isArray(arr)) return arr; }
+  } catch(e) {}
+  // Default: same 4 as the hardcoded fallback in index.html
+  return ['coloration-full-plex-60g', 'is-keratin-lift-spray', 'is-lumiere-oleo', 'qstyle-curl-cream'];
+}
+
+function saveFeatured() {
+  try { localStorage.setItem(LS_FEATURED_KEY, JSON.stringify(featured)); } catch(e) {}
+}
+
+function renderFeatured() {
+  const list = $('featuredList');
+  const count = $('featuredCount');
+  count.textContent = `${featured.length} / ${MAX_FEATURED}`;
+
+  if (featured.length === 0) {
+    list.innerHTML = '<div class="featured-empty">Todavía no hay productos destacados. Seleccioná uno y hacé click en <strong>+ Agregar</strong>.</div>';
+    return;
+  }
+
+  list.innerHTML = featured.map((id, i) => {
+    const name = PRODUCT_CATALOG[id] || id;
+    return `
+    <div class="featured-item">
+      <span class="featured-item__rank">${i + 1}</span>
+      <div style="flex:1;min-width:0;">
+        <div class="featured-item__name">${name}</div>
+        <div class="featured-item__id">${id}</div>
+      </div>
+      <div class="featured-item__actions">
+        <button class="btn-icon" title="Subir" onclick="moveFeatured(${i}, -1)" ${i === 0 ? 'disabled' : ''}>↑</button>
+        <button class="btn-icon" title="Bajar" onclick="moveFeatured(${i},  1)" ${i === featured.length - 1 ? 'disabled' : ''}>↓</button>
+        <button class="btn-icon danger" title="Quitar" onclick="removeFeatured(${i})">✕</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function addFeatured() {
+  const sel = $('featuredSelect');
+  const id = sel.value;
+  if (!id) { showToast('Seleccioná un producto primero.', 'err'); return; }
+  if (featured.includes(id)) { showToast('Este producto ya está en la lista.', 'err'); return; }
+  if (featured.length >= MAX_FEATURED) { showToast(`Máximo ${MAX_FEATURED} productos destacados.`, 'err'); return; }
+  featured.push(id);
+  sel.value = '';
+  saveFeatured();
+  renderFeatured();
+  showToast(`✓ "${PRODUCT_CATALOG[id] || id}" agregado`, 'ok');
+}
+
+function removeFeatured(idx) {
+  const name = PRODUCT_CATALOG[featured[idx]] || featured[idx];
+  featured.splice(idx, 1);
+  saveFeatured();
+  renderFeatured();
+  showToast(`"${name}" quitado`, 'ok');
+}
+
+function moveFeatured(idx, dir) {
+  const newIdx = idx + dir;
+  if (newIdx < 0 || newIdx >= featured.length) return;
+  [featured[idx], featured[newIdx]] = [featured[newIdx], featured[idx]];
+  saveFeatured();
+  renderFeatured();
+}
+
+function exportFeatured() {
+  const data = { featured };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'destacados.json';
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a); URL.revokeObjectURL(url);
+  showToast('destacados.json descargado', 'ok');
+}
+
+// Init featured
+featured = loadFeatured();
+renderFeatured();
+
+$('btnAddFeatured').addEventListener('click', addFeatured);
+$('btnExportFeatured').addEventListener('click', exportFeatured);
 </script>
 
 </body>
