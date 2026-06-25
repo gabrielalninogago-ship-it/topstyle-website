@@ -651,6 +651,78 @@
   ::-webkit-scrollbar-track { background: var(--bg); }
   ::-webkit-scrollbar-thumb { background: var(--border-hi); border-radius: 3px; }
 
+  /* ── BANNER CARDS ── */
+  .banner-toolbar {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 12px; margin-bottom: 18px;
+  }
+  .banner-toolbar__left { display: flex; align-items: center; gap: 12px; }
+  .banner-toolbar__right { display: flex; gap: 10px; }
+
+  .banner-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    display: grid;
+    grid-template-columns: 84px 1fr auto;
+    gap: 0 16px;
+    align-items: center;
+    transition: border-color .2s;
+  }
+  .banner-card:hover { border-color: var(--border-hi); }
+  .banner-card.inactive { opacity: .5; }
+
+  .banner-card__thumb {
+    width: 84px; height: 50px;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    display: block;
+  }
+  .banner-card__thumb-ph {
+    width: 84px; height: 50px;
+    border-radius: var(--radius-sm);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+  }
+
+  .banner-card__info { min-width: 0; }
+  .banner-card__top {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 5px; flex-wrap: wrap;
+  }
+  .banner-card__title {
+    font-size: .88rem; color: var(--text); font-weight: 500;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    max-width: 320px;
+  }
+  .banner-card__meta {
+    font-size: .74rem; color: var(--text-muted);
+    display: flex; gap: 14px; flex-wrap: wrap;
+  }
+  .banner-card__actions { display: flex; gap: 4px; align-items: center; }
+
+  .pill-carrusel { background: rgba(201,168,76,.12); color: var(--gold);  border-color: rgba(201,168,76,.3); }
+  .pill-franja   { background: rgba(76,175,130,.12); color: var(--green); border-color: rgba(76,175,130,.3); }
+  .pill-campana  { background: var(--surface2); color: var(--text-muted); border-color: var(--border); }
+  .pill-cupon-b  { background: var(--amber-bg); color: var(--amber); border-color: rgba(232,168,76,.3); }
+
+  /* accion conditional fields */
+  .accion-extra { display: none; }
+  .accion-extra.show { display: block; }
+
+  /* imagen preview in modal */
+  .banner-form-preview {
+    width: 100%; height: 90px; margin-top: 8px;
+    object-fit: cover; border-radius: var(--radius-sm);
+    border: 1px solid var(--border); display: none;
+  }
+  .banner-form-preview.show { display: block; }
+
   /* ── FEATURED LIST ── */
   .featured-add-row {
     display: flex; gap: 10px; align-items: center; margin-bottom: 18px;
@@ -752,6 +824,38 @@
     </div>
   </div>
 
+
+  <hr class="divider" style="margin: 48px 0 40px;">
+
+  <!-- BANNERS SECTION -->
+  <div class="banner-toolbar">
+    <div class="banner-toolbar__left">
+      <div class="section-head" style="margin-bottom:0;">
+        <h2>Banners</h2>
+        <span class="badge-count" id="bannerCount">0</span>
+      </div>
+    </div>
+    <div class="banner-toolbar__right">
+      <button class="btn btn-outline" id="btnExportBanners">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Exportar banners.json
+      </button>
+      <button class="btn btn-gold" id="btnNewBanner">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Nuevo banner
+      </button>
+    </div>
+  </div>
+  <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:20px;line-height:1.6;">
+    Zona <strong style="color:var(--gold)">Carrusel</strong>: slides del carrusel principal. Zona <strong style="color:var(--green)">Franja cupón</strong>: banner con botón "Usar cupón". Exportá y subí <code style="font-family:'JetBrains Mono',monospace;font-size:.78rem;">banners.json</code> al repo para aplicar.
+  </p>
+
+  <div class="coupon-grid" id="bannerGrid">
+    <div class="empty-state">
+      <div style="font-size:2.5rem">🖼</div>
+      <p>No hay banners todavía. Creá el primero con <strong>Nuevo banner</strong>.</p>
+    </div>
+  </div>
 
   <hr class="divider" style="margin: 48px 0 40px;">
 
@@ -996,6 +1100,107 @@
   </div>
 </div>
 
+<!-- MODAL BANNER -->
+<div class="modal-overlay" id="bannerModalOverlay" role="dialog" aria-modal="true" aria-labelledby="bannerModalTitle">
+  <div class="modal" style="max-width:560px;">
+    <div class="modal__header">
+      <h2 class="modal__title" id="bannerModalTitle">Nuevo banner</h2>
+      <button class="modal__close" id="bannerModalClose" aria-label="Cerrar">✕</button>
+    </div>
+    <div class="modal__body">
+
+      <div class="form-field">
+        <label class="form-label" for="bImagen">Imagen <span class="req">*</span></label>
+        <input class="form-input" type="text" id="bImagen" placeholder="assets/banners/01_topstyle_twelve.png" autocomplete="off" />
+        <span class="form-hint">Ruta relativa al repo (assets/banners/…) o URL absoluta.</span>
+        <img class="banner-form-preview" id="bImgPreview" alt="Vista previa" />
+      </div>
+
+      <div class="form-row cols-2">
+        <div class="form-field">
+          <label class="form-label" for="bTipo">Tipo</label>
+          <select class="form-select" id="bTipo">
+            <option value="campaña">Campaña (estética Question)</option>
+            <option value="cupon">Cupón (estética TopStyle)</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="bZona">Zona</label>
+          <select class="form-select" id="bZona">
+            <option value="carrusel">Carrusel principal</option>
+            <option value="franja-cupon">Franja de cupón</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row cols-2">
+        <div class="form-field">
+          <label class="form-label" for="bTitulo">Título <span style="font-weight:400;color:var(--text-muted)">(opcional)</span></label>
+          <input class="form-input" type="text" id="bTitulo" placeholder="Intensive Repair" maxlength="80" />
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="bSubtitulo">Subtítulo <span style="font-weight:400;color:var(--text-muted)">(opcional)</span></label>
+          <input class="form-input" type="text" id="bSubtitulo" placeholder="35% OFF en Intelligent Series" maxlength="120" />
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <div class="form-field">
+        <label class="form-label" for="bAccionTipo">Acción al hacer click</label>
+        <select class="form-select" id="bAccionTipo">
+          <option value="link">Ir a sección / URL</option>
+          <option value="cupon">Aplicar cupón al carrito</option>
+        </select>
+      </div>
+
+      <div class="accion-extra show" id="accionLink">
+        <div class="form-field" style="margin-top:14px;">
+          <label class="form-label" for="bDestino">Destino</label>
+          <input class="form-input" type="text" id="bDestino" placeholder="#productos" />
+          <span class="form-hint">Ancla interna (#productos, #categorias, #ir-promo…) o URL completa.</span>
+        </div>
+      </div>
+
+      <div class="accion-extra" id="accionCupon">
+        <div class="form-field" style="margin-top:14px;">
+          <label class="form-label" for="bCuponCodigo">Código de cupón</label>
+          <input class="form-input code-input" type="text" id="bCuponCodigo" placeholder="LANZA35OFF" maxlength="30" />
+          <span class="form-hint">El botón "Usar cupón" del banner aplicará este código directo al carrito.</span>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <div class="form-row cols-2">
+        <div class="form-field">
+          <label class="form-label" for="bOrden">Orden</label>
+          <input class="form-input" type="number" id="bOrden" placeholder="1" min="1" max="99" />
+          <span class="form-hint">Dentro de su zona. Menor = primero.</span>
+        </div>
+        <div class="form-field">
+          <label class="form-label">&nbsp;</label>
+          <div class="toggle-row">
+            <div class="toggle-row__label">
+              <span class="toggle-row__title">Activo</span>
+              <span class="toggle-row__desc">Si está apagado, no aparece en el sitio.</span>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="bActivo" checked>
+              <span class="toggle__slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn-ghost" id="btnCancelBanner">Cancelar</button>
+      <button class="btn btn-gold" id="btnSaveBanner">Guardar banner</button>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL CONFIRMAR BORRAR -->
 <div class="confirm-overlay" id="confirmOverlay">
   <div class="confirm-box">
@@ -1018,6 +1223,7 @@
 let coupons = [];     // array of coupon objects (working copy)
 let editingIndex = -1; // -1 = new
 let deleteIndex = -1;
+let deletingBannerId = null;
 
 // Defaults from index.html on first load (before file is connected)
 const DEFAULT_COUPONS = [
@@ -1355,6 +1561,16 @@ function confirmDelete(idx) {
 }
 
 function doDelete() {
+  if (deletingBannerId !== null) {
+    banners = banners.filter(x => x.id !== deletingBannerId);
+    deletingBannerId = null;
+    confirmOverlay.classList.remove('open');
+    saveBanners();
+    renderBannerGrid();
+    showToast('Banner eliminado', 'ok');
+    return;
+  }
+  if (deleteIndex === -1) return;
   const code = coupons[deleteIndex].code;
   coupons.splice(deleteIndex, 1);
   confirmOverlay.classList.remove('open');
@@ -1406,6 +1622,233 @@ document.addEventListener('keydown', e => {
 //  INIT
 // ────────────────────────────────────────────────
 renderGrid();
+
+// ════════════════════════════════════════════════
+//  BLOQUE 4 — BANNERS
+// ════════════════════════════════════════════════
+const LS_BANNERS_KEY = 'topstyle_banners_admin';
+
+const DEFAULT_BANNERS = [
+  { id: 'b1', imagen: 'assets/banners/01_topstyle_twelve.png',           tipo: 'campaña', titulo: '', subtitulo: '', accion: { tipo: 'link', destino: '#productos'  }, zona: 'carrusel',    orden: 1, activo: true },
+  { id: 'b2', imagen: 'assets/banners/02_topstyle_lumiplex_color.png',   tipo: 'campaña', titulo: '', subtitulo: '', accion: { tipo: 'link', destino: '#productos'  }, zona: 'carrusel',    orden: 2, activo: true },
+  { id: 'b3', imagen: 'assets/banners/03_topstyle_intensive_repair.png', tipo: 'campaña', titulo: '', subtitulo: '', accion: { tipo: 'link', destino: '#ir-promo'   }, zona: 'carrusel',    orden: 3, activo: true },
+  { id: 'b4', imagen: 'assets/banners/04_topstyle_termic_protect.png',   tipo: 'campaña', titulo: '', subtitulo: '', accion: { tipo: 'link', destino: '#productos'  }, zona: 'carrusel',    orden: 4, activo: true },
+  { id: 'b5', imagen: 'assets/banners/05_topstyle_coloration.png',       tipo: 'campaña', titulo: '', subtitulo: '', accion: { tipo: 'link', destino: '#categorias' }, zona: 'carrusel',    orden: 5, activo: true },
+  { id: 'b6', imagen: 'assets/banners/06_topstyle_q_style.png',          tipo: 'campaña', titulo: '', subtitulo: '', accion: { tipo: 'link', destino: '#productos'  }, zona: 'carrusel',    orden: 6, activo: true },
+];
+
+let banners = [];
+
+function loadBanners() {
+  try {
+    const raw = localStorage.getItem(LS_BANNERS_KEY);
+    if (raw) { const arr = JSON.parse(raw); if (Array.isArray(arr)) return arr; }
+  } catch(e) {}
+  return JSON.parse(JSON.stringify(DEFAULT_BANNERS));
+}
+
+function saveBanners() {
+  try { localStorage.setItem(LS_BANNERS_KEY, JSON.stringify(banners)); } catch(e) {}
+}
+
+function genBannerId() {
+  return 'b' + Date.now() + Math.random().toString(36).slice(2, 6);
+}
+
+const ZONA_LABELS = { carrusel: 'Carrusel', 'franja-cupon': 'Franja cupón' };
+const TIPO_LABELS = { 'campaña': 'Campaña', cupon: 'Cupón' };
+
+function escBanner(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function renderBannerGrid() {
+  const grid = $('bannerGrid');
+  const countEl = $('bannerCount');
+  const sorted = [...banners].sort((a, b) => {
+    if (a.zona !== b.zona) return a.zona === 'carrusel' ? -1 : 1;
+    return (a.orden || 99) - (b.orden || 99);
+  });
+  countEl.textContent = banners.length;
+
+  if (banners.length === 0) {
+    grid.innerHTML = `<div class="empty-state"><div style="font-size:2.5rem">🖼</div><p>No hay banners todavía. Creá el primero con <strong>Nuevo banner</strong>.</p></div>`;
+    return;
+  }
+
+  grid.innerHTML = sorted.map(b => {
+    const displayTitle = b.titulo || b.imagen.split('/').pop();
+    const accionText = b.accion.tipo === 'link'
+      ? `→ ${b.accion.destino || '(sin destino)'}`
+      : `CUPÓN: ${b.accion.codigo || '(sin código)'}`;
+    return `
+    <div class="banner-card ${b.activo ? '' : 'inactive'}">
+      <div>
+        <img class="banner-card__thumb" src="${escBanner(b.imagen)}" alt=""
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="banner-card__thumb-ph" style="display:none">🖼</div>
+      </div>
+      <div class="banner-card__info">
+        <div class="banner-card__top">
+          <span class="banner-card__title">${escBanner(displayTitle)}</span>
+          <span class="pill ${b.zona === 'carrusel' ? 'pill-carrusel' : 'pill-franja'}">${escBanner(ZONA_LABELS[b.zona] || b.zona)}</span>
+          <span class="pill ${b.tipo === 'cupon' ? 'pill-cupon-b' : 'pill-campana'}">${escBanner(TIPO_LABELS[b.tipo] || b.tipo)}</span>
+          ${!b.activo ? '<span class="pill pill-muted">Inactivo</span>' : ''}
+        </div>
+        <div class="banner-card__meta">
+          <span>#${b.orden}</span>
+          <span>${escBanner(accionText)}</span>
+          ${b.subtitulo ? `<span>${escBanner(b.subtitulo)}</span>` : ''}
+        </div>
+      </div>
+      <div class="banner-card__actions">
+        <button class="btn btn-ghost" style="font-size:.78rem;gap:5px;" onclick="openEditBanner('${escBanner(b.id)}')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Editar
+        </button>
+        <button class="btn btn-ghost" style="color:var(--red);font-size:.78rem;gap:5px;" onclick="confirmDeleteBanner('${escBanner(b.id)}')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+          Eliminar
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── Banner modal refs ──
+const bannerModalOverlay = $('bannerModalOverlay');
+const bannerModalTitle   = $('bannerModalTitle');
+const bImagen     = $('bImagen');
+const bImgPreview = $('bImgPreview');
+const bTipo       = $('bTipo');
+const bZona       = $('bZona');
+const bTitulo     = $('bTitulo');
+const bSubtitulo  = $('bSubtitulo');
+const bAccionTipo = $('bAccionTipo');
+const bDestino    = $('bDestino');
+const bCuponCodigo= $('bCuponCodigo');
+const bOrden      = $('bOrden');
+const bActivo     = $('bActivo');
+const accionLinkEl = $('accionLink');
+const accionCuponEl= $('accionCupon');
+
+let editingBannerId = null;
+
+function openBannerModal()  { bannerModalOverlay.classList.add('open'); }
+function closeBannerModal() { bannerModalOverlay.classList.remove('open'); }
+
+function updateBannerAccionFields() {
+  const v = bAccionTipo.value;
+  accionLinkEl.className  = 'accion-extra' + (v === 'link'  ? ' show' : '');
+  accionCuponEl.className = 'accion-extra' + (v === 'cupon' ? ' show' : '');
+}
+
+function updateBannerPreview() {
+  const src = bImagen.value.trim();
+  bImgPreview.className = src ? 'banner-form-preview show' : 'banner-form-preview';
+  if (src) bImgPreview.src = src;
+}
+
+function openNewBanner() {
+  editingBannerId = null;
+  bannerModalTitle.textContent = 'Nuevo banner';
+  bImagen.value = ''; bImgPreview.className = 'banner-form-preview';
+  bTipo.value = 'campaña'; bZona.value = 'carrusel';
+  bTitulo.value = ''; bSubtitulo.value = '';
+  bAccionTipo.value = 'link'; bDestino.value = '#productos'; bCuponCodigo.value = '';
+  bOrden.value = banners.length + 1;
+  bActivo.checked = true;
+  updateBannerAccionFields();
+  openBannerModal();
+}
+
+function openEditBanner(id) {
+  const b = banners.find(x => x.id === id);
+  if (!b) return;
+  editingBannerId = id;
+  bannerModalTitle.textContent = 'Editar banner';
+  bImagen.value   = b.imagen || '';
+  bTipo.value     = b.tipo   || 'campaña';
+  bZona.value     = b.zona   || 'carrusel';
+  bTitulo.value   = b.titulo    || '';
+  bSubtitulo.value= b.subtitulo || '';
+  bAccionTipo.value    = b.accion?.tipo    || 'link';
+  bDestino.value       = b.accion?.destino || '';
+  bCuponCodigo.value   = b.accion?.codigo  || '';
+  bOrden.value  = b.orden  ?? 1;
+  bActivo.checked = b.activo !== false;
+  updateBannerAccionFields();
+  updateBannerPreview();
+  openBannerModal();
+}
+
+function saveBannerForm() {
+  const imagen = bImagen.value.trim();
+  if (!imagen) { showToast('La imagen es obligatoria.', 'err'); bImagen.focus(); return; }
+  const accionTipo = bAccionTipo.value;
+  const destino    = bDestino.value.trim();
+  const codigo     = bCuponCodigo.value.trim().toUpperCase();
+  if (accionTipo === 'link'  && !destino) { showToast('Ingresá el destino del link.', 'err'); bDestino.focus(); return; }
+  if (accionTipo === 'cupon' && !codigo)  { showToast('Ingresá el código del cupón.', 'err'); bCuponCodigo.focus(); return; }
+  const accion = accionTipo === 'link' ? { tipo: 'link', destino } : { tipo: 'cupon', codigo };
+  const bannerObj = {
+    imagen,
+    tipo:      bTipo.value,
+    titulo:    bTitulo.value.trim(),
+    subtitulo: bSubtitulo.value.trim(),
+    accion,
+    zona:   bZona.value,
+    orden:  parseInt(bOrden.value) || banners.length + 1,
+    activo: bActivo.checked,
+  };
+
+  if (editingBannerId) {
+    const idx = banners.findIndex(x => x.id === editingBannerId);
+    if (idx !== -1) banners[idx] = { ...banners[idx], ...bannerObj };
+    showToast('✓ Banner actualizado', 'ok');
+  } else {
+    banners.push({ id: genBannerId(), ...bannerObj });
+    showToast('✓ Banner creado', 'ok');
+  }
+
+  closeBannerModal();
+  saveBanners();
+  renderBannerGrid();
+}
+
+function confirmDeleteBanner(id) {
+  const b = banners.find(x => x.id === id);
+  if (!b) return;
+  deletingBannerId = id;
+  deleteIndex = -1;
+  confirmText.textContent = `¿Eliminar el banner "${b.titulo || b.imagen.split('/').pop()}"? Esta acción no se puede deshacer desde este panel.`;
+  confirmOverlay.classList.add('open');
+}
+
+function exportBanners() {
+  const blob = new Blob([JSON.stringify(banners, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'banners.json';
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a); URL.revokeObjectURL(url);
+  showToast('banners.json descargado', 'ok');
+}
+
+banners = loadBanners();
+renderBannerGrid();
+
+$('btnNewBanner').addEventListener('click', openNewBanner);
+$('btnExportBanners').addEventListener('click', exportBanners);
+$('bannerModalClose').addEventListener('click', closeBannerModal);
+$('btnCancelBanner').addEventListener('click', closeBannerModal);
+$('btnSaveBanner').addEventListener('click', saveBannerForm);
+bannerModalOverlay.addEventListener('click', e => { if (e.target === bannerModalOverlay) closeBannerModal(); });
+bAccionTipo.addEventListener('change', updateBannerAccionFields);
+bImagen.addEventListener('input', updateBannerPreview);
+bImagen.addEventListener('blur', updateBannerPreview);
+bCuponCodigo.addEventListener('input', () => { bCuponCodigo.value = bCuponCodigo.value.toUpperCase(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeBannerModal(); });
 
 // ════════════════════════════════════════════════
 //  BLOQUE 5 — PRODUCTOS DESTACADOS
