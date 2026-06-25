@@ -8379,17 +8379,35 @@
     }
 
     // ==========================================================
-    //  F1 — BANNER CARRUSEL (editar BANNERS para cambiar slides)
+    //  F1 — BANNER CARRUSEL — lee banners.json (zona: carrusel)
+    //       si el archivo no existe, usa el fallback hardcodeado
     // ==========================================================
-    {
-      const BANNERS = [
-        { src: 'assets/banners/01_topstyle_twelve.png',           alt: 'Twelve Spray — Question Professional',        link: '#productos' },
-        { src: 'assets/banners/02_topstyle_lumiplex_color.png',   alt: 'Lumiplex Color — Question Professional',       link: '#productos' },
-        { src: 'assets/banners/03_topstyle_intensive_repair.png', alt: 'Intensive Repair — Question Professional',     link: '#ir-promo'  },
-        { src: 'assets/banners/04_topstyle_termic_protect.png',   alt: 'Termic Protect — Question Professional',       link: '#productos' },
-        { src: 'assets/banners/05_topstyle_coloration.png',       alt: 'Coloration Full Plex — Question Professional', link: '#categorias'},
-        { src: 'assets/banners/06_topstyle_q_style.png',          alt: 'Q Style — Question Professional',              link: '#productos' },
+    (async () => {
+      const BANNERS_DEFAULT = [
+        { src: 'assets/banners/01_topstyle_twelve.png',           alt: 'Twelve Spray — Question Professional',        link: '#productos'  },
+        { src: 'assets/banners/02_topstyle_lumiplex_color.png',   alt: 'Lumiplex Color — Question Professional',       link: '#productos'  },
+        { src: 'assets/banners/03_topstyle_intensive_repair.png', alt: 'Intensive Repair — Question Professional',     link: '#ir-promo'   },
+        { src: 'assets/banners/04_topstyle_termic_protect.png',   alt: 'Termic Protect — Question Professional',       link: '#productos'  },
+        { src: 'assets/banners/05_topstyle_coloration.png',       alt: 'Coloration Full Plex — Question Professional', link: '#categorias' },
+        { src: 'assets/banners/06_topstyle_q_style.png',          alt: 'Q Style — Question Professional',              link: '#productos'  },
       ];
+      let BANNERS = BANNERS_DEFAULT;
+      try {
+        const r = await fetch('banners.json');
+        if (r.ok) {
+          const data = await r.json();
+          const carrusel = data
+            .filter(b => b.zona === 'carrusel' && b.activo !== false)
+            .sort((a, b) => (a.orden || 99) - (b.orden || 99));
+          if (carrusel.length) {
+            BANNERS = carrusel.map(b => ({
+              src:  b.imagen,
+              alt:  b.titulo || b.imagen.split('/').pop().replace(/\.[^.]+$/, '').replace(/_/g, ' '),
+              link: b.accion?.tipo === 'link' ? (b.accion.destino || null) : null,
+            }));
+          }
+        }
+      } catch(e) {}
 
       const track    = document.getElementById('bannerTrack');
       const dotsWrap = document.getElementById('bannerDots');
@@ -8490,7 +8508,7 @@
       });
 
       startAuto();
-    }
+    })();
 
     // ==========================================================
     //  F2 — PRODUCTOS DESTACADOS (editar IDs para cambiar selección)
