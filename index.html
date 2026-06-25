@@ -1185,6 +1185,51 @@
     }
     @media (min-width: 640px) { .products__grid { grid-template-columns: repeat(2, 1fr); } }
     @media (min-width: 960px) { .products__grid { grid-template-columns: repeat(3, 1fr); gap: var(--space-8); } }
+    .products__grid.is-grouped { display: block; }
+
+    /* Bloque 2 — Botón toggle catálogo */
+    .catalog-toggle {
+      display: none;
+      align-items: center; gap: 8px;
+      padding: 10px 22px;
+      border: 1.5px solid var(--silver-hi);
+      border-radius: var(--radius-full);
+      background: transparent;
+      color: var(--silver-hi);
+      font-size: 14px; font-weight: 600;
+      cursor: pointer;
+      transition: all var(--t-fast);
+      white-space: nowrap;
+    }
+    .catalog-toggle:hover { background: var(--silver-hi); color: #fff; }
+    .catalog-toggle__arrow { display: inline-block; transition: transform var(--t-fast); }
+    .catalog-toggle.is-open .catalog-toggle__arrow { transform: rotate(180deg); }
+    @media (min-width: 960px) {
+      .catalog-toggle { display: inline-flex; }
+      .catalog-body.is-collapsed { display: none; }
+    }
+
+    /* Bloque 2 — Grupos por línea (vista "Todos") */
+    .line-group { margin-bottom: 48px; }
+    .line-group__head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-bottom: var(--space-3); margin-bottom: var(--space-6);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .line-group__title { font-family: var(--font-display); font-size: 18px; font-weight: 500; color: var(--text-primary); }
+    .line-group__cards { display: grid; grid-template-columns: 1fr; gap: var(--space-6); }
+    @media (min-width: 640px) { .line-group__cards { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 960px) { .line-group__cards { grid-template-columns: repeat(3, 1fr); gap: var(--space-8); } }
+    .btn--ver-mas {
+      font-size: 13px; color: var(--silver-hi);
+      background: none; border: 1px solid var(--border-strong);
+      border-radius: var(--radius-full); padding: 6px 16px;
+      cursor: pointer; transition: all var(--t-fast);
+    }
+    .btn--ver-mas:hover { background: var(--silver-hi); color: #fff; border-color: var(--silver-hi); }
+    .catalog-show-more { grid-column: 1 / -1; text-align: center; padding-top: var(--space-4); }
+    .filter-rest-cards { display: contents; }
+
     /* F3b — IS agrupada por sub-línea */
     .is-subline-group { grid-column: 1 / -1; margin-bottom: var(--space-8); }
     .is-subline-header {
@@ -4320,34 +4365,40 @@
             Los más pedidos por nuestros clientes profesionales.
           </p>
         </div>
+        <button class="catalog-toggle" id="catalogToggle" type="button">
+          <span class="catalog-toggle__txt">Ver catálogo completo</span>
+          <span class="catalog-toggle__arrow">↓</span>
+        </button>
       </div>
 
-      <!-- Filtros por línea (JS sin recarga) -->
-      <div class="products__filters reveal" role="tablist" aria-label="Filtrar productos por línea">
-        <button class="filter-chip is-active" data-filter="all" role="tab" aria-selected="true">Todos</button>
-        <button class="filter-chip" data-filter="coloracion" role="tab">Línea Coloración</button>
-        <button class="filter-chip" data-filter="intelligent" role="tab">Intelligent Series</button>
-        <button class="filter-chip" data-filter="styling" role="tab">Línea Styling</button>
-        <button class="filter-chip" data-filter="salon" role="tab">Línea Salón</button>
-      </div>
+      <div id="catalogBody" class="catalog-body is-collapsed">
+        <!-- Filtros por línea (JS sin recarga) -->
+        <div class="products__filters reveal" role="tablist" aria-label="Filtrar productos por línea">
+          <button class="filter-chip is-active" data-filter="all" role="tab" aria-selected="true">Todos</button>
+          <button class="filter-chip" data-filter="coloracion" role="tab">Línea Coloración</button>
+          <button class="filter-chip" data-filter="intelligent" role="tab">Intelligent Series</button>
+          <button class="filter-chip" data-filter="styling" role="tab">Línea Styling</button>
+          <button class="filter-chip" data-filter="salon" role="tab">Línea Salón</button>
+        </div>
 
-      <!--
-        PRODUCTOS — renderizados desde PRODUCTS (ver <script> al final).
-        Para agregar/quitar/ocultar: editar la variable PRODUCTS.
-        Cada producto tiene un flag "active" (true|false) para ocultarlo sin borrarlo.
-      -->
-      <div class="products__grid" id="productsGrid" role="list">
-        <!-- Se inyectan desde JS -->
-      </div>
+        <!--
+          PRODUCTOS — renderizados desde PRODUCTS (ver <script> al final).
+          Para agregar/quitar/ocultar: editar la variable PRODUCTS.
+          Cada producto tiene un flag "active" (true|false) para ocultarlo sin borrarlo.
+        -->
+        <div class="products__grid" id="productsGrid" role="list">
+          <!-- Se inyectan desde JS -->
+        </div>
 
-      <!-- Estado "sin productos en esta categoría" -->
-      <div class="cart-empty" id="productsEmpty" hidden style="grid-column: 1 / -1;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-          <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/>
-        </svg>
-        <h4>No hay productos en esta categoría</h4>
-        <p>Probá con otra categoría o vé todos los productos.</p>
-      </div>
+        <!-- Estado "sin productos en esta categoría" -->
+        <div class="cart-empty" id="productsEmpty" hidden style="grid-column: 1 / -1;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/>
+          </svg>
+          <h4>No hay productos en esta categoría</h4>
+          <p>Probá con otra categoría o vé todos los productos.</p>
+        </div>
+      </div><!-- /catalogBody -->
     </div>
   </section>
 
@@ -6447,6 +6498,10 @@
       { key:'equilibre',     label:'Équilibre',     desc:'Para cabello sensibilizado',              color:'#bfd42e' },
     ];
 
+    const SHOW_PER_GROUP = 6;
+    const LINE_LABELS = { coloracion: 'Coloración', intelligent: 'Intelligent Series', styling: 'Q Style', salon: 'Línea Salón' };
+    const LINE_ORDER  = ['coloracion', 'intelligent', 'styling', 'salon'];
+
     const renderProducts = () => {
       const visible = PRODUCTS.filter(p => p.active !== false);
       let filtered = currentFilter === 'all'
@@ -6489,24 +6544,65 @@
           </article>`;
       };
 
-      if (currentFilter === 'intelligent' && !currentLine && !searchQuery) {
-        productsGrid.innerHTML = IS_SUBLINES.map(sub => {
-          const subProds = filtered.filter(p => p.id.startsWith('is-' + sub.key + '-'));
-          if (!subProds.length) return '';
-          return `<div class="is-subline-group">
-            <div class="is-subline-header" style="--subline-color:${sub.color}">
-              <span class="is-subline-header__label">${sub.label}</span>
-              <span class="is-subline-header__desc">${sub.desc}</span>
+      const attachVerMas = (btn, restEl, totalRest) => {
+        btn.addEventListener('click', () => {
+          const hidden = restEl.style.display === 'none';
+          restEl.style.display = hidden ? '' : 'none';
+          btn.textContent = hidden ? '↑ Ver menos' : `${totalRest} productos más →`;
+          if (hidden) applyReveal(restEl);
+        });
+      };
+
+      if (currentFilter === 'all' && !currentLine && !searchQuery) {
+        // Vista agrupada por línea
+        productsGrid.classList.add('is-grouped');
+        productsGrid.innerHTML = LINE_ORDER.map(lineKey => {
+          const prods = filtered.filter(p => getProductLine(p.id) === lineKey);
+          if (!prods.length) return '';
+          const vis  = prods.slice(0, SHOW_PER_GROUP);
+          const rest = prods.slice(SHOW_PER_GROUP);
+          return `<div class="line-group" data-group="${lineKey}">
+            <div class="line-group__head">
+              <h3 class="line-group__title">${LINE_LABELS[lineKey]}</h3>
+              ${rest.length ? `<button class="btn--ver-mas" type="button">${rest.length} productos más →</button>` : ''}
             </div>
-            <div class="is-subline-cards">${subProds.map(cardHtml).join('')}</div>
+            <div class="line-group__cards">${vis.map(cardHtml).join('')}</div>
+            ${rest.length ? `<div class="line-group__cards" style="display:none;margin-top:var(--space-6);">${rest.map((p, i) => cardHtml(p, SHOW_PER_GROUP + i)).join('')}</div>` : ''}
           </div>`;
         }).join('');
+        productsGrid.querySelectorAll('.line-group').forEach(group => {
+          const btn  = group.querySelector('.btn--ver-mas');
+          const rest = group.querySelectorAll('.line-group__cards')[1];
+          if (btn && rest) attachVerMas(btn, rest, rest.children.length);
+        });
+
       } else {
-        productsGrid.innerHTML = filtered.map(cardHtml).join('');
+        // Filtro activo — plano con "Ver más" si hay más de 6
+        productsGrid.classList.remove('is-grouped');
+        if (!searchQuery && filtered.length > SHOW_PER_GROUP) {
+          const vis  = filtered.slice(0, SHOW_PER_GROUP);
+          const rest = filtered.slice(SHOW_PER_GROUP);
+          productsGrid.innerHTML =
+            vis.map(cardHtml).join('') +
+            `<div class="filter-rest-cards" style="display:none;">${rest.map((p, i) => cardHtml(p, SHOW_PER_GROUP + i)).join('')}</div>` +
+            `<div class="catalog-show-more"><button class="btn--ver-mas" type="button">${rest.length} productos más →</button></div>`;
+          const btn    = productsGrid.querySelector('.catalog-show-more .btn--ver-mas');
+          const restEl = productsGrid.querySelector('.filter-rest-cards');
+          if (btn && restEl) attachVerMas(btn, restEl, rest.length);
+        } else {
+          productsGrid.innerHTML = filtered.map(cardHtml).join('');
+        }
       }
 
       productsEmpty.hidden = filtered.length > 0;
       applyReveal(productsGrid);
+      // Si el catálogo ya es visible (mobile o desktop abierto), forzar is-visible en el próximo frame
+      const cb = $('#catalogBody');
+      if (!cb || !cb.classList.contains('is-collapsed')) {
+        requestAnimationFrame(() => {
+          productsGrid.querySelectorAll('.reveal').forEach(el => el.classList.add('is-visible'));
+        });
+      }
     };
 
     renderProducts();
@@ -6542,6 +6638,7 @@
         debounce = setTimeout(() => {
           const had = !!searchQuery;
           searchQuery = v.toLowerCase();
+          if (searchQuery && !had) expandCatalog();
           renderProducts();
           updateCount();
           if (searchQuery && !had) {
@@ -6839,11 +6936,37 @@
     // Links "Ver todo →" disparan el filter chip correspondiente
     $$('[data-line-filter]').forEach(link => {
       link.addEventListener('click', () => {
+        expandCatalog();
         const lineKey = link.dataset.lineFilter;
         const chip = document.querySelector('.filter-chip[data-filter="' + lineKey + '"]');
         if (chip) setTimeout(() => chip.click(), 250);
       });
     });
+
+    // Catálogo plegable — toggle desktop
+    const catalogBody   = $('#catalogBody');
+    const catalogToggle = $('#catalogToggle');
+    const expandCatalog = () => {
+      if (!catalogBody) return;
+      catalogBody.classList.remove('is-collapsed');
+      if (catalogToggle) {
+        catalogToggle.classList.add('is-open');
+        const txt = catalogToggle.querySelector('.catalog-toggle__txt');
+        if (txt) txt.textContent = 'Cerrar catálogo';
+      }
+      requestAnimationFrame(() => {
+        productsGrid.querySelectorAll('.reveal').forEach(el => el.classList.add('is-visible'));
+      });
+    };
+    if (catalogToggle && catalogBody) {
+      catalogToggle.addEventListener('click', () => {
+        const collapsed = catalogBody.classList.toggle('is-collapsed');
+        catalogToggle.classList.toggle('is-open', !collapsed);
+        const txt = catalogToggle.querySelector('.catalog-toggle__txt');
+        if (txt) txt.textContent = collapsed ? 'Ver catálogo completo' : 'Cerrar catálogo';
+        if (!collapsed) catalogBody.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+    }
 
     // Filtros
     const filterChips = $$('.filter-chip');
@@ -6860,9 +6983,10 @@
       });
     });
 
-    // Categorías → click dispara filtro correspondiente
+    // Categorías → click dispara filtro correspondiente + expande catálogo
     $$('.category[data-category]').forEach(cat => {
       cat.addEventListener('click', () => {
+        expandCatalog();
         const targetCat = cat.dataset.category;
         const chip = $(`.filter-chip[data-filter="${targetCat}"]`);
         if (chip) setTimeout(() => chip.click(), 300);
@@ -6881,6 +7005,7 @@
           c.classList.toggle('is-active', active);
           c.setAttribute('aria-selected', String(active));
         });
+        expandCatalog();
         renderProducts();
         // Scroll al catálogo
         const target = document.getElementById('productos');
@@ -7041,7 +7166,7 @@
       }
     } catch(e) {}
 
-    const LINE_LABELS = { coloracion: 'Coloración', intelligent: 'Intelligent Series', styling: 'Q Style', salon: 'Salón' };
+    const CART_LINE_LABELS = { coloracion: 'Coloración', intelligent: 'Intelligent Series', styling: 'Q Style', salon: 'Salón' };
 
     const lineSubtotal = (coupon) => {
       const lineas = coupon?.lineas;
@@ -7151,7 +7276,7 @@
         if (discount > 0 && CART.hasPrices()) {
           cartDiscountRow.hidden = false;
           const lineasSuffix = ACTIVE_COUPON?.lineas?.length
-            ? ` · solo ${ACTIVE_COUPON.lineas.map(l => LINE_LABELS[l] || l).join(', ')}`
+            ? ` · solo ${ACTIVE_COUPON.lineas.map(l => CART_LINE_LABELS[l] || l).join(', ')}`
             : '';
           cartDiscountLabel.textContent = ACTIVE_COUPON ? `(${ACTIVE_COUPON.code}${lineasSuffix})` : '';
           cartDiscountValue.textContent = '− ' + formatMoney(discount);
@@ -7305,7 +7430,7 @@
         return false;
       }
       if (c.minSubtotal && lineSubtotal(c) < c.minSubtotal) {
-        const scope = c.lineas?.length ? ` en ${c.lineas.map(l => LINE_LABELS[l] || l).join(', ')}` : '';
+        const scope = c.lineas?.length ? ` en ${c.lineas.map(l => CART_LINE_LABELS[l] || l).join(', ')}` : '';
         showCouponMsg(`Aplica a compras desde ${formatMoney(c.minSubtotal)}${scope}`, 'err');
         // Igual lo aceptamos para que se active cuando alcance el mínimo
         ACTIVE_COUPON = c;
@@ -7771,7 +7896,7 @@
           const hasLineas = ACTIVE_COUPON.lineas?.length;
           if (hasLineas) {
             const base = lineSubtotal(ACTIVE_COUPON);
-            const lineLabel = ACTIVE_COUPON.lineas.map(l => LINE_LABELS[l] || l).join(', ');
+            const lineLabel = ACTIVE_COUPON.lineas.map(l => CART_LINE_LABELS[l] || l).join(', ');
             lines.push(`*Cupón aplicado:* ${ACTIVE_COUPON.code} (${ACTIVE_COUPON.label}) — ${ACTIVE_COUPON.value}% en ${lineLabel}`);
             lines.push(`*Base de descuento:* ${formatMoney(base)}`);
           } else {
