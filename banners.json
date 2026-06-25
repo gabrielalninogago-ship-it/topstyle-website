@@ -1,0 +1,90 @@
+[
+  {
+    "id": "b1",
+    "imagen": "assets/banners/01_topstyle_twelve.png",
+    "tipo": "campaña",
+    "titulo": "",
+    "subtitulo": "",
+    "accion": { "tipo": "link", "destino": "#productos" },
+    "zona": "carrusel",
+    "orden": 1,
+    "activo": true
+  },
+  {
+    "id": "b2",
+    "imagen": "assets/banners/02_topstyle_lumiplex_color.png",
+    "tipo": "campaña",
+    "titulo": "",
+    "subtitulo": "",
+    "accion": { "tipo": "link", "destino": "#productos" },
+    "zona": "carrusel",
+    "orden": 2,
+    "activo": true
+  },
+  {
+    "id": "b3",
+    "imagen": "assets/banners/03_topstyle_intensive_repair.png",
+    "tipo": "campaña",
+    "titulo": "",
+    "subtitulo": "",
+    "accion": { "tipo": "link", "destino": "#ir-promo" },
+    "zona": "carrusel",
+    "orden": 3,
+    "activo": true
+  },
+  {
+    "id": "b4",
+    "imagen": "assets/banners/04_topstyle_termic_protect.png",
+    "tipo": "campaña",
+    "titulo": "",
+    "subtitulo": "",
+    "accion": { "tipo": "link", "destino": "#productos" },
+    "zona": "carrusel",
+    "orden": 4,
+    "activo": true
+  },
+  {
+    "id": "b5",
+    "imagen": "assets/banners/05_topstyle_coloration.png",
+    "tipo": "campaña",
+    "titulo": "",
+    "subtitulo": "",
+    "accion": { "tipo": "link", "destino": "#categorias" },
+    "zona": "carrusel",
+    "orden": 5,
+    "activo": true
+  },
+  {
+    "id": "b6",
+    "imagen": "assets/banners/06_topstyle_q_style.png",
+    "tipo": "campaña",
+    "titulo": "",
+    "subtitulo": "",
+    "accion": { "tipo": "link", "destino": "#productos" },
+    "zona": "carrusel",
+    "orden": 6,
+    "activo": true
+  },
+  {
+    "id": "b7",
+    "imagen": "assets/banners/07_topstyle_lanzamiento.png",
+    "tipo": "cupon",
+    "titulo": "",
+    "subtitulo": "",
+    "accion": { "tipo": "cupon", "codigo": "LANZA35OFF" },
+    "zona": "franja-cupon",
+    "orden": 1,
+    "activo": true
+  },
+  {
+    "id": "b8",
+    "imagen": "assets/banners/08_topstyle_mundial.png",
+    "tipo": "campaña",
+    "titulo": "",
+    "subtitulo": "",
+    "accion": { "tipo": "link", "destino": "#productos" },
+    "zona": "franja-cupon",
+    "orden": 2,
+    "activo": true
+  }
+]

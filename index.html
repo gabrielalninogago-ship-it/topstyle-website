@@ -1138,6 +1138,80 @@
       .banner-carousel__btn { width: 30px; height: 30px; }
     }
 
+    /*  FRANJA CUPÓN                                          */
+    .franja-cupon-wrap { display: flex; flex-direction: column; }
+
+    .franja-cupon {
+      position: relative;
+      background: #080810;
+      border-top: 1px solid rgba(255,255,255,.06);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      overflow: hidden;
+    }
+
+    /* ── Full mode: imagen completa, botón overlaid ── */
+    .franja-cupon--full .franja-cupon__inner {
+      position: relative;
+    }
+    .franja-cupon--full .franja-cupon__img {
+      width: 100%;
+      height: clamp(160px, 20vw, 240px);
+      object-fit: cover;
+      display: block;
+    }
+    .franja-cupon--full .franja-cupon__body {
+      position: absolute;
+      bottom: 0; right: 0;
+      padding: 14px 20px;
+      background: linear-gradient(to left, rgba(8,8,16,.75) 0%, transparent 100%);
+      display: flex; align-items: flex-end;
+    }
+
+    /* ── Split mode: imagen izquierda, texto+botón derecha ── */
+    .franja-cupon--split .franja-cupon__inner {
+      display: flex; align-items: stretch;
+      min-height: 180px;
+    }
+    .franja-cupon--split .franja-cupon__img-wrap {
+      flex: 0 0 42%; max-width: 42%; overflow: hidden;
+    }
+    .franja-cupon--split .franja-cupon__img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    .franja-cupon--split .franja-cupon__body {
+      flex: 1; padding: var(--space-7) var(--space-8);
+      display: flex; flex-direction: column; justify-content: center; gap: var(--space-3);
+    }
+
+    /* ── Shared ── */
+    .franja-cupon__titulo {
+      font-family: var(--font-display), serif;
+      font-size: clamp(1.1rem, 2vw, 1.6rem);
+      font-weight: 600; color: var(--gold); line-height: 1.15; margin: 0;
+    }
+    .franja-cupon__subtitulo {
+      font-size: .9rem; color: rgba(240,237,232,.65); line-height: 1.5; margin: 0;
+    }
+    .franja-cupon__btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 22px; border-radius: var(--radius-full);
+      font-family: var(--font-body), sans-serif; font-size: .88rem;
+      font-weight: 600; cursor: pointer; transition: all var(--t-fast);
+      border: none; letter-spacing: .02em; white-space: nowrap;
+      text-decoration: none; flex-shrink: 0;
+    }
+    .franja-cupon__btn--gold { background: var(--gold); color: #080810; }
+    .franja-cupon__btn--gold:hover { background: var(--gold-hi); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(201,168,76,.4); }
+    .franja-cupon__btn--gold:active { transform: none; }
+    .franja-cupon__btn--outline { background: transparent; color: var(--text-primary); border: 1.5px solid rgba(240,237,232,.35); }
+    .franja-cupon__btn--outline:hover { border-color: var(--text-primary); background: rgba(240,237,232,.08); }
+
+    @media (max-width: 640px) {
+      .franja-cupon--split .franja-cupon__inner { flex-direction: column; min-height: unset; }
+      .franja-cupon--split .franja-cupon__img-wrap { flex: 0 0 auto; max-width: 100%; height: 160px; }
+      .franja-cupon--split .franja-cupon__body { padding: var(--space-5) var(--space-4); }
+    }
+
     /*  F2 — PRODUCTOS DESTACADOS (sección propia, 4 curados) */
     /* ================================================== */
     .featured__head { margin-bottom: var(--space-8); }
@@ -4046,6 +4120,9 @@
       </div>
     </div>
   </section>
+
+  <!-- FRANJA CUPÓN (zona: franja-cupon en banners.json) -->
+  <div id="franjaCuponWrap" class="franja-cupon-wrap" style="display:none"></div>
 
   <!-- ================================================= -->
   <!--  F2. PRODUCTOS DESTACADOS — hasta 4, configurables  -->
@@ -8508,6 +8585,84 @@
       });
 
       startAuto();
+    })();
+
+    // ==========================================================
+    //  FRANJA CUPÓN — lee banners.json (zona: franja-cupon)
+    // ==========================================================
+    (async () => {
+      const wrap = document.getElementById('franjaCuponWrap');
+      if (!wrap) return;
+      try {
+        const r = await fetch('banners.json');
+        if (!r.ok) return;
+        const data = await r.json();
+        const franjas = data
+          .filter(b => b.zona === 'franja-cupon' && b.activo !== false)
+          .sort((a, b) => (a.orden || 99) - (b.orden || 99));
+        if (!franjas.length) return;
+
+        wrap.style.display = '';
+        wrap.innerHTML = franjas.map(b => {
+          const hasText = b.titulo || b.subtitulo;
+          const mode    = hasText ? 'split' : 'full';
+          const isCupon = b.accion?.tipo === 'cupon';
+          const btnCls  = isCupon ? 'franja-cupon__btn franja-cupon__btn--gold' : 'franja-cupon__btn franja-cupon__btn--outline';
+          const btnText = isCupon ? 'Usar cupón' : 'Ver productos';
+          const btnEl   = isCupon
+            ? `<button class="${btnCls}" data-coupon-code="${escapeHtml(b.accion.codigo)}">${btnText}</button>`
+            : `<a class="${btnCls}" href="${escapeHtml(b.accion?.destino || '#productos')}">${btnText}</a>`;
+          const imgEl = b.imagen
+            ? `<img class="franja-cupon__img" src="${escapeHtml(b.imagen)}" alt="${escapeHtml(b.titulo || '')}" loading="lazy">`
+            : '';
+
+          if (mode === 'full') {
+            return `
+            <div class="franja-cupon franja-cupon--full">
+              <div class="franja-cupon__inner">
+                ${imgEl}
+                <div class="franja-cupon__body">${btnEl}</div>
+              </div>
+            </div>`;
+          }
+          return `
+          <div class="franja-cupon franja-cupon--split">
+            <div class="franja-cupon__inner">
+              <div class="franja-cupon__img-wrap">${imgEl}</div>
+              <div class="franja-cupon__body">
+                ${b.titulo    ? `<h3 class="franja-cupon__titulo">${escapeHtml(b.titulo)}</h3>` : ''}
+                ${b.subtitulo ? `<p class="franja-cupon__subtitulo">${escapeHtml(b.subtitulo)}</p>` : ''}
+                <div>${btnEl}</div>
+              </div>
+            </div>
+          </div>`;
+        }).join('');
+
+        // Wiring: botón cupón → abrir carrito + aplicar código
+        wrap.querySelectorAll('[data-coupon-code]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const code = btn.dataset.couponCode;
+            if (!code) return;
+            const input  = document.getElementById('couponInput');
+            const apply  = document.getElementById('couponApply');
+            const toggle = document.getElementById('couponToggle');
+            const section= document.getElementById('cartCoupon');
+            const cartTrig = document.getElementById('cartTrigger');
+            if (!input || !apply) return;
+            // Abrir carrito
+            if (cartTrig) cartTrig.click();
+            // Abrir sección cupón si está cerrada
+            if (section && !section.classList.contains('is-open')) {
+              section.classList.add('is-open');
+              toggle?.setAttribute('aria-expanded', 'true');
+            }
+            // Aplicar
+            input.value = code;
+            apply.click();
+          });
+        });
+
+      } catch(e) {}
     })();
 
     // ==========================================================
