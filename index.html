@@ -8589,18 +8589,30 @@
 
     // ==========================================================
     //  FRANJA CUPÓN — lee banners.json (zona: franja-cupon)
+    //  fallback a defaults si el JSON no está disponible
     // ==========================================================
     (async () => {
       const wrap = document.getElementById('franjaCuponWrap');
       if (!wrap) return;
+
+      const FRANJA_DEFAULT = [
+        { imagen: 'assets/banners/07_topstyle_lanzamiento.png', tipo: 'cupon',    titulo: '', subtitulo: '', accion: { tipo: 'cupon', codigo: 'LANZA35OFF'  }, zona: 'franja-cupon', orden: 1, activo: true },
+        { imagen: 'assets/banners/08_topstyle_mundial.png',      tipo: 'campaña',  titulo: '', subtitulo: '', accion: { tipo: 'link',  destino: '#productos' }, zona: 'franja-cupon', orden: 2, activo: true },
+      ];
+
+      let franjas = FRANJA_DEFAULT;
       try {
         const r = await fetch('banners.json');
-        if (!r.ok) return;
-        const data = await r.json();
-        const franjas = data
-          .filter(b => b.zona === 'franja-cupon' && b.activo !== false)
-          .sort((a, b) => (a.orden || 99) - (b.orden || 99));
-        if (!franjas.length) return;
+        if (r.ok) {
+          const data = await r.json();
+          const fromJson = data
+            .filter(b => b.zona === 'franja-cupon' && b.activo !== false)
+            .sort((a, b) => (a.orden || 99) - (b.orden || 99));
+          if (fromJson.length) franjas = fromJson;
+        }
+      } catch(e) {}
+
+      if (!franjas.length) return;
 
         wrap.style.display = '';
         wrap.innerHTML = franjas.map(b => {
