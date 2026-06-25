@@ -1230,6 +1230,31 @@
     .catalog-show-more { grid-column: 1 / -1; text-align: center; padding-top: var(--space-4); }
     .filter-rest-cards { display: contents; }
 
+    /* Bloque 3 — Sort */
+    .products__sort {
+      display: flex; align-items: center; justify-content: flex-end;
+      gap: 10px; margin-bottom: var(--space-6);
+    }
+    .products__sort-label { font-size: 13px; color: var(--text-muted); white-space: nowrap; }
+    .products__sort-wrap { position: relative; display: inline-block; }
+    .products__sort-wrap::after {
+      content: '↓'; position: absolute; right: 12px; top: 50%;
+      transform: translateY(-50%); pointer-events: none;
+      font-size: 11px; color: var(--text-muted);
+    }
+    .products__sort-select {
+      font-size: 13px; color: var(--text-primary);
+      background: transparent;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-full);
+      padding: 7px 32px 7px 14px;
+      cursor: pointer; appearance: none; -webkit-appearance: none;
+      transition: border-color var(--t-fast);
+    }
+    .products__sort-select:focus { outline: none; border-color: var(--silver-hi); }
+    .products__sort-select:hover { border-color: var(--silver-hi); }
+    .products__sort-select option { background: var(--bg-surface, #1a0a2e); color: var(--text-primary); }
+
     /* F3b — IS agrupada por sub-línea */
     .is-subline-group { grid-column: 1 / -1; margin-bottom: var(--space-8); }
     .is-subline-header {
@@ -4381,6 +4406,20 @@
           <button class="filter-chip" data-filter="salon" role="tab">Línea Salón</button>
         </div>
 
+        <!-- Sort -->
+        <div class="products__sort">
+          <span class="products__sort-label">Ordenar:</span>
+          <div class="products__sort-wrap">
+            <select class="products__sort-select" id="sortSelect" aria-label="Ordenar productos">
+              <option value="default">Destacados</option>
+              <option value="elegidos">Más elegidos primero</option>
+              <option value="precio-asc">Precio: menor → mayor</option>
+              <option value="precio-desc">Precio: mayor → menor</option>
+              <option value="az">A–Z</option>
+            </select>
+          </div>
+        </div>
+
         <!--
           PRODUCTOS — renderizados desde PRODUCTS (ver <script> al final).
           Para agregar/quitar/ocultar: editar la variable PRODUCTS.
@@ -6462,6 +6501,7 @@
     let currentFilter = 'all';
     let currentLine = null; // filtro por línea (keyword en name/description). null = sin filtro.
     let searchQuery = '';   // texto del buscador global del nav (lowercased).
+    let currentSort = 'default';
 
     const matchesLine = (p, keyword) => {
       const hay = `${p.name} ${p.description || ''}`.toLowerCase();
@@ -6501,6 +6541,7 @@
     const SHOW_PER_GROUP = 6;
     const LINE_LABELS = { coloracion: 'Coloración', intelligent: 'Intelligent Series', styling: 'Q Style', salon: 'Línea Salón' };
     const LINE_ORDER  = ['coloracion', 'intelligent', 'styling', 'salon'];
+    const SORT_FEATURED_IDS = ['coloration-full-plex-60g', 'is-keratin-lift-spray', 'is-lumiere-oleo', 'qstyle-curl-cream'];
 
     const renderProducts = () => {
       const visible = PRODUCTS.filter(p => p.active !== false);
@@ -6513,6 +6554,28 @@
           const hay = `${p.name} ${p.brand} ${p.description || ''} ${p.id}`.toLowerCase();
           return hay.includes(searchQuery);
         });
+      }
+
+      // Sort
+      if (currentSort === 'precio-asc') {
+        const con = filtered.filter(p => p.price > 0).sort((a, b) => a.price - b.price);
+        const sin = filtered.filter(p => !(p.price > 0));
+        filtered = [...con, ...sin];
+      } else if (currentSort === 'precio-desc') {
+        const con = filtered.filter(p => p.price > 0).sort((a, b) => b.price - a.price);
+        const sin = filtered.filter(p => !(p.price > 0));
+        filtered = [...con, ...sin];
+      } else if (currentSort === 'elegidos') {
+        filtered = [...filtered].sort((a, b) => {
+          const ai = SORT_FEATURED_IDS.indexOf(a.id);
+          const bi = SORT_FEATURED_IDS.indexOf(b.id);
+          if (ai !== -1 && bi !== -1) return ai - bi;
+          if (ai !== -1) return -1;
+          if (bi !== -1) return 1;
+          return 0;
+        });
+      } else if (currentSort === 'az') {
+        filtered = [...filtered].sort((a, b) => a.name.localeCompare(b.name, 'es'));
       }
 
       const cardHtml = (p, i) => {
@@ -6942,6 +7005,15 @@
         if (chip) setTimeout(() => chip.click(), 250);
       });
     });
+
+    // Sort
+    const sortSelect = $('#sortSelect');
+    if (sortSelect) {
+      sortSelect.addEventListener('change', () => {
+        currentSort = sortSelect.value;
+        renderProducts();
+      });
+    }
 
     // Catálogo plegable — toggle desktop
     const catalogBody   = $('#catalogBody');
