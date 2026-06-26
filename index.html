@@ -1139,7 +1139,15 @@
     }
 
     /*  FRANJA CUPÓN                                          */
-    .franja-cupon-wrap { display: flex; flex-direction: column; }
+    .franja-cupon-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3px;
+      background: #080810;
+    }
+    @media (max-width: 640px) {
+      .franja-cupon-wrap { grid-template-columns: 1fr; }
+    }
 
     .franja-cupon {
       background: #0a0a0c;
@@ -8626,7 +8634,7 @@
       // Estilos inline para evitar dependencia del CSS cacheado en CDN
       const S = {
         wrap:   'background:#0a0a0c;border-top:1px solid rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.05);',
-        img:    'width:100%;height:auto;max-height:clamp(260px,30vw,460px);object-fit:cover;object-position:center 20%;display:block;',
+        img:    'width:100%;height:auto;max-height:clamp(200px,25vw,380px);object-fit:cover;object-position:center center;display:block;',
         bar:    'display:flex;align-items:center;justify-content:space-between;gap:16px;padding:13px 24px;background:#0a0a0c;border-top:1px solid rgba(201,168,76,.22);flex-wrap:wrap;',
         text:   'min-width:0;display:flex;flex-direction:column;gap:2px;',
         titulo: 'font-size:1rem;font-weight:600;color:#c9a84c;margin:0;line-height:1.2;',
