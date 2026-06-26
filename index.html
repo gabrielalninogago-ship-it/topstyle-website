@@ -1332,8 +1332,8 @@
       font-size: 11px; color: var(--text-muted);
     }
     .products__sort-select {
-      font-size: 13px; color: var(--text-primary);
-      background: transparent;
+      font-size: 13px; color: #f0ede8;
+      background: #13102a;
       border: 1px solid var(--border-strong);
       border-radius: var(--radius-full);
       padding: 7px 32px 7px 14px;
@@ -1342,7 +1342,7 @@
     }
     .products__sort-select:focus { outline: none; border-color: var(--silver-hi); }
     .products__sort-select:hover { border-color: var(--silver-hi); }
-    .products__sort-select option { background: var(--bg-surface, #1a0a2e); color: var(--text-primary); }
+    .products__sort-select option { background: #13102a; color: #f0ede8; }
 
     /* F3b — IS agrupada por sub-línea */
     .is-subline-group { grid-column: 1 / -1; margin-bottom: var(--space-8); }
@@ -6637,6 +6637,8 @@
     fetch('destacados.json').then(r => r.ok ? r.json() : null).then(d => { if (d && Array.isArray(d.featured) && d.featured.length) SORT_FEATURED_IDS = d.featured; }).catch(() => {});
 
     const renderProducts = () => {
+      const sortWrap = $('.products__sort');
+      if (sortWrap) sortWrap.style.display = currentFilter === 'all' ? '' : 'none';
       const visible = PRODUCTS.filter(p => p.active !== false);
       let filtered = currentFilter === 'all'
         ? visible
@@ -7104,6 +7106,7 @@
     if (sortSelect) {
       sortSelect.addEventListener('change', () => {
         currentSort = sortSelect.value;
+        if (currentSort !== 'default') expandCatalog();
         renderProducts();
       });
     }
@@ -7138,7 +7141,11 @@
     filterChips.forEach(chip => {
       chip.addEventListener('click', () => {
         currentFilter = chip.dataset.filter;
-        currentLine = null; // al cambiar de categoría, limpiamos line
+        currentLine = null;
+        if (currentFilter !== 'all' && currentSort !== 'default') {
+          currentSort = 'default';
+          if (sortSelect) sortSelect.value = 'default';
+        }
         filterChips.forEach(c => {
           const active = c === chip;
           c.classList.toggle('is-active', active);
