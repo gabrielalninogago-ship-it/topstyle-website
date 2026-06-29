@@ -7266,8 +7266,7 @@
     const cartClear = $('#cartClear');
 
     // ---------- CUPONES ----------
-    // Expiración relativa: ms desde la primera visita (localStorage firstVisitAt).
-    // Si expiresRel es null, el cupón no caduca.
+    // Fuente de verdad: /coupons.json (fetcheado al cargar). Fallback: hardcoded + localStorage admin.
     const COUPONS = {
       'BIENVENIDA10': {
         code: 'BIENVENIDA10',
@@ -7275,7 +7274,7 @@
         type: 'percent',
         value: 10,
         minSubtotal: 0,
-        expiresRel: 7 * 24 * 60 * 60 * 1000, // 7 días desde la primera visita
+        expiresRel: 7 * 24 * 60 * 60 * 1000,
       },
       'TOPSTYLE15': {
         code: 'TOPSTYLE15',
@@ -7295,18 +7294,26 @@
       },
       'LANZA35OFF': {
         code: 'LANZA35OFF',
-        label: 'Lanzamiento IS',
+        label: 'Bienvenida Lanzamiento',
         type: 'percent',
         value: 35,
         minSubtotal: 0,
         expiresRel: null,
-        lineas: ['intelligent'],
       }
     };
     try {
       const _adminCoupons = JSON.parse(localStorage.getItem('topstyle_coupons_admin') || 'null');
       if (_adminCoupons && typeof _adminCoupons === 'object') Object.assign(COUPONS, _adminCoupons);
     } catch(e) {}
+    // Fetch coupons.json — sobrescribe defaults y localStorage (aplica a todos los dispositivos)
+    (async () => {
+      try {
+        const list = await fetch('/coupons.json').then(r => r.ok ? r.json() : null);
+        if (Array.isArray(list)) {
+          list.forEach(c => { if (c?.code) COUPONS[c.code] = c; });
+        }
+      } catch(e) {}
+    })();
     const COUPON_STORAGE_KEY = 'topstyle_active_coupon';
     const FIRST_VISIT_KEY = 'topstyle_first_visit_at';
 
@@ -7322,8 +7329,12 @@
 
     const isCouponValid = (coupon) => {
       if (!coupon) return false;
+      if (coupon.active === false) return false;
       if (coupon.expiresRel && firstVisitAt) {
         if (Date.now() - firstVisitAt > coupon.expiresRel) return false;
+      }
+      if (coupon.expiresAt) {
+        if (new Date(coupon.expiresAt + 'T23:59:59') < new Date()) return false;
       }
       return true;
     };

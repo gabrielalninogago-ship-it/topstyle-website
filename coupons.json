@@ -1,0 +1,41 @@
+[
+  {
+    "code": "LANZA35OFF",
+    "label": "Bienvenida Lanzamiento",
+    "type": "percent",
+    "value": 35,
+    "minSubtotal": 0,
+    "expiryType": "none",
+    "expiresRel": null,
+    "expiresAt": null,
+    "validFrom": null,
+    "active": true,
+    "lineas": []
+  },
+  {
+    "code": "TOPSTYLE15",
+    "label": "Cliente frecuente",
+    "type": "percent",
+    "value": 15,
+    "minSubtotal": 25000,
+    "expiryType": "none",
+    "expiresRel": null,
+    "expiresAt": null,
+    "validFrom": null,
+    "active": true,
+    "lineas": []
+  },
+  {
+    "code": "PRO20",
+    "label": "Peluquería profesional",
+    "type": "percent",
+    "value": 20,
+    "minSubtotal": 50000,
+    "expiryType": "none",
+    "expiresRel": null,
+    "expiresAt": null,
+    "validFrom": null,
+    "active": true,
+    "lineas": []
+  }
+]

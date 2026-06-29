@@ -808,8 +808,17 @@
         Nuevo cupón
       </button>
     </div>
-    <div class="toolbar__right"></div>
+    <div class="toolbar__right">
+      <button class="btn btn-outline" id="btnExportCoupons">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Exportar coupons.json
+      </button>
+    </div>
   </div>
+
+  <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:20px;line-height:1.6;">
+    Después de agregar o editar cupones, exportá <code style="font-family:'JetBrains Mono',monospace;font-size:.78rem;">coupons.json</code> y reemplazá el archivo en el repo para que los cambios lleguen a todos los dispositivos.
+  </p>
 
   <!-- LISTA DE CUPONES -->
   <div class="section-head">
@@ -1837,11 +1846,22 @@ function exportBanners() {
   showToast('banners.json descargado', 'ok');
 }
 
+function exportCoupons() {
+  const blob = new Blob([JSON.stringify(coupons, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'coupons.json';
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a); URL.revokeObjectURL(url);
+  showToast('coupons.json descargado — subilo al repo', 'ok');
+}
+
 banners = loadBanners();
 renderBannerGrid();
 
 $('btnNewBanner').addEventListener('click', openNewBanner);
 $('btnExportBanners').addEventListener('click', exportBanners);
+$('btnExportCoupons').addEventListener('click', exportCoupons);
 $('bannerModalClose').addEventListener('click', closeBannerModal);
 $('btnCancelBanner').addEventListener('click', closeBannerModal);
 $('btnSaveBanner').addEventListener('click', saveBannerForm);
