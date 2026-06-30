@@ -4020,6 +4020,13 @@
       /* Welcome modal: code box no desborde en pantallas estrechas */
       .welcome-modal__code-value { font-size: 17px; letter-spacing: 0.12em; }
 
+      /* Product footer: apila precio arriba / botón abajo (fix "ELE COL" en cards 2-col) */
+      .product__footer { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .product__add { width: 100%; text-align: center; }
+
+      /* Botón bloque: permitir wrap para evitar overflow en pantallas estrechas */
+      .btn--block { white-space: normal; }
+
       /* QR trigger: solo ícono para no tapar columna derecha */
       .qr-trigger__label { display: none; }
       .qr-trigger { padding: 11px 13px; bottom: 100px; }
@@ -4892,7 +4899,7 @@
   <div class="welcome-pill" id="welcomePill" role="dialog" aria-label="Cupón de bienvenida pendiente">
     <button type="button" class="welcome-pill__body" id="welcomePillBody" aria-label="Ver mi cupón de bienvenida">
       <span class="welcome-pill__icon" aria-hidden="true">🎁</span>
-      <span>Tenés <strong>10% off</strong> esperándote</span>
+      <span>Tenés <strong>35% off</strong> esperándote</span>
     </button>
     <button type="button" class="welcome-pill__close" id="welcomePillClose" aria-label="Descartar cupón">×</button>
   </div>
