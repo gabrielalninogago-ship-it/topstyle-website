@@ -202,7 +202,7 @@
     /*  RESET BÁSICO                                       */
     /* ================================================== */
     *, *::before, *::after { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
     section[id] { scroll-margin-top: 92px; }
     #publicos  { padding-top: var(--space-2); }
     #productos { padding-top: var(--space-2); }
@@ -1293,10 +1293,8 @@
     .catalog-toggle:hover { background: var(--silver-hi); color: #fff; }
     .catalog-toggle__arrow { display: inline-block; transition: transform var(--t-fast); }
     .catalog-toggle.is-open .catalog-toggle__arrow { transform: rotate(180deg); }
-    @media (min-width: 960px) {
-      .catalog-toggle { display: inline-flex; }
-      .catalog-body.is-collapsed { display: none; }
-    }
+    .catalog-toggle { display: inline-flex; }
+    .catalog-body.is-collapsed { display: none; }
 
     /* Bloque 2 — Grupos por línea (vista "Todos") */
     .line-group { margin-bottom: 48px; }
@@ -3993,24 +3991,36 @@
     /*  CORRECCIONES MOBILE                                */
     /* ================================================== */
 
-    /* Nav: reducir gap en pantallas pequeñas para que el hamburger no se corte */
     @media (max-width: 640px) {
+      /* Nav: logo más chico + gap reducido para que el hamburger entre */
+      .nav__brand img { height: 52px; }
       .container.nav__inner { gap: 10px; }
       .cart-trigger { margin-left: 0; }
-    }
 
-    /* Botón "Elegir color" / "+ Agregar": no wrappear en cards de 2 columnas */
-    @media (max-width: 640px) {
+      /* Botón producto: font más chica, permitir wrap (sin nowrap) */
       .product__add {
         font-size: 10px;
         letter-spacing: 0.06em;
         padding: 7px 10px;
-        white-space: nowrap;
       }
-    }
 
-    /* QR trigger: solo ícono en mobile para no tapar productos */
-    @media (max-width: 640px) {
+      /* Cards de líneas: título arriba, meta truncada para que siempre se vea el nombre */
+      .category {
+        justify-content: flex-start;
+      }
+      .category__name { font-size: 18px; }
+      .category__meta {
+        display: -webkit-box;
+        -webkit-line-clamp: 4;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        word-break: break-word;
+      }
+
+      /* Welcome modal: code box no desborde en pantallas estrechas */
+      .welcome-modal__code-value { font-size: 17px; letter-spacing: 0.12em; }
+
+      /* QR trigger: solo ícono para no tapar columna derecha */
       .qr-trigger__label { display: none; }
       .qr-trigger { padding: 11px 13px; bottom: 100px; }
     }
@@ -5046,12 +5056,12 @@
         </svg>
       </button>
       <p class="welcome-modal__eyebrow">Bienvenida a TopStyle</p>
-      <h3 class="welcome-modal__title" id="welcomeTitle">10% OFF en tu <em>primera compra</em></h3>
+      <h3 class="welcome-modal__title" id="welcomeTitle">35% OFF en tu <em>primera compra</em></h3>
       <p class="welcome-modal__lead">
-        Usá este código al finalizar tu pedido. Válido por 7 días en todo el catálogo Question Professional.
+        Usá este código al finalizar tu pedido. Válido en todo el catálogo Question Professional.
       </p>
       <div class="welcome-modal__code">
-        <div class="welcome-modal__code-value" id="welcomeCodeValue">BIENVENIDA10</div>
+        <div class="welcome-modal__code-value" id="welcomeCodeValue">LANZA35OFF</div>
         <button class="welcome-modal__copy" id="welcomeCopy" type="button">Copiar</button>
       </div>
       <p class="welcome-modal__note">
