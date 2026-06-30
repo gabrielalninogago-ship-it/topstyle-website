@@ -3988,6 +3988,32 @@
       .qr-panel { max-width: 100%; }
       .qr-trigger { bottom: 160px; }
     }
+
+    /* ================================================== */
+    /*  CORRECCIONES MOBILE                                */
+    /* ================================================== */
+
+    /* Nav: reducir gap en pantallas pequeñas para que el hamburger no se corte */
+    @media (max-width: 640px) {
+      .container.nav__inner { gap: 10px; }
+      .cart-trigger { margin-left: 0; }
+    }
+
+    /* Botón "Elegir color" / "+ Agregar": no wrappear en cards de 2 columnas */
+    @media (max-width: 640px) {
+      .product__add {
+        font-size: 10px;
+        letter-spacing: 0.06em;
+        padding: 7px 10px;
+        white-space: nowrap;
+      }
+    }
+
+    /* QR trigger: solo ícono en mobile para no tapar productos */
+    @media (max-width: 640px) {
+      .qr-trigger__label { display: none; }
+      .qr-trigger { padding: 11px 13px; bottom: 100px; }
+    }
   </style>
 </head>
 <body>
@@ -5125,7 +5151,7 @@
   <!-- ================================================= -->
   <button class="qr-trigger" id="qrTrigger" aria-label="Abrir panel pedido rápido" aria-controls="qrPanel">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-    Pedido Rápido
+    <span class="qr-trigger__label">Pedido Rápido</span>
   </button>
   <div class="qr-backdrop" id="qrBackdrop" aria-hidden="true"></div>
   <aside class="qr-panel" id="qrPanel" aria-label="Panel pedido rápido" aria-hidden="true">
