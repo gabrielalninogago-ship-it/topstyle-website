@@ -2577,7 +2577,7 @@
     .bestsellers__track {
       display: grid;
       grid-auto-flow: column;
-      grid-auto-columns: 78%;
+      grid-auto-columns: 68%;
       gap: var(--space-6);
       padding-bottom: var(--space-4);
     }
@@ -2963,11 +2963,8 @@
     }
     .is-pin__popup-add:hover { background: var(--violet-mid); transform: scale(1.1); }
     @media (max-width: 767px) {
-      .is-shoppable__wrap {
-        overflow-x: auto; border-radius: 0;
-        -webkit-overflow-scrolling: touch;
-      }
-      .is-shoppable__photo { min-width: 600px; border-radius: 0; }
+      .is-shoppable__wrap { border-radius: 0; }
+      .is-shoppable__photo { width: 100%; min-width: 0; border-radius: 0; }
       .is-pin__popup { width: 185px; }
     }
 
@@ -4004,17 +4001,14 @@
         padding: 7px 10px;
       }
 
-      /* Cards de líneas: título arriba, meta truncada para que siempre se vea el nombre */
-      .category {
-        justify-content: flex-start;
-      }
+      /* Cards de líneas: meta clampeada → título siempre visible sin solapar icono */
       .category__name { font-size: 18px; }
       .category__meta {
         display: -webkit-box;
         -webkit-line-clamp: 4;
         -webkit-box-orient: vertical;
         overflow: hidden;
-        word-break: break-word;
+        overflow-wrap: break-word;
       }
 
       /* Welcome modal: code box no desborde en pantallas estrechas */
@@ -4027,9 +4021,11 @@
       /* Botón bloque: permitir wrap para evitar overflow en pantallas estrechas */
       .btn--block { white-space: normal; }
 
-      /* QR trigger: solo ícono para no tapar columna derecha */
+      /* QR trigger: solo ícono, posición separada del back-to-top */
       .qr-trigger__label { display: none; }
-      .qr-trigger { padding: 11px 13px; bottom: 100px; }
+      .qr-trigger { padding: 11px 13px; bottom: 96px; }
+      /* Back-to-top: más arriba para no solaparse con el QR trigger */
+      .back-to-top { bottom: 152px; }
     }
   </style>
 </head>
