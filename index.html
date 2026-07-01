@@ -950,6 +950,8 @@
     @media (min-width: 960px) { .audiences__grid { grid-template-columns: 1fr 1fr; gap: var(--space-8); } }
     .audience {
       position: relative;
+      display: flex;
+      flex-direction: column;
       padding: var(--space-8);
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
@@ -957,6 +959,7 @@
       overflow: hidden;
       transition: transform var(--t), border-color var(--t);
     }
+    .audience .btn { margin-top: auto; }
     .audience:hover {
       transform: translateY(-4px);
       border-color: var(--border-strong);
@@ -2584,7 +2587,7 @@
     .bestsellers__track {
       display: grid;
       grid-auto-flow: column;
-      grid-auto-columns: 60%;
+      grid-auto-columns: 50%;
       gap: var(--space-6);
       padding-bottom: var(--space-4);
     }
@@ -4010,10 +4013,12 @@
 
       /* Cards de líneas: padding-top empuja el título debajo del icono absoluto */
       .category { justify-content: flex-start; padding-top: 72px; }
-      .category__name { font-size: 18px; }
+      .category__name { font-size: 16px; }
       .category__meta {
+        font-size: 10px;
+        letter-spacing: 0.12em;
         display: -webkit-box;
-        -webkit-line-clamp: 4;
+        -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
         overflow: hidden;
         overflow-wrap: break-word;
