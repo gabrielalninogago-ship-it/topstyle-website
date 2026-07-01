@@ -1565,6 +1565,13 @@
       border-radius: var(--radius-lg);
       box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(234,158,196,0.10) inset;
     }
+    @media (max-width: 640px) {
+      .pro-access__card {
+        margin-left: var(--space-3);
+        margin-right: var(--space-3);
+        padding: var(--space-6);
+      }
+    }
     @media (min-width: 960px) {
       .pro-access__card {
         grid-template-columns: 1fr 1.1fr;
@@ -2577,7 +2584,7 @@
     .bestsellers__track {
       display: grid;
       grid-auto-flow: column;
-      grid-auto-columns: 68%;
+      grid-auto-columns: 60%;
       gap: var(--space-6);
       padding-bottom: var(--space-4);
     }
@@ -4001,7 +4008,8 @@
         padding: 7px 10px;
       }
 
-      /* Cards de líneas: meta clampeada → título siempre visible sin solapar icono */
+      /* Cards de líneas: padding-top empuja el título debajo del icono absoluto */
+      .category { justify-content: flex-start; padding-top: 72px; }
       .category__name { font-size: 18px; }
       .category__meta {
         display: -webkit-box;
