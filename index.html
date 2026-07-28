@@ -635,25 +635,51 @@
       top: var(--nav-height);
       left: 0; right: 0;
       bottom: 0;
+      /* Fondo 100% opaco: si --bg-primary llegara a ser translúcido,
+         este color de respaldo evita que se transparente el hero. */
+      background-color: #fdf6fa;
       background: var(--bg-primary);
       border-top: 1px solid var(--border-subtle);
-      padding: var(--space-8) var(--space-6);
+      padding: var(--space-6) var(--space-6)
+               calc(var(--space-12) + env(safe-area-inset-bottom, 0px));
       display: flex;
       flex-direction: column;
-      gap: var(--space-6);
+      gap: var(--space-3);
       transform: translateX(100%);
       transition: transform var(--t);
-      z-index: 95;
+      /* Por encima de los flotantes (wa-float, cart-float, qr-trigger…)
+         pero por debajo del nav (100) para que la X siga clickeable. */
+      z-index: 99;
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
     }
+    html[data-theme="dark"] .nav__mobile { background-color: #170f1e; }
     .nav__mobile.is-open { transform: translateX(0); }
     .nav__mobile a {
       font-family: var(--font-display);
-      font-size: 28px;
+      font-size: clamp(21px, 6vw, 28px);
       font-weight: 500;
       color: var(--text-primary);
       padding: var(--space-3) 0;
       border-bottom: 1px solid var(--border-subtle);
+      flex-shrink: 0;
+    }
+    .nav__mobile a.btn {
+      font-family: var(--font-sans);
+      border-bottom: none;
+    }
+    /* Mientras el menú está abierto, ocultamos los flotantes
+       para que no se superpongan sobre los ítems. */
+    body.is-locked .wa-float,
+    body.is-locked .cart-float,
+    body.is-locked .back-to-top,
+    body.is-locked .welcome-pill,
+    body.is-locked .qr-trigger,
+    body.is-locked .sidebar-trigger {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--t-fast);
     }
     @media (min-width: 960px) { .nav__mobile { display: none; } }
 
@@ -4100,18 +4126,6 @@
       </button>
     </div>
 
-    <div class="nav__mobile" id="navMobile" aria-hidden="true">
-      <a href="#marcas">Marcas</a>
-      <a href="#bestsellers">Más vendidos</a>
-      <a href="#publicos">Para quién</a>
-      <a href="#acceso-profesional">Soy profesional</a>
-      <a href="#categorias">Categorías</a>
-      <a href="#productos">Productos</a>
-      <a href="#como-comprar">Cómo comprar</a>
-      <a href="#contacto">Contacto</a>
-      <a href="#pedido" class="btn btn--primary btn--block" style="margin-top: 16px;">Hacer pedido</a>
-    </div>
-
     <div class="nav__search-row" id="navSearchRow" role="search">
       <div class="nav__search-row-inner">
         <div class="nav__search-field" id="navSearchField">
@@ -4127,6 +4141,24 @@
       <div class="search-results-count" id="searchResultsCount" aria-live="polite"></div>
     </div>
   </header>
+
+  <!-- ================================================= -->
+  <!--  MENÚ MOBILE                                       -->
+  <!--  IMPORTANTE: va FUERA del <header> porque .nav     -->
+  <!--  tiene backdrop-filter, y eso crea un containing   -->
+  <!--  block que rompe el position:fixed de este panel.  -->
+  <!-- ================================================= -->
+  <div class="nav__mobile" id="navMobile" aria-hidden="true">
+    <a href="#marcas">Marcas</a>
+    <a href="#bestsellers">Más vendidos</a>
+    <a href="#publicos">Para quién</a>
+    <a href="#acceso-profesional">Soy profesional</a>
+    <a href="#categorias">Categorías</a>
+    <a href="#productos">Productos</a>
+    <a href="#como-comprar">Cómo comprar</a>
+    <a href="#contacto">Contacto</a>
+    <a href="#pedido" class="btn btn--primary btn--block" style="margin-top: 16px;">Hacer pedido</a>
+  </div>
 
   <!-- ================================================= -->
   <!--  1. HERO                                           -->
