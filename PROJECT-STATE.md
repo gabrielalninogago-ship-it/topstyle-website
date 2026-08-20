@@ -1,6 +1,6 @@
 # TopStyle — Estado del proyecto
 
-> **Última actualización:** 21/05/2026 · **Checkpoint estable:** `N`
+> **Última actualización:** 19/08/2026 · **Checkpoint estable:** `S`
 > Documento autosuficiente para retomar el proyecto en cualquier contexto.
 
 ---
@@ -121,7 +121,7 @@ Topstyle/
 - Sección **#categorias** con 4 tarjetas siguiendo la estructura oficial Question:
   - Línea Coloración · Intelligent Series · Línea Styling · Línea Salón
 - **Filter chips** arriba del grid de productos alineados con las mismas 4 líneas.
-- Catálogo de **72 productos** (57 activos + 14 desactivados con `active: false`).
+- Catálogo de **97 productos** (85 activos + 12 desactivados con `active: false`).
 - Distribución: Coloración 12 · Intelligent 26 · Salón 24 · Styling 10.
 - Cada producto: id, brand, name, description, category, price, image, badge, active.
 - Filtrado por línea vía mapeo `PRODUCT_LINES` (prefijos de id) → `getProductLine(id)`.
@@ -232,7 +232,13 @@ cp _checkpoints/I/TODO-mejoras.md .
 
 ---
 
-## 7. Estado del catálogo (al checkpoint I)
+## 7. Estado del catálogo (conteo al checkpoint S)
+
+| | Productos | Activos |
+|---|---|---|
+| **TOTAL** | **97** | **85** |
+
+> ⚠️ El desglose por línea de abajo quedó del checkpoint I (72 productos) y **no está re-conciliado** con el catálogo actual de 97. Re-tally pendiente (saneamiento de doc en otra sesión).
 
 | Línea | Productos | Activos |
 |---|---|---|
@@ -240,13 +246,12 @@ cp _checkpoints/I/TODO-mejoras.md .
 | Intelligent Series | 26 | 24 |
 | Línea Salón | 24 | 14 |
 | Línea Styling | 10 | 7 |
-| **TOTAL** | **72** | **57** |
 
-**Desactivados (14):** permanente-1/2/3-naturales/tenidos/decolorados-300, neutralizante-900, shampoo-neutro-4900, shampoo-frecuente-4900, theraphy-liss-kit/shampoo-480/alisador-480/mascara-480, silver-shampoo-960, qstyle-coolfix-gel, qstyle-oil-molecular-flex, ampollas-restauradoras.
+**Desactivados (12):** permanente-1/2/3-naturales/tenidos/decolorados-300, neutralizante-900, shampoo-neutro-4900, shampoo-frecuente-4900, theraphy-liss-kit/shampoo-480/alisador-480/mascara-480, silver-shampoo-960, ampollas-restauradoras. _(qstyle-coolfix-gel y qstyle-oil-molecular-flex se activaron en el checkpoint S al llegar su precio oficial.)_
 
 **Bestsellers (7):** twelve-spray-210, is-keratin-lift-spray, is-lumiere-oleo, qstyle-curl-cream, qstyle-termic-protect, coloration-full-plex-60g, is-lumiere-ampollas.
 
-**Precios:** lista oficial mayorista Question, abril 2026.
+**Precios:** lista oficial mayorista Question, julio 2026.
 
 ---
 
@@ -313,6 +318,15 @@ cp _checkpoints/I/TODO-mejoras.md .
 ---
 
 ## 11. Decisiones recientes
+
+### Sesión del 19/08/2026 (checkpoint S — precios lista Question Julio 2026)
+
+- ✅ **Actualización de precios de los 97 productos** a la lista c/IVA de publicaciones Online de Question, julio 2026 (columna Sugerido). Match por `id` exacto. 85 productos al +5% general; 12 excepciones documentadas en el spec (Q-Style atrasados +10,25%, Finish Spray +22,5%, alineaciones a lista, y recalculo del kit Theraphy Liss como suma de sus 3 pasos).
+- ✅ **Activados `qstyle-coolfix-gel` (25.686) y `qstyle-oil-molecular-flex` (58.956)** — estaban en `price: 0 / active: false`. Imágenes verificadas (existen y cargan 200). ⚠️ `qstyle-oil-molecular.jpg` es de baja resolución (105×105) — reemplazar cuando haya foto oficial. Nombre del Oil corregido de "70 ml" → **"75 ml"** según lista oficial.
+- ✅ **`silver-acondicionador-960`**: baja intencional 62.136 → 26.476 (el producto real es el Acondicionador de 160 ml; el precio cargado era el del 960). `id` conservado a propósito (comentario legacy en el código) para no romper carritos guardados en localStorage.
+- ✅ **`lumiplex-activador-19vol-900`**: corregido 16.931 → 19.753 (valor de lista, alineado con 3/6/13 Vol). Ya existía en el catálogo; imagen propia y válida, no se tocó.
+- ✅ **Verificación en navegador OK**: sin errores de consola, grid completo, precios nuevos renderizados, viejos ausentes, subtotal del carrito con precios nuevos.
+- 🔜 Fuera de alcance (para otra sesión): alta de SKU nuevos de la lista de julio (oxigenadas 90 ml, post color 4900, hair mist Garden/Mare) y revisar `shampoo-frecuente-4900` (nombre sin SKU oficial correspondiente).
 
 ### Sesión del 21/05/2026 (checkpoint N — swatches reales del PDF)
 
