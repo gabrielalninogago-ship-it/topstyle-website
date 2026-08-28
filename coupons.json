@@ -37,5 +37,18 @@
     "validFrom": null,
     "active": true,
     "lineas": []
+  },
+  {
+    "code": "WENDY50OFF",
+    "label": "Cupón especial",
+    "type": "percent",
+    "value": 50,
+    "minSubtotal": 0,
+    "expiryType": "none",
+    "expiresRel": null,
+    "expiresAt": null,
+    "validFrom": null,
+    "active": true,
+    "lineas": []
   }
 ]
