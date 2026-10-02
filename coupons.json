@@ -50,5 +50,18 @@
     "validFrom": null,
     "active": true,
     "lineas": []
+  },
+  {
+    "code": "MAMA40OFF",
+    "label": "Día de la Madre",
+    "type": "percent",
+    "value": 40,
+    "minSubtotal": 0,
+    "expiryType": "date",
+    "expiresRel": null,
+    "expiresAt": "2026-10-18",
+    "validFrom": null,
+    "active": true,
+    "lineas": ["intelligent"]
   }
 ]

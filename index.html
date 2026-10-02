@@ -7707,19 +7707,32 @@
       }
       if (c.minSubtotal && lineSubtotal(c) < c.minSubtotal) {
         const scope = c.lineas?.length ? ` en ${c.lineas.map(l => CART_LINE_LABELS[l] || l).join(', ')}` : '';
-        showCouponMsg(`Aplica a compras desde ${formatMoney(c.minSubtotal)}${scope}`, 'err');
         // Igual lo aceptamos para que se active cuando alcance el mínimo
         ACTIVE_COUPON = c;
         try { localStorage.setItem(COUPON_STORAGE_KEY, c.code); } catch(e) {}
         syncCouponUI();
         renderCart();
+        // Después de syncCouponUI, que limpia el mensaje
+        showCouponMsg(`Aplica a compras desde ${formatMoney(c.minSubtotal)}${scope}`, 'err');
+        return true;
+      }
+      if (c.lineas?.length && lineSubtotal(c) <= 0) {
+        const lineLabel = c.lineas.map(l => CART_LINE_LABELS[l] || l).join(', ');
+        // Igual lo aceptamos para que se active cuando agregue un producto de la línea
+        ACTIVE_COUPON = c;
+        try { localStorage.setItem(COUPON_STORAGE_KEY, c.code); } catch(e) {}
+        syncCouponUI();
+        renderCart();
+        // Después de syncCouponUI, que limpia el mensaje
+        showCouponMsg(`Este cupón aplica solo a productos ${lineLabel}`, 'err');
         return true;
       }
       ACTIVE_COUPON = c;
       try { localStorage.setItem(COUPON_STORAGE_KEY, c.code); } catch(e) {}
-      showCouponMsg(`¡Listo! ${c.value}% de descuento aplicado`, 'ok');
       syncCouponUI();
       renderCart();
+      // Después de syncCouponUI, que limpia el mensaje
+      showCouponMsg(`¡Listo! ${c.value}% de descuento aplicado`, 'ok');
       // Si aplicó BIENVENIDA10, marcamos el welcome como cerrado para siempre.
       if (c.code === 'BIENVENIDA10') setWelcomeState('applied');
       return true;
@@ -8723,10 +8736,10 @@
 
       const FRANJA_DEFAULT = [
         { imagen: 'assets/banners/07_topstyle_lanzamiento.png', tipo: 'cupon',    titulo: '', subtitulo: '', accion: { tipo: 'cupon', codigo: 'LANZA35OFF'  }, zona: 'franja-cupon', orden: 1, activo: true },
-        { imagen: 'assets/banners/08_topstyle_mundial.png',      tipo: 'campaña',  titulo: '', subtitulo: '', accion: { tipo: 'link',  destino: '#productos' }, zona: 'franja-cupon', orden: 2, activo: true },
+        { imagen: 'assets/banners/08_topstyle_mundial.png',      tipo: 'campaña',  titulo: '', subtitulo: '', accion: { tipo: 'link',  destino: '#productos' }, zona: 'franja-cupon', orden: 2, activo: false },
       ];
 
-      let franjas = FRANJA_DEFAULT;
+      let franjas = FRANJA_DEFAULT.filter(b => b.activo !== false);
       try {
         const r = await fetch('banners.json');
         if (r.ok) {

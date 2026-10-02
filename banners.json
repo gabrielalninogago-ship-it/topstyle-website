@@ -85,6 +85,6 @@
     "accion": { "tipo": "link", "destino": "#productos" },
     "zona": "franja-cupon",
     "orden": 2,
-    "activo": true
+    "activo": false
   }
 ]
