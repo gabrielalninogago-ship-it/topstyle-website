@@ -57,9 +57,9 @@
     "type": "percent",
     "value": 40,
     "minSubtotal": 0,
-    "expiryType": "date",
+    "expiryType": "none",
     "expiresRel": null,
-    "expiresAt": "2026-10-18",
+    "expiresAt": null,
     "validFrom": null,
     "active": true,
     "lineas": ["intelligent"]
