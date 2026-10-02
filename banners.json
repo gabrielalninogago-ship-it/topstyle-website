@@ -66,6 +66,17 @@
     "activo": true
   },
   {
+    "id": "b9",
+    "imagen": "assets/banners/09_topstyle_dia_madre.png",
+    "tipo": "cupon",
+    "titulo": "",
+    "subtitulo": "",
+    "accion": { "tipo": "cupon", "codigo": "MAMA40OFF" },
+    "zona": "franja-cupon",
+    "orden": 1,
+    "activo": true
+  },
+  {
     "id": "b7",
     "imagen": "assets/banners/07_topstyle_lanzamiento.png",
     "tipo": "cupon",
@@ -73,18 +84,7 @@
     "subtitulo": "",
     "accion": { "tipo": "cupon", "codigo": "LANZA35OFF" },
     "zona": "franja-cupon",
-    "orden": 1,
-    "activo": true
-  },
-  {
-    "id": "b8",
-    "imagen": "assets/banners/08_topstyle_mundial.png",
-    "tipo": "campaña",
-    "titulo": "",
-    "subtitulo": "",
-    "accion": { "tipo": "link", "destino": "#productos" },
-    "zona": "franja-cupon",
     "orden": 2,
-    "activo": false
+    "activo": true
   }
 ]
